@@ -168,7 +168,7 @@ class SeguimientoAsignatura extends Model
         	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
         						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
         						->first();
-        	$fecha_actual = date('Y-m-d H:i:s');
+        	$fecha_actual = date('Y-m-d H:i:s'); 
             $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
                                        ->where('id_formato', $this->id_seguimiento)
                                        ->where('estado', 1)
