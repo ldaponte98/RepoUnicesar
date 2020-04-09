@@ -1,0 +1,38 @@
+.p-gris{
+	width: 100%;
+	background-color: #ede8e8;
+	padding: 10px;
+}
+.p-blanco{
+    width: 100%;
+	background-color: white;
+	padding: 10px;
+}
+.ima{
+	padding: 0px;
+	color: white;
+	font-family: arial;
+	width: 150px;
+	height: 150px;
+	margin: 20px;
+	background-image: url(../Imagenes/a1.jpg);
+	border-radius: 75px;
+}
+.ima h6{
+	width: 100%;
+	margin-left: 200px;
+	color: black;
+	font-size: 38px;
+	font-family: "Volkhov", serif;
+	text-align: center;
+}
+.letra{
+	width: 270px;
+	height: 150px;
+	background-color:rgba(31, 31, 31, 0.9);
+	-webkit-transition: opacity 0.3s;
+	opacity: 0;
+}
+.ima:hover .letra{
+	opacity: 1;
+}

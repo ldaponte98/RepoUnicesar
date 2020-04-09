@@ -1,0 +1,325 @@
+
+@extends('layouts.main_docente')
+@php
+    $usuario = \App\Usuario::find(session('id_usuario'));
+@endphp    
+<style type="text/css">
+    .search{
+    line-height: inherit;
+    height: 31px;
+    background-color: #f2f7f8;
+    border-left-color: transparent;
+    border-right-color: transparent;
+    border-top-color: transparent;
+    border-bottom-color: #ddd;
+    }
+    .search:focus{
+       border-bottom-color: black; 
+       transition: 2.5s;
+    }
+
+    #segundofil{
+        display: none;
+    }
+    #bodytablemiseguimiento tr:hover{
+        background-color: #DAF7A6;
+        color: black;
+       
+    }
+</style>
+@section('header_content')
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+
+<div class="row page-titles">
+                    <div class="col-md-6 col-8 align-self-center">
+                        <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
+                            <li class="breadcrumb-item active">Seguimiento de asignatura</li>
+                        </ol>
+                        <a id="btnfil" style="color: white;" onclick="masfiltros()"  class="btn pull-left  btn-info">Mas filtros</a>
+                    </div>
+                    <div class="col-md-2 col-8 align-self-center">
+                    </div><div class="col-md-2 col-8 align-self-center">
+                    </div>
+                    <div class="col-md-2 col-8 align-self-center">
+                      <br> <br>   
+                    <a target="_blank" id="btnlistar" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-success">Excel tabla actual</a>
+                    </div>
+                </div>
+@endsection
+@section('content')
+{{ Form::open(array('id' => 'form_fltros')) }}
+<div class="row">    
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Estado</b></label>
+                                           <select id="estado" name="estado" class="form-control form-control-line"  >
+                                                <option value="">Seleccione...</option>
+                                                <option value="Recibido">Recibidos (Leidos)</option>
+                                                <option value="Enviado">Enviados (No leidos)</option>
+                                                <option value="Pendiente">Pendientes</option>
+                                            </select>
+                            </div>
+                        </div>  
+                              <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Asignatura</b></label>
+                                        <select id="asignatura" name="asignatura" class="form-control form-control-line"  >
+                                                <option value="">Seleccione...</option>
+                                                @foreach ($asignaturas as $asignatura)
+                                                <option value="{{ $asignatura->id_asignatura }}">{{ $asignatura->nombre }}</option>
+                                                @endforeach
+                                        </select>
+                            </div>
+                        </div> 
+
+                         <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Grupo</b></label>
+                                           <select id="grupo" name="grupo" class="form-control form-control-line"  >
+                                                <option value="">Seleccione...</option>
+                                                
+                                            </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Periodo academico</b></label>
+                                           <select id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
+                                                <option value="">Seleccione...</option>
+                                                @foreach ($periodos_academicos as $periodo)
+                                                <option value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
+                                                @endforeach
+                                            </select>
+                            </div>
+                        </div>
+                        
+                      
+                    
+                 </div>
+                 <div id="segundofil">
+                 <div class="row" >
+                    
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Corte</b></label>
+                                           <select id="cor" name="corte" class="form-control form-control-line"  >
+                                                <option value="">Seleccione...</option>
+                                                <option value="1">Primer Corte</option>
+                                                <option value="2">Segundo Corte</option>
+                                                <option value="3">Tercer Corte</option>
+                                            </select>
+                            </div>
+                        </div>  
+                              <div class="col-sm-6">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Fecha de envio</b></label>
+                                  <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="fecha" type="text" name="fecha" autocomplete="off" value="" placeholder ="Seleccione...">
+
+                                                
+                            </div>
+                        </div> 
+                         <div class="col-sm-3">
+                            <div class="form-group">
+                                          <input type="hidden" name="docente" type="text" class="form-control form-control-line" value="{{ $usuario->tercero->cedula }}" placeholder="" >
+                            </div>
+                        </div>  
+                    
+                 </div>
+
+                </div>
+{{ Form::close() }}
+
+                <div class="row" >
+                    
+                        <div class="col-sm-4">
+                            
+                        </div>  
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <center>
+                                   <a style="color: white; width: 80%;" onclick="consultar()"  class="btn btn-info">Consultar</a>
+                                </center>
+                            </div>
+                        </div>
+                 </div>
+
+
+                <!--TABLA-->
+
+                <div class="row">
+                    <!-- column -->
+                    <div class="col-sm-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <h4 class="card-title" id="titulo_tabla">Seguimientos de asignatura </h4>
+                                <div id="tablaarchivo" class="table-responsive">
+                                    <table id="tabla_seguimientos" class="table">
+                                        <thead>
+                                            <tr>
+                                                <td><b>Id</b></td>
+                                                <td><b>Asignatura</b></td>
+                                                <td><b>Grupo</b></td>
+                                                <td><b>Corte</b></td>
+                                                <td><b>Fecha de envio</b></td>
+                                                <td><b>Retraso</b></td>
+                                                <td><b>Estado</b></td>
+                                                <td><b>Periodo</b></td>
+                                                <td><center><b>Acciones</b></center></td> 
+                                            </tr>
+                                        </thead>
+                                        <tbody id="bodytablemiseguimiento">
+                                            
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    $(document).ready(function() {
+                        $("#asignatura").on('change', function(){
+                           cargargrupos()
+                        })
+                         $('#fecha').click(function(){
+                            if($('#fecha').val()==""){
+                                    $('#fecha').daterangepicker({
+                                      autoApply: true,
+                                      autoUpdateInput: true,
+                                      locale: {
+                                        format: 'YYYY/MM/DD',
+                                        cancelLabel: 'Clear'
+                                      }
+                                    });
+                             }
+                         });
+                    })
+
+                   /*
+                    $('#fecha_envio').datepicker({
+                        format: "dd/mm/yyyy",
+                        language: "es",
+                        autoclose: true
+                    });
+                    $('#fecha_revision').datepicker({
+                        format: "dd/mm/yyyy",
+                        language: "es",
+                        autoclose: true
+                    });
+                    */
+
+                function masfiltros(){
+                    if($("#btnfil").html()=="Mas filtros"){
+                        $("#btnfil").html("Menos filtros");
+                        document.getElementById("btnfil").className = "btn pull-left btn-success";
+                        document.getElementById("btnlistar").className = "btn pull-left btn-info";
+                        document.getElementById("segundofil").style.display='';
+                        $("#segundofil").fadeIn();
+                    }else{
+                        $("#btnfil").html("Mas filtros")
+                        document.getElementById("btnfil").className = "btn pull-left btn-info";
+                         document.getElementById("btnlistar").className = "btn pull-left btn-success";
+                        $("#segundofil").fadeOut();
+                    }
+                }
+
+                function cargargrupos() {
+                    var id_asignatura = $("#asignatura").val()
+                    var ruta = "../asignatura/buscar_grupos/"+id_asignatura
+                    var grupos = "<option value='0'>Seleccione...</option>"
+                    $.get(ruta, function(response) {
+                        response.forEach(function(grupo){
+                            grupos += '<option value="'+grupo.id_grupo+'">'+grupo.codigo+'</option>'
+                        })
+                        $("#grupo").html(grupos)
+                    })
+                }
+
+                function consultar(){
+                    var data = $("#form_fltros").serialize();
+                    var url = "{{ route('seguimiento/getReporte') }}"
+                    $.blockUI({
+                        message: '<h1>Buscando</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                        css: {
+                            border: 'none',
+                            padding: '15px',
+                            backgroundColor: '#000',
+                            '-webkit-border-radius': '10px',
+                            '-moz-border-radius': '10px',
+                            opacity: .8,
+                            color: '#fff'
+                        }});
+                    $.post(url, data, function(response) { 
+                        var tabla = ""
+                        response.forEach(function(seguimiento) {
+                            var acciones = ""
+                           tabla += "<tr>"+
+                                    "<td>"+seguimiento.id_seguimiento+"</td>"+
+                                    "<td>"+seguimiento.asignatura+"</td>"+
+                                    "<td>"+seguimiento.grupo+"</td>"+
+                                    "<td>"+seguimiento.corte+"</td>"
+                            if(seguimiento.estado=='Pendiente'){
+                                tabla += "<td> Sin enviar </td>"+
+                                         "<td>"+seguimiento.retraso+"</td>"
+
+                            }else{
+                                tabla += "<td>"+seguimiento.fecha+"</td>"+
+                                         "<td>No tiene</td>"
+                            }
+                            tabla += "<td>"+seguimiento.estado+"</td>"+
+                                     "<td>"+seguimiento.periodo_academico+"</td>"
+                            //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
+                            if(seguimiento.estado=='Pendiente'){
+                                if(seguimiento.retraso == "En espera"){
+
+                                     acciones = "<td><center><a href='editar/"+seguimiento.id_seguimiento+"' style='color: blue; cursor: pointer;  font-size: 14px;' >Realizar</a></center></td>"
+                                }else if(seguimiento.retraso == "Tiene plazo-extra"){
+                                    acciones = "<td><center><a href='editar/"+seguimiento.id_seguimiento+"' style='color: blue; cursor: pointer;  font-size: 14px;' >Realizar</a></center></td>"
+                                }else{
+                                     acciones = "<td><center><a href='../plazo_docente/solicitar/"+seguimiento.id_seguimiento+"/"+seguimiento.id_tercero+"' style='color: blue; cursor: pointer;  font-size: 11px;' >Solicitar extra-plazo</a></center></td>"
+                                }
+                               
+                            }
+                            if(seguimiento.estado=='Recibido'){
+                                acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' target='_blank' href = 'view/"+seguimiento.id_seguimiento+"'>Ver</a></center></td>"
+                            }
+                            if(seguimiento.estado=='Enviado'){
+                                acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;' target='_blank' href = 'view/"+seguimiento.id_seguimiento+"'>Ver</a></center></td>"
+                                acciones += "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' href='editar/"+seguimiento.id_seguimiento+"' >Editar</a></center></td>"
+                            }
+
+                            tabla += acciones
+                            $.unblockUI(); //
+                        })
+                        $.unblockUI();
+
+                        $("#bodytablemiseguimiento").html(tabla)
+                        $("#titulo_tabla").html("Seguimientos de asignatura ("+response.length+")")
+                    })
+
+                }
+
+                function exportar_excel() {
+                    var tabla_aux = $("#tabla_seguimientos").html()
+                    borrarColumna("tabla_seguimientos",8)
+                    tableToExcel('tabla_seguimientos', 'Reporte_seguimiento')
+                    $("#tabla_seguimientos").html(tabla_aux)
+                }
+
+                </script>
+
+
+            <!--FIN MODAL DE NOTICAR RETRASO------------------------------------------------------->
+
+
+@endsection
+
