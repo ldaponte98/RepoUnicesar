@@ -337,7 +337,7 @@
                 </div>
                 <ul id="sidebarnav" class="in">
                         <li >
-                            <a href="admin.php" class="waves-effect"><i class="fa fa-window-restore m-r-10" aria-hidden="true"></i>Tablero</a>
+                            <a class="waves-effect"><i class="fa fa-window-restore m-r-10" aria-hidden="true"></i>Tablero</a>
                         </li>
                         <li>
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>
