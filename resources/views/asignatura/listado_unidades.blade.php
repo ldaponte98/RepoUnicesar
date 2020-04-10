@@ -51,8 +51,8 @@
             <div class="row">
     
         <div class="col-lg-7"><input id="input_eje" style="display: none" class="form-control" type="text" name="" placeholder="Nombre del eje tematico"></div>
-        <div class="col-lg-2"><button id="btn_eje" style="display: none" onclick="agregar_unidad()" class="btn btn-success">Agregar</button></div>
-    <div class="col-lg-3"><button onclick="HabilitarOpcionAgregarEje()" class="btn btn-info pull-right">Nuevo Eje</button></div>
+        <div class="col-lg-2"><button id="btn_eje" style="display: none" onclick="agregar_eje()" class="btn btn-success">Agregar</button></div>
+    <div class="col-lg-3"><button onclick="HabilitarOpcionAgregarEje()" class="btn btn-info pull-right">Nuevo eje tematico</button></div>
 </div>
             <div class="form-group">                                     
                         <div class="card">
@@ -92,6 +92,8 @@
 {{ csrf_field() }}
 <script type="text/javascript" async src="https://tenor.com/embed.js"></script>
 <script type="text/javascript">
+
+    var id_unidad_escojida = ""
     function HabilitarOpcionAgregarUnidad(){
         $("#btn_unidad").fadeIn()
         $("#input_unidad").fadeIn()
@@ -119,6 +121,26 @@
                     "</td>"+
                     "</tr>")
                 })
+            }
+        })
+    }
+
+    function cargar_tabla_ejes() {
+        $("#bodytableEjes").html('<center><i>Cargando...</i></center>')
+        var url = "../../seguimiento/getEjesTematicos/"+id_unidad_escojida
+        $.get(url, (response) => {
+            $("#bodytableEjes").html("")
+            if(response){
+                
+                response.ejes_tematicos.forEach((eje)=>{
+                    $("#bodytableEjes").append("<tr>"+
+                    "<td><center>"+eje.id_eje_tematico+"</center></td>"+
+                    "<td>"+eje.nombre+"</td>"+
+                    "<td><center><a onclick=\"eliminarEje("+eje.id_eje_tematico+")\" style='cursor:pointer'><i class='fa fa-trash'></i></a></center></td>"+
+                    
+                    "</tr>")
+                })
+                
             }
         })
     }
@@ -183,9 +205,47 @@
          })
     }
 
+    function agregar_eje() {
+        $("#bodytableEjes").html("<br><br><i>Registrando nuevo eje tematico...</i>")
+        var url = '{{ route('asignatura/agregar_eje') }}'
+        var eje = $("#input_eje").val()
+        var token = document.getElementsByName("_token")[0].value
+        var data = {
+            'id_unidad': id_unidad_escojida,
+            'eje': eje,
+            '_token': token
+        }
+         $.post(url,data,function(result){
+             if(result.error==false){
+                cargar_tabla_ejes()
+             }else{
+                toastr.error(result.mensaje, 'Error', {timeOut: 3000})
+             }
+         })
+    }
+
+    function eliminarEje(id_eje) {
+        var r = confirm("¿Seguro que desea eliminar este eje tematico?");
+        if (r == true) {
+             $("#bodytableEjes").html("<br><br><i>Borrando eje tematico...</i>")
+           var url = '../eliminar_eje/'+id_eje
+           $.get(url, (response) => {
+                if(response.error == true){
+                    toastr.error(response.mensaje, 'Error', {timeOut: 10000})
+                }
+                cargar_tabla_ejes()
+               
+            })
+
+           
+        }
+    }
+
     function buscar_ejes(id_unidad, nombre_unidad) {
         $("#myModal").modal('show')
         $("#titulo_name_unidad").html("Ejes de <i>"+nombre_unidad+"</i>")
+        id_unidad_escojida = id_unidad
+        cargar_tabla_ejes(id_unidad)
         
     }
 </script>

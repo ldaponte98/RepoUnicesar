@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Asignatura;
 use App\UnidadAsignatura;
+use App\EjeTematico;
+use App\EjeTematicoSeguimiento;
 use App\UnidadAsignaturaSeguimiento;
 
 class AsignaturaController extends Controller
@@ -53,6 +55,29 @@ class AsignaturaController extends Controller
         }
     }
 
+    public function agregarEje(Request $request)
+    {
+        $post = $request->all();
+
+        if ($post) {
+            $post = (object) $post;
+            $eje = new EjeTematico;
+            $eje->id_unidad_asignatura = $post->id_unidad;
+            $eje->nombre = $post->eje;
+            if ($eje->save()) {
+               return response()->json([
+                    'error' => false,
+                    'mensaje' => 'Eje tematico guardado correctamente'
+                ]);
+            }
+
+            return response()->json([
+                'error' => true,
+                'mensaje' => 'Error verifique los caracteres e intentelo nuevamente'
+            ]);
+        }
+    }
+
     public function getUnidades($id_asignatura)
     {
         $asignatura =  Asignatura::find($id_asignatura);
@@ -81,6 +106,31 @@ class AsignaturaController extends Controller
         return response()->json([
                         'error' => true,
                         'mensaje' => 'No existe la unidad'
+                ]);
+    }
+
+    public function eliminarEje($id_eje)
+    {
+        $eje = EjeTematico::find($id_eje);
+        if ($eje) {
+            $seguimientos_con_este_eje = EjeTematicoSeguimiento::all()->where('id_eje_tematico', $id_eje);
+            if (count($seguimientos_con_este_eje) == 0) {
+                $eje->delete();
+                return response()->json([
+                        'error' => false,
+                        'mensaje' => 'Eje tematico eliminado correctamente'
+                ]);
+            }else{
+                return response()->json([
+                        'error' => true,
+                        'mensaje' => 'No se pudo eliminar este eje tematico debido a que hay seguimientos de asignatura que han usado este eje'
+                ]);
+            }
+            
+        }
+        return response()->json([
+                        'error' => true,
+                        'mensaje' => 'No existe el eje'
                 ]);
     }
 }
