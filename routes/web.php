@@ -27,6 +27,9 @@ Route::any('docente/update_image/{id_tercero}','TerceroController@updateImageDoc
 Route::get('asignatura/listado_asignaturas','AsignaturaController@getAsignaturas')->name('asignatura/listado_asignaturas');
 Route::get('asignatura/view/{id}','AsignaturaController@viewAsignatura')->name('asignatura/view');
 Route::get('asignatura/buscar_grupos/{id}','AsignaturaController@buscarGrupos')->name('asignatura/buscar_grupos');
+Route::post('asignatura/agregar_unidad','AsignaturaController@agregarUnidad')->name('asignatura/agregar_unidad');
+Route::get('asignatura/get_unidades/{id}','AsignaturaController@getUnidades')->name('asignatura/get_unidades');
+Route::get('asignatura/eliminar_unidad/{id}','AsignaturaController@eliminarUnidad')->name('asignatura/eliminar_unidad');
 
 Route::post('grupo/buscar','GrupoController@buscar')->name('grupo/buscar');
 

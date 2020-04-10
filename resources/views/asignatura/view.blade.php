@@ -42,6 +42,11 @@
                     <a class="nav-link tab_header" id="programas-tab" data-toggle="tab" href="#programas" role="tab" aria-controls="programas"
                       aria-selected="false"><b>Programas academicos</b></a>
                   </li>
+
+                  <li class="nav-item">
+                    <a class="nav-link tab_header" id="unidades-tab" data-toggle="tab" href="#unidades" role="tab" aria-controls="unidades"
+                      aria-selected="false"><b>Unidades</b></a>
+                  </li>
                   
                 </ul>
                 <div class="tab-content" id="myTabContent">
@@ -52,6 +57,10 @@
 
                     <div class="tab-pane fade" id="programas" role="tabpanel" aria-labelledby="programas-tab">
                       {{ view('asignatura.listado_programas_academicos',compact('asignatura')) }}     
+                                        
+                    </div>
+                    <div class="tab-pane fade" id="unidades" role="tabpanel" aria-labelledby="unidades-tab">
+                      {{ view('asignatura.listado_unidades',compact('asignatura')) }}     
                                         
                     </div>
                  

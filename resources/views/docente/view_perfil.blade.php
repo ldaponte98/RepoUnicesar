@@ -1,6 +1,5 @@
 
-    @extends('layouts.main_docente')
-
+@extends((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'))
 <style type="text/css">
     div#iconedit{
         width: 40;
