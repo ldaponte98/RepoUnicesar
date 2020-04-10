@@ -190,6 +190,30 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="col-sm-4">
+                        <div class="card-section card-section-1 border rounded">
+                            <div class="card-header card-header-1 rounded">
+                                <center><h2 class="card-header-title mb-3 text-white">Plan de Accion</h2></center>
+                            </div>
+                            <div class="card-body text-center mb-2" style="padding: 15px">
+                                <br><br><br><br>
+                                @if ($fechas_de_entrega_plan_accion != null)
+                                    <b>Desde {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_accion->fechainicial1))}} hasta {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_accion->fechafinal1))}}</b>
+                                @else
+                                    <center><b>Fechas no definidas </b></center>
+                                @endif 
+                                <br>
+                                <br>
+                                <br>
+                                 <hr>
+                                 <center>
+                                <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.plan_accion') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
+
+                                </center>
+                            </div>
+                        </div>
+                    </div>
                                            
             </div>
         </div>

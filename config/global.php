@@ -6,6 +6,7 @@ return [
     'plan_trabajo' => 12,
     'desarrollo_asignatura' => 13,
     'actividades_complementarias' => 14,
+    'plan_accion' => 16,
 
 
 

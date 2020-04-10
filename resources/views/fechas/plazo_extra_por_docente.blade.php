@@ -95,7 +95,11 @@
   </div>
 </div>
 {{ Form::close() }}
-
+<style type="text/css">
+ .nav-item .active{
+    color: blue !important;
+ }
+</style>
 @if (isset($docente))
 
 
@@ -133,6 +137,11 @@
                           <a class="nav-link tab_header" id="act_pendientes-tab" data-toggle="tab" href="#act_pendientes" role="tab" aria-controls="act_pendientes"
                             aria-selected="true"><b>Actividades complementarias</b></a>
                         </li>
+
+                         <li class="nav-item">
+                          <a class="nav-link tab_header" id="acc_pendientes-tab" data-toggle="tab" href="#acc_pendientes" role="tab" aria-controls="acc_pendientes"
+                            aria-selected="true"><b>Plan de accion</b></a>
+                        </li>
                         
                     </ul>
 
@@ -153,6 +162,10 @@
                       </div>
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade" id="act_pendientes" role="tabpanel" aria-labelledby="act_pendientes-tab">
+                        </div>
+                      </div>
+                      <div class="tab-content" id="myTabContent">
+                        <div class="tab-pane fade" id="acc_pendientes" role="tabpanel" aria-labelledby="acc_pendientes-tab">
                         </div>
                       </div>
                 </div>

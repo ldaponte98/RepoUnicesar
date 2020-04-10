@@ -47,6 +47,11 @@ class FechasEntregaController extends Controller
 					 			->where('id_dominio_tipo_formato', config('global.actividades_complementarias'))
 					 			->where('id_licencia', session('id_licencia'))
 					 			->first();
+		$fechas_de_entrega_plan_accion = FechasEntrega::
+								  where('id_periodo_academico', $periodo_academico->id_periodo_academico)
+					 			->where('id_dominio_tipo_formato', config('global.plan_accion'))
+					 			->where('id_licencia', session('id_licencia'))
+					 			->first();
        	
 
 		return view('fechas.fechas_de_entrega',compact([
@@ -54,6 +59,7 @@ class FechasEntregaController extends Controller
 			'fechas_de_entrega_actividades_complementarias', 
 			'fechas_de_entrega_plan_trabajo', 
 			'fechas_de_entrega_plan_desarrollo_asignatura', 
+			'fechas_de_entrega_plan_accion',
 			'periodo_academico'
 		]));	     
     }
