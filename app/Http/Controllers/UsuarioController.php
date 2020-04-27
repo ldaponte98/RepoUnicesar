@@ -27,7 +27,7 @@ class UsuarioController extends Controller
                 if ($usuario->id_perfil == 2) $is_docente=true;
     			session([
                 'id_usuario' => $usuario->id,
-                'id_usuario_tercero' =>  $usuario->tercero->id_tercero,
+                'id_tercero_usuario' =>  $usuario->tercero->id_tercero,
                 'id_licencia' => $usuario->tercero->id_licencia,
                 'is_admin' => $is_admin,
                 'is_docente' => $is_docente,

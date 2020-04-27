@@ -357,7 +357,7 @@
                                     <a href="{{ route('seguimiento/consultar') }}">Seguimiento por corte</a>
                                 </li>
                                 <li class="">
-                                    <a href="#">Informe final</a>
+                                    <a href="{{ route('seguimiento/consultar_informe_final') }}">Informe final</a>
                                 </li>
                             </ul>
 

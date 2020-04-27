@@ -96,9 +96,9 @@ class SeguimientoAsignaturaController extends Controller
 
         if (session('is_docente')==true) {
             $seguimientos = DB::table('seguimiento_asignatura')
-                    ->where('id_tercero',session('id_usuario_tercero'))
+                    ->where('id_tercero',session('id_tercero_usuario'))
                     ->paginate(10);
-            $asignaturas = Tercero::find(session('id_usuario_tercero'))->asignaturas();
+            $asignaturas = Tercero::find(session('id_tercero_usuario'))->asignaturas();
             return view('seguimiento_asignatura.consultar_desde_docente',compact(['periodos_academicos','seguimientos','asignaturas']));
         }
         return view('seguimiento_asignatura.consultar',compact(['periodos_academicos','seguimientos','asignaturas']));
@@ -118,10 +118,10 @@ class SeguimientoAsignaturaController extends Controller
                        ->where('id_licencia',session('id_licencia'));
         if (session('is_docente')==true) {
             $seguimientos = DB::table('seguimiento_asignatura')
-                    ->where('id_tercero',session('id_usuario_tercero'))
+                    ->where('id_tercero',session('id_tercero_usuario'))
                     ->paginate(10);
-            $asignaturas = Tercero::find(session('id_usuario_tercero'))->asignaturas();
-            return view('seguimiento_asignatura.consultar_desde_docente',compact(['periodos_academicos','seguimientos','asignaturas']));
+            $asignaturas = Tercero::find(session('id_tercero_usuario'))->asignaturas();
+            return view('seguimiento_asignatura.consultar_informe_final_desde_docente',compact(['periodos_academicos','seguimientos','asignaturas']));
         }
         return view('seguimiento_asignatura.consultar_informe_final',compact(['periodos_academicos','seguimientos','asignaturas']));
     }
@@ -217,7 +217,7 @@ class SeguimientoAsignaturaController extends Controller
                 $hasta = explode(' - ', $post->fecha)[1];
                  $condiciones .= " and DATE_FORMAT(s.fecha, '%Y/%m/%d') BETWEEN '$desde' AND '$hasta'";
             }
-            if ($post->docente and $post->docente != ""){
+            if (isset($post->docente) and $post->docente != ""){
                 $condiciones .= " and (LOWER(t.id_tercero) like LOWER('%".$post->docente."%')
                                        or LOWER(t.cedula) like LOWER('%".$post->docente."%')
                                        or LOWER(t.nombre) like LOWER('%".$post->docente."%')
@@ -228,7 +228,7 @@ class SeguimientoAsignaturaController extends Controller
             }
 
             $condiciones .= " and a.id_licencia = ".session('id_licencia');
-
+            if(session('is_docente') == true) $condiciones .= " and s.id_tercero = ".session('id_tercero_usuario');
             $sql = "select s.id_seguimiento,
                     t.id_tercero,
                     concat(t.nombre,' ',t.apellido) as docente,
