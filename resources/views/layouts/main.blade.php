@@ -208,43 +208,65 @@
 
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
-                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
+                                <div class="notify"> 
+                                     @php
+                                     $total_notificaciones = \App\Notificaciones::where('estado', 0) 
+                                                            ->where('id_tercero_recibe', $usuario->tercero->id_tercero)
+                                                            ->count();
+                                                            //0 es una notificacion no leida
+                                     @endphp 
+                                     @if ($total_notificaciones > 0)
+                                         <span class="heartbit"></span> <span class="point"></span>
+                                     @endif
+                                    
+                                </div>
                             </a>
                             <div class="dropdown-menu mailbox animated bounceInDown" aria-labelledby="2">
                                 <ul>
                                     <li>
-                                        <div class="drop-title">You have 4 new messages</div>
+                                        <div class="drop-title">Tienes {{ $total_notificaciones }} notificaciones</div>
                                     </li>
                                     <li style="overflow: visible;">
                                         <div class="slimScrollDiv" style="position: relative; overflow: visible hidden; width: auto; height: 250px;"><div class="message-center" style="overflow: hidden; width: auto; height: 250px;">
                                             <!-- Message -->
-                                            <a href="#">
-                                                <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online float-right"></span> </div>
+                                       @php
+                                            $notificaciones = Illuminate\Support\Facades\DB::table('notificaciones') 
+                                                            ->where('id_tercero_recibe', $usuario->tercero->id_tercero)
+                                                            ->orderBy('fecha', 'desc')
+                                                            ->get();
+                                        @endphp
+
+                                        @foreach ($notificaciones as $notificacion)
+                                        @php
+                                            $tercero_envia = \App\Tercero::find($notificacion->id_tercero_envia);
+                                            $imagen = 'assets/images/users/sin_foto.jpg';
+                                            if ($tercero_envia->foto)$imagen = '../../files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
+                                             $fecha = date("d-m-Y",strtotime($notificacion->fecha));
+                                            $hora = date("H:m",strtotime($notificacion->fecha));
+                                            $hoy =  date("d-m-Y");
+                                            if ($fecha == date("d-m-Y")) $fecha = "Hoy";
+                                            if ($fecha == date("d-m-Y",strtotime($hoy."- 1 days"))) $fecha = "Ayer";
+                                        @endphp
+
+                                       
+
+                                            <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}" title="{{ $notificacion->notificacion }}">
+                                                <div class="user-img"> <img src="{{ asset($imagen) }}" alt="user" class="img-circle" width="35" height="35"> <span class="profile-status online float-right"></span> </div>
                                                 <div class="mail-contnet">
-                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span> </div>
+                                                <h5>{{ $tercero_envia->getNameFull() }}<span class="pull-right" style="font-size: 9px">{{ $fecha }}</span></h5> <span class="mail-desc">{{ $notificacion->notificacion }}</span> <span class="time">{{ $hora }}</span> 
+                                                @if ($notificacion->estado == 0)
+                                                    <div class="notify"> 
+                                                    <span class="heartbit"></span> <span class="point"></span>
+                                                    </div>
+                                                @endif
+                                             
+                                        </div>
                                             </a>
-                                            <!-- Message -->
-                                            <a href="#">
-                                                <div class="user-img"> <img src="../assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy float-right"></span> </div>
-                                                <div class="mail-contnet">
-                                                    <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span> </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="#">
-                                                <div class="user-img"> <img src="../assets/images/users/3.jpg" alt="user" class="img-circle"> <span class="profile-status away float-right"></span> </div>
-                                                <div class="mail-contnet">
-                                                    <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span> </div>
-                                            </a>
-                                            <!-- Message -->
-                                            <a href="#">
-                                                <div class="user-img"> <img src="../assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline float-right"></span> </div>
-                                                <div class="mail-contnet">
-                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div>
-                                            </a>
+                                            @endforeach
                                         </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 186.012px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>See all e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="{{ route('notificacion/mis_notificaciones') }}"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
                                 </ul>
                             </div>

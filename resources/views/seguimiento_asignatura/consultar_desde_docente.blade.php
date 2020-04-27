@@ -185,6 +185,36 @@
                     </div>
                 </div>
 
+
+            <div class="modal fade" id="modalNotificacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Solicitud de extraplazo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!--Material textarea-->
+                    <div class="md-form">
+                      <label for="msg_notificacion">Mensaje de notificacion</label>
+                      <textarea id="msg_notificacion" class="md-textarea form-control" rows="6"></textarea>
+                    </div>
+
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="NotificarSolicitud()">Enviar</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+             {{ Form::open(array('route' => array('notificacion/crear'), 'method' => 'post', 'id'=>'_form')) }}
+            {{ Form::close() }}
+            @php
+                $jefe_departamento = \App\Tercero::where('id_licencia', $usuario->tercero->id_licencia)->where('id_dominio_tipo_ter', 2)->first();
+            @endphp
+
                 <script>
                     $(document).ready(function() {
                         $("#asignatura").on('change', function(){
@@ -285,7 +315,7 @@
                                 }else if(seguimiento.retraso == "Tiene plazo-extra"){
                                     acciones = "<td><center><a href='editar/"+seguimiento.id_seguimiento+"' style='color: blue; cursor: pointer;  font-size: 14px;' >Realizar</a></center></td>"
                                 }else{
-                                     acciones = "<td><center><a href='../plazo_docente/solicitar/"+seguimiento.id_seguimiento+"/"+seguimiento.id_tercero+"' style='color: blue; cursor: pointer;  font-size: 11px;' >Solicitar extra-plazo</a></center></td>"
+                                     acciones = "<td><center><a onclick=\"OpenModalNotificarSolicitud('"+seguimiento.id_seguimiento+"')\" style='color: blue; cursor: pointer;  font-size: 11px;' >Solicitar extra-plazo</a></center></td>"
                                 }
                                
                             }
@@ -314,6 +344,46 @@
                     tableToExcel('tabla_seguimientos', 'Reporte_seguimiento')
                     $("#tabla_seguimientos").html(tabla_aux)
                 }
+
+                 function OpenModalNotificarSolicitud(id_seguimiento) {
+                            var mensaje = "El docente "+'{{ $usuario->tercero->getNameFull() }}'+" solicita un plazo exta para el seguimiento de asignatura "+id_seguimiento;
+                            id_seguimiento_escojido = id_seguimiento
+                            $("#msg_notificacion").val(mensaje)
+                            $('#modalNotificacion').modal('show')
+                        }
+                 function NotificarSolicitud() {
+                            $('#modalNotificacion').modal('hide')
+                            var mensaje = $("#msg_notificacion").val()
+
+                            if (mensaje.lenght == 0) {
+                                alert("Debe llenar el campo requerido")
+                                return false
+                            }
+                            if (mensaje.lenght>500) {
+                                alert("Tamaño maximo de caracteres : 500")
+                                return false
+                            }
+                            var id_tercero_envia = '{{ $usuario->tercero->id_tercero }}'
+                            var id_tercero_recibe = '{{ $jefe_departamento->id_tercero }}'
+                            var id_dominio_tipo = 8 //Es retraso
+                            var _token = document.getElementsByName('_token')[0].value;
+
+                            var data = {
+                                mensaje : mensaje,
+                                id_tercero_envia : id_tercero_envia,
+                                id_tercero_recibe : id_tercero_recibe,
+                                id_dominio_tipo : id_dominio_tipo,
+                                id_formato : id_seguimiento_escojido,
+                                id_dominio_tipo_formato : {{ config('global.seguimiento_asignatura') }},
+                                _token : _token
+                            };
+                            $.post("{{ route('notificacion/crear') }}",data, function(response){
+                               if (!response.error) toastr.success('Notificacion enviada exitosamente', 'Mensaje enviado', {timeOut: 3000}) 
+                               if (response.error) toastr.error('Ocurrio un error al enviar la notificacion', 'Mensaje no enviado', {timeOut: 3000})
+                            });
+                        }
+
+
 
                 </script>
 

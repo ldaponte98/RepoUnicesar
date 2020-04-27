@@ -40,19 +40,34 @@ class NotificacionesController extends Controller
         if ($notificacion) {
             $notificacion->estado = 1;
             $notificacion->save();
-            switch ($notificacion->id_dominio_tipo) {
-                case 8: //extra-plazo
-                    if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
-                        return redirect()->route('seguimiento/editar', ['id' => $notificacion->id_formato]);
-                    }
-                case 9: //retraso
-                    if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
-                        return redirect()->route('seguimiento/consultar');
-                    }
-                                   
-                default:
-                    echo "Accion invalida";
-                    break;
+            if (session('is_docente')==true) {
+                switch ($notificacion->id_dominio_tipo) {
+                    case 8: //extra-plazo
+                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+                            return redirect()->route('seguimiento/editar', ['id' => $notificacion->id_formato]);
+                        }
+                    case 9: //retraso
+                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+                            return redirect()->route('seguimiento/consultar');
+                        }
+                                       
+                    default:
+                        echo "Accion invalida";
+                        break;
+                }
+            }
+
+            if (session('is_admin')==true) {
+                switch ($notificacion->id_dominio_tipo) {
+                    case 8: //extra-plazo
+                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+                            return redirect()->route('docente/view',['id' => $notificacion->tercero_envia->id_tercero]);
+                        }
+                                 
+                    default:
+                        echo "Accion invalida";
+                        break;
+                }
             }
         }
     }

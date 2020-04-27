@@ -44,6 +44,9 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <script src="https://jquery-ui.googlecode.com/svn-history/r3982/trunk/ui/i18n/jquery.ui.datepicker-nl.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
     <script src="{{ asset('js/TableToExcel.js') }}"></script>
 
 
@@ -277,11 +280,7 @@
                         </li>
 
 
-                        <li class="nav-item dropdown">
-                            <a title="Ver mis extra-plazos" class="nav-link text-muted waves-effect waves-dark" href="MisPlazos.php" id="2" aria-expanded="false"> <i class="mdi mdi-alarm"></i>
-                                <div class="notify">  </div>
-                            </a>
-                        </li>
+                        
 
 
                     </ul>
@@ -328,7 +327,7 @@
                         <div class="dropdown-menu animated flipInY">
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
                             <a href="VerCalendarioAcademico.php" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
-                            <a href="MisPlazos.php" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
+                            <a href="{{ route('notificacion/mis_notificaciones') }}" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
                            
                             <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
                         </div>
@@ -373,7 +372,7 @@
                         </li>
                
                     <li>
-                            <a href="{{ route('logout') }}" class="waves-effect"><i class="fa fa-sign-out m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
+                            <a href="{{ route('logout') }}" class="waves-effect"><i class="fa fa-times m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
                         </li>
                     </ul>
                     </ul>

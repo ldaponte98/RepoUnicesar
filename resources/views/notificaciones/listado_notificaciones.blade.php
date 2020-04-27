@@ -1,5 +1,5 @@
 
-@extends('layouts.main_docente')
+@extends((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'))
 
 @section('header_content')
 
@@ -33,10 +33,19 @@
                                     </li>
                                     <li class="nav-item">
                                       <a class="nav-link tab_header" id="peticiones-tab" data-toggle="tab" href="#peticiones" role="tab" aria-controls="peticiones"
-                                        aria-selected="false"><b>Peticiones y extra-plazos</b></a>
+                                        aria-selected="false"><b>
+                                        @if (session('is_docente'))
+                                            Peticiones y extra-plazos
+                                        @else
+                                            Enviadas
+                                        @endif
+                                    </b></a>
                                     </li>
                                    
                                   </ul>
+
+                                  
+
                                   <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="notificaciones" role="tabpanel" aria-labelledby="notificaciones-tab">
                                     
@@ -89,7 +98,7 @@
                                                     </center></td> 
                                                     <td><center>
                                                         @if ($notificacion->estado == 0)
-                                                            Pendiente
+                                                         <b style="color: #f62d51">Pendiente</b>
                                                         @else
                                                             Leida
                                                         @endif
@@ -101,6 +110,12 @@
                                                     <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}">Revisar</a>
                                                     </center></td>
                                                     @endif  
+
+                                                    @if ($notificacion->id_dominio_tipo == 9)
+                                                    <td><center>
+                                                    <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}">Ir</a>
+                                                    </center></td>
+                                                    @endif 
                                                     </tr>
 
                                                 @endforeach
@@ -119,10 +134,11 @@
                                                 <tr>
                                                     <th><center><b><i class="fa fa-user"></i></b></center></th>
                                                     <th><center><b>Dirigido</b></center></th>
-                                                    <th><center><b>Rango</b></center></th>
+                                                    <th><center><b>Asunto</b></center></th>
                                                     <th><center><b>Fecha</b></center></th>
                                                     <th><center><b>Hora</b></center></th>
                                                     <th><center><b>Mensaje</b></center></th>
+                                                    <th><center><b>Estado</b></center></th>
                                                 </tr>
                                             </thead>
                                             <style type="text/css"> 
@@ -148,7 +164,7 @@
                                                         </center>
                                                     </td>
                                                     <td>{{ $tercero_recibe->getNameFull() }}</td>
-                                                    <td>{{ $tercero_recibe->tipo->dominio }}</td>
+                                                    <td>{{ $tipo->dominio }}</td>
                                                     <td>{{ date('d-m-Y', strtotime($notificacion->fecha)) }}</td>
                                                     <td>{{ date('H:i', strtotime($notificacion->fecha)) }}</td>
                                                     
@@ -157,6 +173,14 @@
                                                       <i class="fa fa-comment"></i>
                                                     </a>
                                                     </center></td>    
+                                                    <td><center>
+                                                        @if ($notificacion->estado == 0)
+                                                         <b style="color: #f62d51">Sin ver</b>
+                                                        @else
+                                                            Vista
+                                                        @endif
+                                                    </center>
+                                                    </td> 
                                                     </tr>
 
                                                 @endforeach
