@@ -48,16 +48,66 @@ class SeguimientoAsignaturaController extends Controller
         		$seguimiento->save();
     		}
 
-            $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->first();
+            $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->where('id_periodo_academico', $seguimiento->grupo->id_periodo_academico)->first();
     		return view('seguimiento_asignatura.view',compact('seguimiento'),compact('fechas'));
     	}
 
     	echo "Este archivo no existe";
     }
 
+    public function viewInformeFinal($id_seguimiento)
+    {
+        $seguimiento_3 = SeguimientoAsignatura::find($id_seguimiento);
+
+        if ($seguimiento_3) {
+            $id_asignatura = $seguimiento_3->id_asignatura;
+            $id_grupo = $seguimiento_3->id_grupo;
+            $id_tercero = $seguimiento_3->id_tercero;
+
+            $seguimientos = SeguimientoAsignatura::all()
+                                ->where('id_asignatura', $id_asignatura)
+                                ->where('id_grupo', $id_grupo)
+                                ->where('id_tercero', $id_tercero);
+
+            if ($seguimiento_3->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
+                $seguimiento_3->estado = 'Recibido';
+                $seguimiento_3->save();
+            }
+
+            $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->where('id_periodo_academico', $seguimiento_3->grupo->id_periodo_academico)->first();
+
+            return view('seguimiento_asignatura.view_informe_final',compact('seguimientos'),compact('fechas'));
+        }
+
+        echo "Este archivo no existe";
+    }
+
     public function listar()
     {
         $seguimientos = DB::table('seguimiento_asignatura')
+                    ->paginate(10);
+
+        $periodos_academicos = DB::table('periodo_academico')
+                   ->orderBy('id_periodo_academico','desc')
+                   ->get();
+
+        $asignaturas = Asignatura::all()
+                       ->where('id_licencia',session('id_licencia'));
+
+        if (session('is_docente')==true) {
+            $seguimientos = DB::table('seguimiento_asignatura')
+                    ->where('id_tercero',session('id_usuario_tercero'))
+                    ->paginate(10);
+            $asignaturas = Tercero::find(session('id_usuario_tercero'))->asignaturas();
+            return view('seguimiento_asignatura.consultar_desde_docente',compact(['periodos_academicos','seguimientos','asignaturas']));
+        }
+        return view('seguimiento_asignatura.consultar',compact(['periodos_academicos','seguimientos','asignaturas']));
+    }
+
+    public function listarInformeFinal()
+    {
+        $seguimientos = DB::table('seguimiento_asignatura')
+                    ->where('corte', 3)
                     ->paginate(10);
 
         $periodos_academicos = DB::table('periodo_academico')
@@ -73,7 +123,7 @@ class SeguimientoAsignaturaController extends Controller
             $asignaturas = Tercero::find(session('id_usuario_tercero'))->asignaturas();
             return view('seguimiento_asignatura.consultar_desde_docente',compact(['periodos_academicos','seguimientos','asignaturas']));
         }
-        return view('seguimiento_asignatura.consultar',compact(['periodos_academicos','seguimientos','asignaturas']));
+        return view('seguimiento_asignatura.consultar_informe_final',compact(['periodos_academicos','seguimientos','asignaturas']));
     }
 
     public function getSeguimiento($id_seguimiento)
@@ -151,6 +201,69 @@ class SeguimientoAsignaturaController extends Controller
         return response()->json("nada llego");
     }
 
+    public function getReporteInformeFinal(Request $request)
+    {
+        $post = $request->all();
+
+        if ($post) {
+            $post = (object) $post;
+            $condiciones = "";
+            if ($post->estado and $post->estado != "") $condiciones .= " and s.estado = '".$post->estado."'";
+            if ($post->asignatura and $post->asignatura != "") $condiciones .= " and s.id_asignatura = ".$post->asignatura;
+            if ($post->grupo and $post->grupo != "") $condiciones .= " and s.id_grupo = ".$post->grupo;
+            if ($post->periodo_academico and $post->periodo_academico != "") $condiciones .= " and g.id_periodo_academico = ".$post->periodo_academico;
+            if ($post->fecha and $post->fecha != ""){
+                $desde = explode(' - ', $post->fecha)[0];
+                $hasta = explode(' - ', $post->fecha)[1];
+                 $condiciones .= " and DATE_FORMAT(s.fecha, '%Y/%m/%d') BETWEEN '$desde' AND '$hasta'";
+            }
+            if ($post->docente and $post->docente != ""){
+                $condiciones .= " and (LOWER(t.id_tercero) like LOWER('%".$post->docente."%')
+                                       or LOWER(t.cedula) like LOWER('%".$post->docente."%')
+                                       or LOWER(t.nombre) like LOWER('%".$post->docente."%')
+                                       or LOWER(t.apellido) like LOWER('%".$post->docente."%')
+                                       or LOWER(t.email) like LOWER('%".$post->docente."%')
+                                       or LOWER(t.servicio) like LOWER('%".$post->docente."%')
+                                       )";
+            }
+
+            $condiciones .= " and a.id_licencia = ".session('id_licencia');
+
+            $sql = "select s.id_seguimiento,
+                    t.id_tercero,
+                    concat(t.nombre,' ',t.apellido) as docente,
+                    a.id_asignatura,
+                    concat(a.nombre,' (',a.codigo,') ') as asignatura,
+                    g.id_grupo,
+                    g.codigo as grupo,
+                    s.fecha,
+                    s.estado,
+                    s.corte,
+                    p.periodo as periodo_academico
+                    from seguimiento_asignatura s
+                    left join asignatura a using(id_asignatura)
+                    left join grupo g using(id_grupo)
+                    left join periodo_academico p on g.id_periodo_academico = p.id_periodo_academico
+                    left join terceros t  on t.id_tercero = s.id_tercero
+                    where s.id_seguimiento is not null
+                    and s.corte = 3 
+                    $condiciones 
+                    order by s.fecha desc";
+            $data = DB::select($sql);
+
+            $seguimientos = [];
+            foreach ($data as $key => $value) {
+               $seguimiento = $value;
+               if($value->estado == 'Pendiente') {
+                 $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
+               }
+               array_push($seguimientos, $seguimiento);
+            }
+            return response()->json($seguimientos);
+        }
+        return response()->json("nada llego");
+    }
+
     public function editar(Request $request, $id)
     {
         $post = $request->all();
@@ -176,7 +289,7 @@ class SeguimientoAsignaturaController extends Controller
                 $seguimiento->save();
                 $error = false; 
                 //eliminamos la informacion vieja
-                $delete_unidades = UnidadAsignaturaSeguimiento::where('id_seguimiento_asignatura', $seguimiento->id_seguimiento) ->delete();
+                $delete_unidades = UnidadAsignaturaSeguimiento::where('id_seguimiento_asignatura', $seguimiento->id_seguimiento)->delete();
                 $delete_ejes = EjeTematicoSeguimiento::where('id_seguimiento_asignatura', $seguimiento->id_seguimiento)->delete();
                 $delete_causas = CausaSeguimiento::where('id_seguimiento_asignatura', $seguimiento->id_seguimiento)->delete();
                 $delete_analisis = AnalisisCualitativoSeguimiento::where('id_seguimiento_asignatura', $seguimiento->id_seguimiento)->delete();
@@ -252,13 +365,13 @@ class SeguimientoAsignaturaController extends Controller
 
     }
 
-    public function getEjesTematicos($id_unidad)
+    public function getEjesTematicos($id_unidad,$id_seguimiento)
     {
        $unidad = UnidadAsignatura::find($id_unidad);
        return response()->json([
                     "unidad" => $unidad,
                     "ejes_tematicos" => $unidad->ejes_tematicos,
-                ]);
+        ]);
     }
 
     public function imprimir($id_seguimiento)
@@ -266,6 +379,68 @@ class SeguimientoAsignaturaController extends Controller
         $seguimiento = SeguimientoAsignatura::find($id_seguimiento);
         $pdf = \PDF::loadView('seguimiento_asignatura.pdf_seguimiento', compact('seguimiento'));
         return $pdf->stream('Seguimiento de asignatura.pdf');
+    }
+
+    public function imprimir_informe_final($id_seguimiento)
+    {
+        $seguimiento_3 = SeguimientoAsignatura::find($id_seguimiento);
+
+        if ($seguimiento_3) {
+            $id_asignatura = $seguimiento_3->id_asignatura;
+            $id_grupo = $seguimiento_3->id_grupo;
+            $id_tercero = $seguimiento_3->id_tercero;
+
+        $seguimiento_1 = SeguimientoAsignatura::
+                                where('id_asignatura', $id_asignatura)
+                                ->where('id_grupo', $id_grupo)
+                                ->where('id_tercero', $id_tercero)
+                                ->where('corte', 1)
+                                ->first();
+        $seguimiento_2 = SeguimientoAsignatura::
+                                where('id_asignatura', $id_asignatura)
+                                ->where('id_grupo', $id_grupo)
+                                ->where('id_tercero', $id_tercero)
+                                ->where('corte', 2)
+                                ->first();
+        $pdf = \PDF::loadView('seguimiento_asignatura.pdf_informe_final', compact([
+            'seguimiento_1',
+            'seguimiento_2',
+            'seguimiento_3'
+        ]));
+        return $pdf->stream('Informe final seguimiento de asignatura.pdf');
+        }
+        echo "No se pudo realizar el archivo"; die();
+    }
+
+    public function imprimir_informe_final_prueba($id_seguimiento)
+    {
+        $seguimiento_3 = SeguimientoAsignatura::find($id_seguimiento);
+
+        if ($seguimiento_3) {
+            $id_asignatura = $seguimiento_3->id_asignatura;
+            $id_grupo = $seguimiento_3->id_grupo;
+            $id_tercero = $seguimiento_3->id_tercero;
+
+        $seguimiento_1 = SeguimientoAsignatura::
+                                where('id_asignatura', $id_asignatura)
+                                ->where('id_grupo', $id_grupo)
+                                ->where('id_tercero', $id_tercero)
+                                ->where('corte', 1)
+                                ->first();
+        $seguimiento_2 = SeguimientoAsignatura::
+                                where('id_asignatura', $id_asignatura)
+                                ->where('id_grupo', $id_grupo)
+                                ->where('id_tercero', $id_tercero)
+                                ->where('corte', 2)
+                                ->first();
+        return view('seguimiento_asignatura.pdf_informe_final', compact([
+            'seguimiento_1',
+            'seguimiento_2',
+            'seguimiento_3'
+        ]));
+        
+        }
+        echo "No se pudo realizar el archivo"; die();
     }
     public function imprimir_prueba($id_seguimiento)
     { 

@@ -24,5 +24,17 @@ class Asignatura extends Model
 		return $this->hasMany(UnidadAsignatura::class, 'id_asignatura');
 	}
 
+	public function ejes_tematicos()
+	{
+		$ejes = [];
+		$unidades = UnidadAsignatura::all()->where('id_asignatura', $this->id_asignatura);
+		foreach ($unidades as $unidad) {
+			foreach ($unidad->ejes_tematicos as $eje) {
+				array_push($ejes, $eje);
+			}
+		}
+		return $ejes;
+	}
+
 	
 }

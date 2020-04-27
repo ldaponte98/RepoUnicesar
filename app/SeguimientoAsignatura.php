@@ -21,7 +21,10 @@ class SeguimientoAsignatura extends Model
     	'relacion_ideal_real',
     	'prom_notas',
     	'aprobados',
-    	'reprobados',
+        'reprobados',
+        'num_est_sup_promedio',
+        'num_est_no_sup_promedio',
+        'reprobados',
     	'estrategias_didacticas',
     	'estrategias_evaluativas',
     	'estrategias_desa_cont_programatico',
@@ -40,6 +43,8 @@ class SeguimientoAsignatura extends Model
             'prom_notas' => 'required',
             'aprobados' => 'required',
             'reprobados' => 'required',
+            'num_est_sup_promedio' => 'required',
+            'num_est_no_sup_promedio' => 'required',
             'estrategias_didacticas' => 'required',
             'estrategias_evaluativas' => 'required',
             'si_porc_efi_critico' => 'required',
@@ -54,7 +59,9 @@ class SeguimientoAsignatura extends Model
     	if ($this->num_estudiantes == null or $this->num_estudiantes == "") array_push($this->errores, "El campo de numero de estudiantes es requerido");
     	if ($this->prom_notas == null or $this->prom_notas == "") array_push($this->errores, "El campo de promedio de notas es requerido");
     	if ($this->aprobados == null or $this->aprobados == "") array_push($this->errores, "El campo de aprobados es requerido") ;
-    	if ($this->reprobados == null or $this->reprobados == "") array_push($this->errores, "El campo de reprobados es requerido") ;
+        if ($this->reprobados == null or $this->reprobados == "") array_push($this->errores, "El campo de reprobados es requerido") ;
+        if ($this->num_est_sup_promedio == null or $this->num_est_sup_promedio == "") array_push($this->errores, "El campo numero de estudiantes que superan el promedio es requerido");
+        if ($this->num_est_no_sup_promedio == null or $this->num_est_no_sup_promedio == "") array_push($this->errores, "El campo numero de estudiantes que estan por debajo del promedio es requerido");
     	if ($this->estrategias_didacticas == null or $this->estrategias_didacticas == "") array_push($this->errores, "El campo de estrategias didacticas es requerido");
     	if ($this->estrategias_evaluativas == null or $this->estrategias_evaluativas == "") array_push($this->errores, "El campo de estrategias evaluativas es requerido");
     	if ($this->si_porc_efi_critico == null or $this->si_porc_efi_critico == "") array_push($this->errores, "El campo de si el porcentaje de eficiencia es critico es requerido");
@@ -174,8 +181,8 @@ class SeguimientoAsignatura extends Model
                                        ->where('estado', 1)
                                        ->first();
             if ($plazo_extra) {
-                $fecha_inicio_plazo = date('Y-m-d', strtotime($plazo_extra->fecha_inicio));
-                $fecha_fin_plazo = date('Y-m-d', strtotime($plazo_extra->fecha_fin));
+                $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+                $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
                 if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {
                    return "Tiene plazo-extra";
                 }
@@ -219,6 +226,20 @@ class SeguimientoAsignatura extends Model
         	}
         
         }
+
+
+    public function porcentaje_desarrollo_por_corte()
+    {
+       $total_ejes_tematicos_todos = count($this->asignatura->ejes_tematicos());
+       $total_ejes_tematicos_desarrollados = count($this->ejes_tematicos_desarrollados);
+       $porcentaje = 0;
+       if ($total_ejes_tematicos_todos == 0){
+            $porcentaje = 100;
+       }else{
+            $porcentaje = ($total_ejes_tematicos_desarrollados / $total_ejes_tematicos_todos) * 100;
+       }
+       return round($porcentaje, 2);
+    }
 
 	
 }

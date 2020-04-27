@@ -203,43 +203,52 @@
                         <!-- This is  -->
 
                         <li class="nav-item"> <a class="nav-link nav-toggler hidden-md-up text-muted waves-effect waves-dark" href="javascript:void(0)"><i class="ti-menu"></i></a> </li>
+                        
+
+
                         <li class="nav-item dropdown">
-                            <a id="btnnoti" class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-message"></i>
-                                <div id="notify" class="notify">  </div>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
+                                <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                             </a>
-                            <div class="dropdown-menu mailbox animated bounceInDown">
+                            <div class="dropdown-menu mailbox animated bounceInDown" aria-labelledby="2">
                                 <ul>
                                     <li>
-                                        <div class="drop-title">Notificaciones</div>
+                                        <div class="drop-title">You have 4 new messages</div>
                                     </li>
                                     <li style="overflow: visible;">
                                         <div class="slimScrollDiv" style="position: relative; overflow: visible hidden; width: auto; height: 250px;"><div class="message-center" style="overflow: hidden; width: auto; height: 250px;">
-                                           
-                                            <div id="notificaciones">
-                                                
-                                            </div>
                                             <!-- Message -->
-
-                                        </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 192.901px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
+                                            <a href="#">
+                                                <div class="user-img"> <img src="../assets/images/users/1.jpg" alt="user" class="img-circle"> <span class="profile-status online float-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:30 AM</span> </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="#">
+                                                <div class="user-img"> <img src="../assets/images/users/2.jpg" alt="user" class="img-circle"> <span class="profile-status busy float-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Sonu Nigam</h5> <span class="mail-desc">I've sung a song! See you at</span> <span class="time">9:10 AM</span> </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="#">
+                                                <div class="user-img"> <img src="../assets/images/users/3.jpg" alt="user" class="img-circle"> <span class="profile-status away float-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Arijit Sinh</h5> <span class="mail-desc">I am a singer!</span> <span class="time">9:08 AM</span> </div>
+                                            </a>
+                                            <!-- Message -->
+                                            <a href="#">
+                                                <div class="user-img"> <img src="../assets/images/users/4.jpg" alt="user" class="img-circle"> <span class="profile-status offline float-right"></span> </div>
+                                                <div class="mail-contnet">
+                                                    <h5>Pavan kumar</h5> <span class="mail-desc">Just see the my admin!</span> <span class="time">9:02 AM</span> </div>
+                                            </a>
+                                        </div><div class="slimScrollBar" style="background: rgb(220, 220, 220); width: 5px; position: absolute; top: 0px; opacity: 0.4; display: none; border-radius: 7px; z-index: 99; right: 1px; height: 186.012px;"></div><div class="slimScrollRail" style="width: 5px; height: 100%; position: absolute; top: 0px; display: none; border-radius: 7px; background: rgb(51, 51, 51); opacity: 0.2; z-index: 90; right: 1px;"></div></div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="MisNotificaciones.php"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="javascript:void(0);"> <strong>See all e-Mails</strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
-
-
                                 </ul>
-
-
                             </div>
                         </li>
-
-
-                        <li class="nav-item dropdown">
-                            <a title="Ver mis extra-plazos" class="nav-link text-muted waves-effect waves-dark" href="sdfsfd" id="2" aria-expanded="false"> <i class="mdi mdi-alarm"></i>
-                                <div class="notify">  </div>
-                            </a>
-                        </li>
-
                         <style type="text/css">
                             .cuadro_busqueta{
                                 background: white; 
@@ -338,27 +347,28 @@
                         <li>
                             <!--<a href="PeriodosAcademicos.php" class="waves-effect"><i class="fa fa-area-chart m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Carga academica</font></font></a>-->
                         </li>
+                         @php
+                            $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
+                                            ->leftJoin('asignatura', 'asignatura.id_asignatura', '=', 'seguimiento_asignatura.id_asignatura')
+                                            ->where('estado', 'Enviado')
+                                            ->where('id_licencia', session('id_licencia'))
+                                            ->count();
+                        @endphp 
                         <li class="">
                             <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-file-chart m-r-10"></i><span class="hide-menu">Reportes</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li class="">
-                                    <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;" >Seguimiento de asignatura
-                                    @php
-                                    $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
-                                                    ->leftJoin('asignatura', 'asignatura.id_asignatura', '=', 'seguimiento_asignatura.id_asignatura')
-                                                    ->where('estado', 'Enviado')
-                                                    ->where('id_licencia', session('id_licencia'))
-                                                    ->count();
-                             @endphp 
+                                    <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
+                                   
                              @if ($total_seguimientos_sin_leer > 0)
-                                <span class="label label-rounded label-warning" title="{{ $total_seguimientos_sin_leer }} sin revisar ">{{ $total_seguimientos_sin_leer }}</span>
-
+                                <span class="label label-rounded label-warning" title="{{ $total_seguimientos_sin_leer }} sin revisar ">{{ $total_seguimientos_sin_leer }}
+                                </span>
                              @endif
                              </a>
                              <ul aria-expanded="false" class="collapse">
-                                    <li class="">
+                                    <li>
                                     <a href="{{ route('seguimiento/consultar') }}" style="font-size: 14px;">Seguimiento por corte</a>
-                                    <a href="sdfdf"  style="font-size: 14px;">Informe final</a>
+                                    <a href="{{ route('seguimiento/consultar_informe_final') }}"  style="font-size: 14px;">Informe final</a>
                                 </li>
 
                                 </ul>

@@ -51,16 +51,20 @@ Route::post('notificacion/crear','NotificacionesController@crear')->name('notifi
 
 //RUTAS SEGUIMIENTO
 Route::get('seguimiento/consultar','SeguimientoAsignaturaController@listar')->name('seguimiento/consultar');
+Route::get('seguimiento/consultar_informe_final','SeguimientoAsignaturaController@listarInformeFinal')->name('seguimiento/consultar_informe_final');
 Route::any('seguimiento/editar/{id}','SeguimientoAsignaturaController@editar')->name('seguimiento/editar');
 Route::get('seguimiento/view/{id}','SeguimientoAsignaturaController@view')->name('seguimiento/view');
+Route::get('seguimiento/view_informe_final/{id}','SeguimientoAsignaturaController@viewInformeFinal')->name('seguimiento/view_informe_final');
 Route::post('seguimiento/marcarComoLeido','SeguimientoAsignaturaController@marcarComoLeido')->name('seguimiento/marcarComoLeido');
 Route::any('seguimiento/getReporte','SeguimientoAsignaturaController@getReporte')->name('seguimiento/getReporte');
-Route::get('seguimiento/getEjesTematicos/{id}','SeguimientoAsignaturaController@getEjesTematicos')->name('seguimiento/getEjesTematicos');
+Route::any('seguimiento/getReporteInformeFinal','SeguimientoAsignaturaController@getReporteInformeFinal')->name('seguimiento/getReporteInformeFinal');
+Route::get('seguimiento/getEjesTematicos/{id}/{id_seguimiento}','SeguimientoAsignaturaController@getEjesTematicos')->name('seguimiento/getEjesTematicos');
 Route::get('seguimiento/getSeguimiento/{id}','SeguimientoAsignaturaController@getSeguimiento')->name('seguimiento/getSeguimiento');
 Route::get('seguimiento/imprimir/{id}','SeguimientoAsignaturaController@imprimir')->name('seguimiento/imprimir');
 Route::get('seguimiento/view_imprimir/{id}','SeguimientoAsignaturaController@imprimir_prueba')->name('seguimiento/view_imprimir');
 
-
+Route::get('seguimiento/imprimir_informe_final/{id}','SeguimientoAsignaturaController@imprimir_informe_final')->name('seguimiento/imprimir_informe_final');
+Route::get('seguimiento/imprimir_informe_final_prueba/{id}','SeguimientoAsignaturaController@imprimir_informe_final_prueba')->name('seguimiento/imprimir_informe_final_prueba');
 
 //RUTAS FECHAS
 Route::any('fechas/fechas_de_entrega','FechasEntregaController@index')->name('fechas/fechas_de_entrega');

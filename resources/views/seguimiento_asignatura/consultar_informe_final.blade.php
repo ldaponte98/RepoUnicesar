@@ -39,7 +39,7 @@
                         <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
-                            <li class="breadcrumb-item active">Seguimiento de asignatura</li>
+                            <li class="breadcrumb-item active">Informe final seguimiento de asignatura</li>
                         </ol>
                         <a id="btnfil" style="color: white;" onclick="masfiltros()"  class="btn pull-left  btn-info">Mas filtros</a>
                     </div>
@@ -60,7 +60,7 @@
                             <div class="form-group">
                                   <label style="color: black;"><b>Estado</b></label>
                                            <select id="estado" name="estado" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
+                                                <option value="">Todos</option>
                                                 <option value="Recibido">Recibidos (Leidos)</option>
                                                 <option value="Enviado">Enviados (No leidos)</option>
                                                 <option value="Pendiente">Pendientes</option>
@@ -82,10 +82,10 @@
                          <div class="col-sm-3">
                             <div class="form-group">
                                   <label style="color: black;"><b>Grupo</b></label>
-                                           <select id="grupo" name="grupo" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                
-                                            </select>
+                                   <select id="grupo" name="grupo" class="form-control form-control-line"  >
+                                        <option value="">Seleccione...</option>
+                                        
+                                    </select>
                             </div>
                         </div>
                         <div class="col-sm-3">
@@ -115,19 +115,7 @@
                     
                  </div>
                  <div id="segundofil">
-                 <div class="row" >
-                    
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Corte</b></label>
-                                           <select id="cor" name="corte" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                <option value="1">Primer Corte</option>
-                                                <option value="2">Segundo Corte</option>
-                                                <option value="3">Tercer Corte</option>
-                                            </select>
-                            </div>
-                        </div>  
+                 <div class="row" > 
                               <div class="col-sm-6">
                             <div class="form-group">
                                   <label style="color: black;"><b>Fecha de envio</b></label>
@@ -136,7 +124,7 @@
                                                 
                             </div>
                         </div> 
-                         <div class="col-sm-3">
+                         <div class="col-sm-6">
                             <div class="form-group">
                                   <label style="color: black;"><b>Docente</b></label>
                                           <input name="docente" type="text" class="form-control form-control-line" placeholder="" >
@@ -170,7 +158,7 @@
                     <div class="col-sm-12">
                         <div class="card">
                             <div class="card-block">
-                                <h4 class="card-title" id="titulo_tabla">Seguimientos de asignatura </h4>
+                                <h4 class="card-title" id="titulo_tabla">Informes finales de seguimiento de asignatura </h4>
                                 <div id="tablaarchivo" class="table-responsive">
                                     <table id="tabla_seguimientos" class="table">
                                         <thead>
@@ -179,7 +167,6 @@
                                                 <td><b>Docente</b></td>
                                                 <td><b>Asignatura</b></td>
                                                 <td><b>Grupo</b></td>
-                                                <td><b>Corte</b></td>
                                                 <td><b>Fecha de envio</b></td>
                                                 <td><b>Retraso</b></td>
                                                 <td><b>Estado</b></td>
@@ -247,6 +234,7 @@
                 }
 
                 function cargargrupos() {
+                    $("#grupo").html("<option value='0'>Cargando...</option>")
                     var id_asignatura = $("#asignatura").val()
                     var ruta = "../asignatura/buscar_grupos/"+id_asignatura
                     var grupos = "<option value='0'>Seleccione...</option>"
@@ -260,7 +248,7 @@
 
                 function consultar(){
                     var data = $("#form_fltros").serialize();
-                    var url = "{{ route('seguimiento/getReporte') }}"
+                    var url = "{{ route('seguimiento/getReporteInformeFinal') }}"
                     $.blockUI({
                         message: '<h1>Buscando</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
                         css: {
@@ -280,8 +268,7 @@
                                     "<td>"+seguimiento.id_seguimiento+"</td>"+
                                     "<td>"+seguimiento.docente+"</td>"+
                                     "<td>"+seguimiento.asignatura+"</td>"+
-                                    "<td>"+seguimiento.grupo+"</td>"+
-                                    "<td>"+seguimiento.corte+"</td>"
+                                    "<td>"+seguimiento.grupo+"</td>"
                             if(seguimiento.estado=='Pendiente'){
                                 tabla += "<td> Sin enviar </td>"+
                                          "<td>"+seguimiento.retraso+"</td>"
@@ -294,14 +281,16 @@
                                      "<td>"+seguimiento.periodo_academico+"</td>"
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(seguimiento.estado=='Pendiente'){
+
                                 acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;'"+
                                  "onclick=\"OpenModalNotificarRetraso("+seguimiento.id_seguimiento+","+seguimiento.id_tercero+",\'"+seguimiento.docente+"\',\'"+seguimiento.retraso+"\',\'"+seguimiento.asignatura+"\',\'"+seguimiento.grupo+"\',"+seguimiento.corte+", \'"+seguimiento.periodo_academico+"\')\">Notificar retraso</a></center></td>"
+                                 if(seguimiento.retraso == 'En espera' || seguimiento.retraso == 'Tiene plazo-extra') acciones = ""
                             }
                             if(seguimiento.estado=='Recibido'){
-                                acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' target='_blank' href = 'view/"+seguimiento.id_seguimiento+"'>Ver</a></center></td>"
+                                acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' target='_blank' href = 'view_informe_final/"+seguimiento.id_seguimiento+"'>Ver</a></center></td>"
                             }
                             if(seguimiento.estado=='Enviado'){
-                                acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;' target='_blank' href = 'view/"+seguimiento.id_seguimiento+"'>Revisar</a></center></td>"
+                                acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;' target='_blank' href = 'view_informe_final/"+seguimiento.id_seguimiento+"'>Revisar</a></center></td>"
                             }
 
                             tabla += acciones
@@ -310,7 +299,7 @@
                         $.unblockUI();
 
                         $("#bodytablemiseguimiento").html(tabla)
-                        $("#titulo_tabla").html("Seguimientos de asignatura ("+response.length+")")
+                        $("#titulo_tabla").html("Informe final seguimiento de asignatura ("+response.length+")")
                     })
 
                 }
@@ -407,6 +396,10 @@
 
             <!--FIN MODAL DE NOTICAR RETRASO------------------------------------------------------->
 
-
+<script>
+    $(document).ready(function(){
+        consultar()
+    })
+</script>
 @endsection
 

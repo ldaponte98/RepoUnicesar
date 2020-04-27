@@ -21,7 +21,7 @@ class PlazoDocenteController extends Controller
         $plazo_docente->id_tercero = $post->id_tercero;
         $plazo_docente->id_formato = $post->id_formato;
         $plazo_docente->fecha_inicio = $fecha_inicio;
-        $plazo_docente->fecha_fin = $fecha_fin;
+        $plazo_docente->fecha_fin = $fecha_fin. " 23:59:59";
 
         if ($plazo_docente->save()) {
 
@@ -32,6 +32,7 @@ class PlazoDocenteController extends Controller
             $notificacion->id_tercero_envia = session('id_usuario_tercero');
             $notificacion->id_tercero_recibe = $post->id_tercero;
             $notificacion->id_dominio_tipo = config('global.notificacion_extra_pazo');
+            $notificacion->id_formato = $post->id_formato;
             $notificacion->save();
         	return response()->json([
         		'error' => false,

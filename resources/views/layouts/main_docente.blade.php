@@ -3,7 +3,6 @@
 
 @endphp
 @if ($usuario == null)
-
     <script>
         location.href = '{{ route('logout') }}'
      </script>

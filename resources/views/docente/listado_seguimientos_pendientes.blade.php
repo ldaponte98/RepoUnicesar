@@ -170,7 +170,7 @@
                 '_token' : token,
                 'id_tercero' : {{ $docente->id_tercero }},
                 'id_formato' : id_seguimiento,
-                'fechas_plazo' : fechas_plazo
+                'fechas_plazo' : fechas_plazo,
             }
             $.blockUI({
                         message: '<h1>Registrando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',

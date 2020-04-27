@@ -240,6 +240,26 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                        
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-md-12" style="color: black;" >N° Estudiantes que superan el promedio <b>*</b></label>
+                                        <div class="col-md-12">
+                                            <input id="num_est_sup_promedio" name="num_est_sup_promedio"  type="number" class="form-control form-control-line " value="{{ $seguimiento->num_est_sup_promedio }}" onchange="establecer_no_sup_promedio()">
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label class="col-md-12" style="color: black;">N° Estudiantes que estan por debajo del promedio</label>
+                                        <div class="col-md-12">
+                                            <input id="num_est_no_sup_promedio" value="{{ $seguimiento->num_est_no_sup_promedio }}" name="num_est_no_sup_promedio" type="number" class="form-control form-control-line " readonly  >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                                     <div class="form-group">
                                         <label class="col-md-12" style="color: black;">Analisis cualitativo del comportamiento academico de los estudiantes</label>
                                         <br><br>
@@ -436,7 +456,7 @@
        		$("#ejes_tematicos").html("Cargando...")
        		var html_unidad = $("#unidad_"+id_unidad)
 	       	 if(html_unidad.prop('checked')){
-	       	 	var url = "../getEjesTematicos/"+id_unidad
+	       	 	var url = "../getEjesTematicos/"+id_unidad+"/"+{{ $seguimiento->id_seguimiento }}
 	       	 	$.ajax({ type: "GET", url : url, dataType:  "JSON"})
 		         .done(function(response){
 		        	unidades_seleccionadas.push(response)
@@ -597,6 +617,20 @@
            
         }
 
+        function establecer_no_sup_promedio(){
+             var total = $("#num_estudiantes").val()
+            var sup_prom = $("#num_est_sup_promedio").val()
+
+            total = parseInt(total)
+            sup_prom = parseInt(sup_prom)
+            $("#num_est_no_sup_promedio").val("")
+            //aca valido si lo q escribio es numero y si es permitido segun el numero de estudiantes
+            if(sup_prom > total){ $("#num_est_sup_promedio").val(total); $("#num_est_no_sup_promedio").val(0); return true}
+            if(sup_prom < 0){ $("#num_est_sup_promedio").val(0); $("#num_est_no_sup_promedio").val(total); return true}
+            
+            if(sup_prom != "")  $("#num_est_no_sup_promedio").val(total-sup_prom)
+        }
+
         function validar_cantidad_de_estudiantes(){
             if($("#num_estudiantes").val() > $("#num_estudiantes_iniciales").val()) $("#num_estudiantes").val($("#num_estudiantes_iniciales").val())
             if($("#num_estudiantes").val() < 0) $("#num_estudiantes").val(0)
@@ -633,6 +667,8 @@
                 'prom_notas' : $("#prom_notas").val(),
                 'aprobados' : $("#aprobados").val(),
                 'reprobados' : $("#reprobados").val(),
+                'num_est_sup_promedio' : $("#num_est_sup_promedio").val(),
+                'num_est_no_sup_promedio' : $("#num_est_no_sup_promedio").val(),
                 'estrategias_didacticas' : $("#estrategias_didacticas").val(),
                 'estrategias_evaluativas' : $("#estrategias_evaluativas").val(),
                 'estrategias_desa_cont_programatico' : $("#estrategias_desa_cont_programatico").val(),
@@ -658,8 +694,8 @@
             $.post(url, data, function(response){
                 $.unblockUI();
                 if(response.error == false){
-                    toastr.success('El seguimiento de asignatura se ah registrado correctamente.', 'Guardado correctamente', {timeOut: 3000})
-                    location.href = '{{ route('seguimiento/view', $seguimiento->id_seguimiento) }}'
+                    toastr.success('El seguimiento de asignatura se ah registrado correctamente.', 'Guardado correctamente', {timeOut: 2000})
+                    window.open('{{ route('seguimiento/view', $seguimiento->id_seguimiento) }}', '_blank');
                 }else{ 
                     console.log(response)
                     response.errores.forEach(function(error) {

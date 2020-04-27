@@ -1,4 +1,9 @@
-
+@php
+	$licencia = \App\Licencia::find(session('id_licencia'));
+	foreach ($seguimientos as $seguimiento) {
+		if ($seguimiento->corte == 3) $seguimiento_final = $seguimiento;
+	}
+@endphp
 
 <!DOCTYPE html>
 <html>
@@ -313,16 +318,14 @@
 				<h2 class="title">Universidad Popular Del Cesar</h2>
 				<p>
 					<br>
-					Departamento de Matematicas y Estadisticas
+					{{ $licencia->nombre }}
 				</p>
 			</div>
 			<div id="panel1">
 			<div class="company-contact">
 				<div class="phone left">
 					<span class="circle"><img src="data:image/svg+xml;charset=utf-8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4NCjwhLS0gR2VuZXJhdG9yOiBBZG9iZSBJbGx1c3RyYXRvciAxNS4xLjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4NCjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+DQo8c3ZnIHZlcnNpb249IjEuMSIgaWQ9IkxheWVyXzEiIHhtbG5zOnNrZXRjaD0iaHR0cDovL3d3dy5ib2hlbWlhbmNvZGluZy5jb20vc2tldGNoL25zIg0KCSB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjkuNzYycHgiIGhlaWdodD0iOS45NThweCINCgkgdmlld0JveD0iLTQuOTkyIDAuNTE5IDkuNzYyIDkuOTU4IiBlbmFibGUtYmFja2dyb3VuZD0ibmV3IC00Ljk5MiAwLjUxOSA5Ljc2MiA5Ljk1OCIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8dGl0bGU+RmlsbCAxPC90aXRsZT4NCjxkZXNjPkNyZWF0ZWQgd2l0aCBTa2V0Y2guPC9kZXNjPg0KPGcgaWQ9IlBhZ2UtMSIgc2tldGNoOnR5cGU9Ik1TUGFnZSI+DQoJPGcgaWQ9IklOVk9JQ0UtMSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTMwMS4wMDAwMDAsIC01NC4wMDAwMDApIiBza2V0Y2g6dHlwZT0iTVNBcnRib2FyZEdyb3VwIj4NCgkJPGcgaWQ9IlpBR0xBVkxKRSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzAuMDAwMDAwLCAxNS4wMDAwMDApIiBza2V0Y2g6dHlwZT0iTVNMYXllckdyb3VwIj4NCgkJCTxnIGlkPSJLT05UQUtUSSIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMjY3LjAwMDAwMCwgMzUuMDAwMDAwKSIgc2tldGNoOnR5cGU9Ik1TU2hhcGVHcm91cCI+DQoJCQkJPGcgaWQ9Ik92YWwtMS1feDJCXy1GaWxsLTEiPg0KCQkJCQk8cGF0aCBpZD0iRmlsbC0xIiBmaWxsPSIjOEJDMzRBIiBkPSJNOC43NjUsMTIuMzc1YzAuMDIsMC4xNjItMC4wMjgsMC4zMDMtMC4xNDMsMC40MjJMNy4yNDYsMTQuMTkNCgkJCQkJCWMtMC4wNjIsMC4wNy0wLjE0MywwLjEzMy0wLjI0MywwLjE4MmMtMC4xMDEsMC4wNDktMC4xOTcsMC4wOC0wLjI5NSwwLjA5NGMtMC4wMDcsMC0wLjAyOCwwLTAuMDYyLDAuMDA0DQoJCQkJCQljLTAuMDM0LDAuMDA1LTAuMDgsMC4wMDgtMC4xMzQsMC4wMDhjLTAuMTMxLDAtMC4zNDMtMC4wMjMtMC42MzUtMC4wNjhjLTAuMjkzLTAuMDQ1LTAuNjUxLTAuMTU4LTEuMDc2LTAuMzM2DQoJCQkJCQljLTAuNDI0LTAuMTgyLTAuOTA0LTAuNDUxLTEuNDQyLTAuODA5Yy0wLjUzNi0wLjM1Ny0xLjEwOS0wLjg1Mi0xLjcxNi0xLjQ3OWMtMC40ODEtMC40ODQtMC44OC0wLjk1LTEuMTk4LTEuMzkzDQoJCQkJCQlDMC4xMjgsOS45NS0wLjEyNSw5LjU0MS0wLjMxOSw5LjE2NGMtMC4xOTMtMC4zNzYtMC4zMzgtMC43MTctMC40MzQtMS4wMjNjLTAuMDk3LTAuMzA2LTAuMTYxLTAuNTctMC4xOTUtMC43OTINCgkJCQkJCWMtMC4wMzUtMC4yMjEtMC4wNS0wLjM5NC0wLjA0Mi0wLjUyMWMwLjAwNy0wLjEyNiwwLjAxLTAuMTk3LDAuMDEtMC4yMTFjMC4wMTQtMC4wOTksMC4wNDQtMC4xOTgsMC4wOTMtMC4zMDENCgkJCQkJCWMwLjA0OS0wLjEwMSwwLjEwOC0wLjE4NCwwLjE3Ni0wLjI0N2wxLjM3NS0xLjQwM2MwLjA5Ny0wLjA5OCwwLjIwNi0wLjE0NywwLjMzLTAuMTQ3YzAuMDksMCwwLjE2OSwwLjAyNiwwLjIzOCwwLjA3OQ0KCQkJCQkJQzEuMyw0LjY0OCwxLjM1OSw0LjcxNCwxLjQwNiw0Ljc5MWwxLjEwNiwyLjE0MWMwLjA2MiwwLjExNCwwLjA4LDAuMjM1LDAuMDUyLDAuMzdDMi41MzgsNy40MzYsMi40NzgsNy41NDgsMi4zODksNy42NA0KCQkJCQkJTDEuODgzLDguMTU3QzEuODY5LDguMTcxLDEuODU2LDguMTk0LDEuODQ2LDguMjI2QzEuODM1LDguMjU2LDEuODMsOC4yODMsMS44Myw4LjMwNGMwLjAyNywwLjE0NywwLjA5LDAuMzE3LDAuMTg3LDAuNTA3DQoJCQkJCQljMC4wODIsMC4xNjksMC4yMSwwLjM3NSwwLjM4MiwwLjYxOGMwLjE3MiwwLjI0MywwLjQxNywwLjUyMSwwLjczNCwwLjgzOWMwLjMxMSwwLjMyMiwwLjU4NSwwLjU3NCwwLjgyOCwwLjc1NQ0KCQkJCQkJYzAuMjQsMC4xNzgsMC40NDMsMC4zMDksMC42MDQsMC4zOTVjMC4xNjIsMC4wODUsMC4yODYsMC4xMzUsMC4zNzIsMC4xNTRsMC4xMjgsMC4wMjRjMC4wMTUsMCwwLjAzOC0wLjAwNiwwLjA2Ny0wLjAxNg0KCQkJCQkJYzAuMDMyLTAuMDEsMC4wNTQtMC4wMjEsMC4wNjctMC4wMzdsMC41ODgtMC42MTJjMC4xMjUtMC4xMTIsMC4yNy0wLjE2OCwwLjQzNi0wLjE2OGMwLjExNywwLDAuMjA3LDAuMDIxLDAuMjc3LDAuMDYxaDAuMDENCgkJCQkJCWwxLjk5NSwxLjIwM0M4LjY1MSwxMi4xMiw4LjczNywxMi4yMzQsOC43NjUsMTIuMzc1TDguNzY1LDEyLjM3NXoiLz4NCgkJCQk8L2c+DQoJCQk8L2c+DQoJCTwvZz4NCgk8L2c+DQo8L2c+DQo8L3N2Zz4NCg==" alt=""><span class="helper"></span></span>
-					@php
-						$licencia = \App\Licencia::find(session('id_licencia'));
-					@endphp
+					
 					<a href="tel:5849309">(+57) {{ $licencia->telefono }}</a>
 					<span class="helper"></span>
 				</div>
@@ -341,18 +344,18 @@
 			<div class="details clearfix">
 				<div class="client left">
 					<p>REPORTE DE: </p>
-					<p class="name">{{ $seguimiento->tercero->getnameFull() }} </p>
-					<p>Tipo de vinculacion: {{ $seguimiento->tercero->servicio }}</p>
+					<p class="name">{{ $seguimiento_final->tercero->getnameFull() }} </p>
+					<p>Tipo de vinculacion: {{ $seguimiento_final->tercero->servicio }}</p>
 					<a href="https://accounts.google.com/signin/v2/identifier?service=mail&passive=true&rm=false&continue=https%3A%2F%2Fmail.google.com%2Fmail%2F&ss=1&scc=1&ltmpl=default&ltmplcache=2&emr=1&osid=1&flowName=GlifWebSignIn&flowEntry=ServiceLogin">{{ $seguimiento->tercero->email }}</a>
 				</div>
 				<div class="data right">
-					<div class="title">Seguimiento de grupo</div>
+					<div class="title" style="font-size: 36px"><b>Informe final seguimiento de asignatura</b></div>
 					<div class="date">
-						Fecha de envio: {{ $seguimiento->fecha }}<br>
+						Fecha de envio: {{ $seguimiento_final->fecha }}<br>
 						Fecha de cierre: @php
-							if($seguimiento->corte == 1) echo $fechas->fechafinal1;
-							if($seguimiento->corte == 2) echo $fechas->fechafinal2;
-							if($seguimiento->corte == 3) echo $fechas->fechafinal3;
+							if($seguimiento_final->corte == 1) echo $fechas->fechafinal1;
+							if($seguimiento_final->corte == 2) echo $fechas->fechafinal2;
+							if($seguimiento_final->corte == 3) echo $fechas->fechafinal3;
 						@endphp
 					</div>
 				</div>
@@ -367,24 +370,18 @@
 			<table border="0" cellspacing="0" cellpadding="0">
 			
 				<tbody>
+					
 					<tr>
-						<td class="desc"><h3>Corte</h3>@php
-							if($seguimiento->corte == 1) echo "Primer corte";
-							if($seguimiento->corte == 2) echo "Segundo corte";
-							if($seguimiento->corte == 3) echo "Tercer corte";
-						@endphp</td>
-						<td class="desc"><h3>Periodo academico</h3>{{ $seguimiento->grupo->periodo_academico->periodo }}</td>
-						<td class="desc"></td>
-						<td class="desc"></td>
-						<td class="desc"></td>
+						<td colspan="5" class="desc"><h3>Periodo academico</h3>{{ $seguimiento_final->grupo->periodo_academico->periodo }}</td>
+						
 					</tr>
 					<tr>
-						<td class="desc"><h3>Asignatura</h3>{{ $seguimiento->asignatura->nombre }}</td>
+						<td class="desc"><h3>Asignatura</h3>{{ $seguimiento_final->asignatura->nombre }}</td>
 						<td class="desc"><h3>Programas Academicos</h3>
 						@php
 							$lista_programas = "";
 							$lista_facultades = "";
-							foreach ($seguimiento->asignatura->asignatura_programa as $intersecto) {
+							foreach ($seguimiento_final->asignatura->asignatura_programa as $intersecto) {
 								$lista_programas .= $intersecto->programa->nombre.", ";
 								$lista_facultades .= $intersecto->programa->facultad->nombre.", ";
 							}
@@ -402,23 +399,14 @@
 						<td class="desc"></td>
 					</tr>
 					<tr>
-						<td class="desc"><h3>Numero de creditos</h3>{{ $seguimiento->asignatura->num_creditos }}</td>
-						<td class="desc"><h3>Numero de estudiantes</h3>{{ $seguimiento->num_estudiantes}}</td>
+						<td class="desc"><h3>Numero de creditos</h3>{{ $seguimiento_final->asignatura->num_creditos }}</td>
+						<td class="desc"><h3>Numero de estudiantes</h3>{{ $seguimiento_final->num_estudiantes}}</td>
 						<td class="desc"><h3>Grupo</h3>
-							{{ $seguimiento->grupo->codigo }}
+							{{ $seguimiento_final->grupo->codigo }}
 							<td>
 						<td class="desc"></td>
 					</tr>
-					<tr>
-						<td class="desc" colspan="2"><h3>Unidades Programadas</h3>
-							@foreach ($seguimiento->unidades_programadas as $unidad_programada)
-								<li>{{ $unidad_programada->unidad_asignatura->nombre }}</li>
-							@endforeach
-						</td>
-						<td class="desc"></td>
-						<td class="desc"></td>
-						<td class="desc"></td>
-					</tr>
+
 										
 				</tbody>
 			</table>
@@ -427,69 +415,117 @@
 				<thead>
 					<th class="desc"><b><h1>DESARROLLO DE LA ASIGNATURA</h1></b></th>				
 				</thead>
-
 			</table>
-
-			<table border="0" cellspacing="0" cellpadding="0">
+			@php
+				$porcentaje_desarrollo_total = 0;
+			@endphp
+			@foreach ($seguimientos as $seguimiento)
+			@php
+				$corte = "NO DEFINIDO";
+				
+				if($seguimiento->corte == 1) $corte = "PRIMER CORTE";
+				if($seguimiento->corte == 2) $corte = "SEGUNDO CORTE";
+				if($seguimiento->corte == 3) $corte = "TERCER CORTE";
+			@endphp
+				<table border="0" cellspacing="0" cellpadding="0">
+				<thead>
+					<th style="text-align: center;" colspan="4" class="desc"><b><h1>{{ $corte }}</h1></b></th>				
+				</thead>
 				<tr>
-						<td class="desc"><h3>Ejes tematicos desarrollados</h3>
+						<td style="width: 50%" class="desc"><h3>Unidades Programadas</h3>
+							@if (count($seguimiento->unidades_programadas) == 0)
+								<i>Ninguna</i>
+							@endif
+							@foreach ($seguimiento->unidades_programadas as $unidad_programada)
+								<li>{{ $unidad_programada->unidad_asignatura->nombre }}</li>
+							@endforeach
+						</td>
+						<td style="width: 50%" class="desc"><h3>Ejes tematicos desarrollados</h3>
+							@if (count($seguimiento->ejes_tematicos_desarrollados) == 0)
+								<i>Ninguno</i>
+							@endif
 							@foreach ($seguimiento->ejes_tematicos_desarrollados as $eje_tematico_desarrollado)
 								<li>{{ $eje_tematico_desarrollado->eje_tematico->nombre }}</li>
 							@endforeach
 						</td>
-						<td class="desc"></td>
-						<td class="desc"></td>
-						<td class="desc"></td>
 				</tr>
-				
+				</table>
+				<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
-						<td class="desc"><h3>Porcentaje de desarrollo a la asigntura</h3>
-							{{ $seguimiento->porcentaje_desarrollo }}</td>
-						<td class="desc"><h3>Porcentaje ideal de desarrollo a la fecha</h3>
-							{{ $seguimiento->porcentaje_ideal }}</td>
-						<td class="desc"><h3>Relacion entre lo ideal y lo real</h3>
-							{{ $seguimiento->relacion_ideal_real }}</td>
+						<td class="desc"><h3>N° unidades programadas</h3>
+							{{ count($seguimiento->unidades_programadas) }}</td>
+						<td class="desc"><h3>N° ejes tematicos desarrollados</h3>
+							{{ count($seguimiento->ejes_tematicos_desarrollados) }}</td>
+						<td class="desc"><h3>Porcentaje de desarrollo de la asignatura</h3>
+							
+							{{ $seguimiento->porcentaje_desarrollo_por_corte() }}%</td>
 						<td class="desc"></td>
+						@php
+							$porcentaje_desarrollo_total += $seguimiento->porcentaje_desarrollo_por_corte();
+						@endphp
+				</tr>
+			</table>
+			@endforeach
+
+			<table border="0" cellspacing="0" cellpadding="0">
+				<thead>
+					<th style="text-align: right; padding-top: 20px; padding-bottom: 20px;" colspan="4" class="desc"><b><h1>Porcentaje final de desarrollo a la asignatura {{ $porcentaje_desarrollo_total }}%</h1></b></th>				
+				</thead>
+			</table>
+			
+
+			<table border="0" cellspacing="0" cellpadding="0">
+				<tr>
+						<td colspan="4" class="desc"><h3>Causas por las cuales no se cumplio los contenidos programados</h3>
+							
+						</td>
+						
 				</tr>
 				<tr>
-						<td class="desc"><h3>Causas por las cuales no se cumplio los contenidos programados</h3>
+					@foreach ($seguimientos as $seguimiento)
+					@php
+						$corte = "NO DEFINIDO";
+						if($seguimiento->corte == 1) $corte = "Primer corte";
+						if($seguimiento->corte == 2) $corte = "Segundo corte";
+						if($seguimiento->corte == 3) $corte = "Tercer corte";
+					@endphp
+						<td colspan="1" class="desc"><h3>{{ $corte }}</h3>
 							@foreach ($seguimiento->causas as $causa)
 								<li>{{ $causa->causa }}</li>
 							@endforeach
 						</td>
-						<td class="desc"></td>
-						<td class="desc"></td>
-						<td class="desc"></td>
+					@endforeach
+					<td class="desc"></td>						
 				</tr>
 				<tr>
 						<td class="desc"><h3>Promedio de notas obtenidas</h3>
-							{{ $seguimiento->prom_notas }}</td>
+							{{ $seguimiento_final->prom_notas }}</td>
 						<td class="desc"><h3>Aprobados</h3>
-							{{ $seguimiento->aprobados }}</td>
+							{{ $seguimiento_final->aprobados }}</td>
 						<td class="desc"><h3>Reprobados</h3>
-							{{ $seguimiento->reprobados }}</td>
+							{{ $seguimiento_final->reprobados }}</td>
 						<td class="desc"></td>
 				</tr>
-				</table>
-				<table border="0" cellspacing="0" cellpadding="0">
+			</table>
+			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 						<td style="width: 50%" class="desc"><h3>N° de estudiantes que superan el promedio</h3>
-							{{ $seguimiento->num_est_sup_promedio }}</td>
+							{{ $seguimiento_final->num_est_sup_promedio }}</td>
 						<td style="width: 50%" class="desc"><h3>N° de estudiantes que estan por debjao del promedio</h3>
-							{{ $seguimiento->num_est_no_sup_promedio }}</td>
-					</tr>
-				</table>
-				<table border="0" cellspacing="0" cellpadding="0">
+							{{ $seguimiento_final->num_est_no_sup_promedio }}</td>
+				</tr>
+			</table>
+			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 						<td class="desc"><h3>Analisis cualitativo del comportamiento academico de los estudiantes</h3>
-							@foreach ($seguimiento->analisis_cualitativo as $analisis)
+							@foreach ($seguimiento_final->analisis_cualitativo as $analisis)
 								<li>{{ $analisis->analisis }}</li>
 							@endforeach
 						</td>
 						<td class="desc"><h3>Estrategias didacticas exitosas que desee compartir con sus COLEGAS</h3>
-							{{ $seguimiento->estrategias_didacticas }}</td>
+							{{ $seguimiento_final->estrategias_didacticas }}</td>
 						<td class="desc"><h3>Estrategias evaluativas exitosas que desee compartir con sus colegas</h3>
-							{{ $seguimiento->estrategias_evaluativas }}</td>
+							{{ $seguimiento_final->estrategias_evaluativas }}</td>
 						<td class="desc"></td>
 				</tr>
 			</table>	
@@ -502,11 +538,11 @@
 			<table border="0" cellspacing="0" cellpadding="0">
 				<tr>
 						<td class="desc"><h3>Estrategiar para desarrollar racionalmente, el 100% del contenido programado</h3>
-							{{ $seguimiento->estrategias_desa_cont_programatico }}</td>
+							{{ $seguimiento_final->estrategias_desa_cont_programatico }}</td>
 						<td class="desc"><h3>Si el porcentaje de eficiencia es "critico". Estrategias para mejor eficiencia academica</h3>
-							{{ $seguimiento->si_porc_efi_critico }}</td>
+							{{ $seguimiento_final->si_porc_efi_critico }}</td>
 						<td class="desc"><h3>Observaciones o sugerencias</h3>
-							{{ $seguimiento->sugerencias }}</td>
+							{{ $seguimiento_final->sugerencias }}</td>
 						<td class="desc"></td>
 				</tr>
 				
@@ -534,8 +570,8 @@
 </table>
 -->
 	<div align="center">
-		<input  type="hidden" name="x" value="{{ $seguimiento->id_asignatura }}">
-		<a href="{{ route('seguimiento/imprimir', $seguimiento->id_seguimiento) }}" class="btn  btn-success" style="color: white; width: 90px;" target="_blank">   Imprimir  </a>
+		<input  type="hidden" name="x" value="{{ $seguimiento_final->id_asignatura }}">
+		<a href="{{ route('seguimiento/imprimir', $seguimiento_final->id_seguimiento) }}" class="btn  btn-success" style="color: white; width: 90px;" target="_blank">   Imprimir  </a>
 		<a  id="btnimp" href="javascript:history.back(1)" class="btn  btn-danger" style="color: white; width: 90px;">   Volver  </a>
 		
             </div>
