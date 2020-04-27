@@ -247,7 +247,7 @@
                                         if ($fecha == date("d-m-Y")) $fecha = "Hoy";
                                         if ($fecha == date("d-m-Y",strtotime($hoy."- 1 days"))) $fecha = "Ayer";
                                         @endphp
-                                            <a href="#" title="{{ $notificacion->notificacion }}">
+                                            <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}" title="{{ $notificacion->notificacion }}">
 
                                             <div class="btn {{ $color_boton }} btn-circle"><i class="{{ $icono }}"></i></div>
                                             <div class="mail-contnet">
@@ -266,7 +266,7 @@
                                     </div>
                                     </li>
                                     <li>
-                                        <a class="nav-link text-center" href="MisNotificaciones.php"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
+                                        <a class="nav-link text-center" href="{{ route('notificacion/mis_notificaciones') }}"> <strong>Ver todas las notificaciones</strong> <i class="fa fa-angle-right"></i> </a>
                                     </li>
 
 
@@ -371,11 +371,10 @@
                                 </li>
                             </ul>
                         </li>
-                        <li>                    
-
-                        
-                       
-                       
+               
+                    <li>
+                            <a href="{{ route('logout') }}" class="waves-effect"><i class="fa fa-sign-out m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
+                        </li>
                     </ul>
                     </ul>
                     

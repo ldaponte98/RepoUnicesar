@@ -15,6 +15,7 @@ use App\EjeTematicoSeguimiento;
 use App\CausaSeguimiento;
 use App\AnalisisCualitativoSeguimiento;
 use App\PlazoDocente;
+use App\Notificaciones;
 use Maatwebsite\Excel\Facades\Excel;
 
 class SeguimientoAsignaturaController extends Controller
@@ -46,6 +47,17 @@ class SeguimientoAsignaturaController extends Controller
     		if ($seguimiento->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
     			$seguimiento->estado = 'Recibido';
         		$seguimiento->save();
+
+                $tercero_envia = Tercero::find(session('id_tercero_usuario'));
+                $notificacion = new Notificaciones;
+                $tipo_tercero_envia = $tercero_envia->tipo->dominio; 
+                $notificacion->notificacion = "El $tipo_tercero_envia ah revisado el seguimiento de asignatura numero $id_seguimiento.";
+                $notificacion->id_tercero_envia = $tercero_envia->id_tercero;
+                $notificacion->id_tercero_recibe = $seguimiento->tercero->id_tercero;
+                $notificacion->id_dominio_tipo = 6;//revision
+                $notificacion->id_formato = $id_seguimiento;
+                $notificacion->id_dominio_tipo_formato = config('global.seguimiento_asignatura');
+                $notificacion->save();
     		}
 
             $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->where('id_periodo_academico', $seguimiento->grupo->id_periodo_academico)->first();

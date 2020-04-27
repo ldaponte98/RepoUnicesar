@@ -119,8 +119,10 @@
           });
         })
 
+        var id_seguimiento_escojido = 0
         function OpenModalNotificarRetraso(id_seguimiento,name_tercero_envia, retraso, asignatura, grupo,corte, periodo_academico) {
             var mensaje = "El administrador "+name_tercero_envia+" te notifica retraso de "+retraso+" en el seguimiento de asignatura con codigo "+id_seguimiento+ " con relacion a la asignatura "+asignatura+" para el grupo "+grupo+" perteneciente al "+corte+" corte del periodo academico "+periodo_academico+".";
+            id_seguimiento_escojido = id_seguimiento
             $("#msg_notificacion").val(mensaje)
             $('#modalNotificacion').modal('show')
         }
@@ -151,6 +153,8 @@
                 id_tercero_envia : id_tercero_envia,
                 id_tercero_recibe : id_tercero_recibe,
                 id_dominio_tipo : id_dominio_tipo,
+                id_formato : id_seguimiento_escojido,
+                id_dominio_tipo_formato : {{ config('global.seguimiento_asignatura') }},
                 _token : _token
             };
             $.post("{{ route('notificacion/crear') }}",data, function(response){

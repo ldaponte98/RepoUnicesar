@@ -46,6 +46,8 @@ Route::post('grupo/buscar','GrupoController@buscar')->name('grupo/buscar');
 
 //RUTAS NOTIFICACIONES
 Route::post('notificacion/crear','NotificacionesController@crear')->name('notificacion/crear');
+Route::any('notificacion/mis_notificaciones','NotificacionesController@listar_mis_notificaciones')->name('notificacion/mis_notificaciones');
+Route::get('notificacion/ver_notificacion/{id_notificacion}','NotificacionesController@ver_notificacion')->name('notificacion/ver_notificacion');
 
 
 

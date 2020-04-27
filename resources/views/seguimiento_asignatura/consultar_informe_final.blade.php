@@ -344,9 +344,11 @@
 
             <script>
                 var id_tercero_recibe = ""
+                var id_seguimiento_escojido = 0
         function OpenModalNotificarRetraso(id_seguimiento,id_tercero,name_tercero_envia, retraso, asignatura, grupo,corte, periodo_academico) {
             var mensaje = "El administrador notifica que se encuenta "+retraso+" en el seguimiento de asignatura con codigo "+id_seguimiento+ " con relacion a la asignatura "+asignatura+" para el grupo "+grupo+" perteneciente al "+corte+" corte del periodo academico "+periodo_academico+".";
             id_tercero_recibe = id_tercero
+            id_seguimiento_escojido = id_seguimiento
             $("#msg_notificacion").val(mensaje)
             $('#modalNotificacion').modal('show')
         }
@@ -371,6 +373,8 @@
                 id_tercero_envia : id_tercero_envia,
                 id_tercero_recibe : id_tercero_recibe,
                 id_dominio_tipo : id_dominio_tipo,
+                id_formato : id_seguimiento_escojido,
+                id_dominio_tipo_formato : {{ config('global.seguimiento_asignatura') }},
                 _token : _token
             };
             $.blockUI({
