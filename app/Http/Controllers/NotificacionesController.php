@@ -42,15 +42,27 @@ class NotificacionesController extends Controller
             $notificacion->save();
             if (session('is_docente')==true) {
                 switch ($notificacion->id_dominio_tipo) {
+                    case 6: //revision
+                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+                            return redirect()->route('seguimiento/view', ['id' => $notificacion->id_formato]);
+                        }
+                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+                            return redirect()->route('plan_trabajo/view');
+                        }
                     case 8: //extra-plazo
                         if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
                             return redirect()->route('seguimiento/editar', ['id' => $notificacion->id_formato]);
+                        }
+                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+                            return redirect()->route('plan_trabajo/view');
                         }
                     case 9: //retraso
                         if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
                             return redirect()->route('seguimiento/consultar');
                         }
-                                       
+                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+                            return redirect()->route('plan_trabajo/view');
+                        }
                     default:
                         echo "Accion invalida";
                         break;

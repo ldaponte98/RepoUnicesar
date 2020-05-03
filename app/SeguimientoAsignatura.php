@@ -124,12 +124,14 @@ class SeguimientoAsignatura extends Model
 	{
 		$periodo = $this->grupo->periodo_academico;
     	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
-    						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
+                            ->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
+                            ->where('id_licencia',session('id_licencia'))
     						->first();
     	$fecha_actual = date('Y-m-d');
 
         $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
                                        ->where('id_formato', $this->id_seguimiento)
+                                       ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
                                        ->where('estado', 1)
                                        ->first();
             if ($plazo_extra) {
@@ -174,10 +176,12 @@ class SeguimientoAsignatura extends Model
         	$periodo = $this->grupo->periodo_academico;
         	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
         						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
+                                ->where('id_licencia',session('id_licencia'))
         						->first();
         	$fecha_actual = date('Y-m-d H:i:s'); 
             $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
                                        ->where('id_formato', $this->id_seguimiento)
+                                       ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
                                        ->where('estado', 1)
                                        ->first();
             if ($plazo_extra) {

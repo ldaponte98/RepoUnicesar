@@ -31,6 +31,8 @@
     <!-- You can change the theme colors from here -->
     <link href="{{ asset("assets/css/colors/blue.css") }}" id="theme" rel="stylesheet">
     <link href="{{ asset("Iconos/css/all.css") }}" rel="stylesheet">
+            <link href="{{ asset("css/estilos_card.css") }}" rel="stylesheet">
+
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -43,10 +45,9 @@
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-    <script src="https://jquery-ui.googlecode.com/svn-history/r3982/trunk/ui/i18n/jquery.ui.datepicker-nl.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
+<script src="http://malsup.github.io/jquery.blockUI.js"></script>
     <script src="{{ asset('js/TableToExcel.js') }}"></script>
 
 
@@ -280,7 +281,11 @@
                         </li>
 
 
-                        
+                        <li class="nav-item dropdown">
+                            <a href="{{ route('fechas/fechas_de_entrega') }}" title="Fechas de entrega" class="nav-link text-muted waves-effect waves-dark"  aria-expanded="false"> <i class="mdi mdi-alarm"></i>
+                                <div class="notify">  </div>
+                            </a>
+                        </li>
 
 
                     </ul>
@@ -326,7 +331,7 @@
                     @endphp</font></font><span class="caret"></span></a>
                         <div class="dropdown-menu animated flipInY">
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                            <a href="VerCalendarioAcademico.php" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
+                            <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
                             <a href="{{ route('notificacion/mis_notificaciones') }}" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
                            
                             <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
@@ -334,16 +339,23 @@
                     </div>
                 </div>
                 <ul id="sidebarnav" class="in">
-                        <li >
+                    <li class="nav-small-cap">Personal</li>
+                        <li>
                             <a class="waves-effect"><i class="fa fa-window-restore m-r-10" aria-hidden="true"></i>Tablero</a>
                         </li>
                         <li>
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>
                         </li>
+                        <li class="nav-devider"></li>
+                        <li class="nav-small-cap">Formatos</li>
+                        <li>
+                            <a href="{{ route('plan_trabajo/view') }}" class="waves-effect"><i class="fa fa-briefcase m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
+                        </li>
 
                         <li>
 
-                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fas fa-tasks m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  @php
+                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fas fa-tasks m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
+                            @php
                             $total_seguimientos_pendientes = \App\SeguimientoAsignatura::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
                                                     ->count();

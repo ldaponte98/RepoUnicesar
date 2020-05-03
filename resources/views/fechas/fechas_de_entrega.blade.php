@@ -1,5 +1,5 @@
 
-@extends('layouts.main')
+@extends((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'))
 
 @section('header_content')
 
@@ -19,6 +19,8 @@
 @endsection
 @section('content')
 @php
+
+$is_admin = session('is_admin');
 @endphp
 
 @if (session('mensaje_update_fechas'))
@@ -79,7 +81,11 @@
                                 <br>
                                  <hr>
                                  <center>
-                                <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.plan_trabajo') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
+                                  @if ($is_admin == true)
+                                    <span>
+                                  <a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.plan_trabajo') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
+                                  @endif
+                                
 
                                 </center>
                             </div>
@@ -103,8 +109,10 @@
                                 <br>                                
                                  <hr>
                                  <center>
-                                <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.desarrollo_asignatura') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
+                                   @if ($is_admin == true)
 
+                                <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.desarrollo_asignatura') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
+                                @endif
                                 </center>
                             </div>
                         </div>
@@ -149,8 +157,9 @@
                                  
                                  <hr>
                                  <center>
+                                  @if ($is_admin == true)
                                 <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.seguimiento_asignatura') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
-
+                                @endif
                                 </center>
                             </div>
                         </div>
@@ -183,8 +192,9 @@
                                 @endif                                 
                                  <hr>
                                  <center>
+                                  @if ($is_admin == true)
                                 <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.actividades_complementarias') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
-
+                                  @endif
                                 </center>
 
                             </div>
@@ -208,8 +218,9 @@
                                 <br>
                                  <hr>
                                  <center>
+                                  @if ($is_admin == true)
                                 <span><a href="{{ route('fechas/editar_fechas_de_entrega',['periodo' => $periodo_academico->id_periodo_academico, 'formato' =>  config('global.plan_accion') ]) }}" title="Editar fechas"><i class="fa fa-pencil rounded-circle" aria-hidden="true"></i></a></span>
-
+                                  @endif
                                 </center>
                             </div>
                         </div>

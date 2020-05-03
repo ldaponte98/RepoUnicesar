@@ -366,6 +366,8 @@
                         <li >
                             <a href="{{ route('asignatura/listado_asignaturas') }}" class="waves-effect "><i class="fa fa-book m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
                         </li>
+
+                         
                         <li>
                             <!--<a href="PeriodosAcademicos.php" class="waves-effect"><i class="fa fa-area-chart m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Carga academica</font></font></a>-->
                         </li>
@@ -379,6 +381,9 @@
                         <li class="">
                             <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-file-chart m-r-10"></i><span class="hide-menu">Reportes</span></a>
                             <ul aria-expanded="false" class="collapse">
+                                <li>
+                                    <a href="{{ route('plan_trabajo/consultar') }}" class="waves-effect">Plan de trabajo</a>
+                                </li>
                                 <li class="">
                                     <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
                                    

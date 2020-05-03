@@ -20,19 +20,20 @@ class PlazoDocenteController extends Controller
 
         $plazo_docente->id_tercero = $post->id_tercero;
         $plazo_docente->id_formato = $post->id_formato;
+        $plazo_docente->id_dominio_tipo_formato = $post->id_dominio_tipo_formato;
         $plazo_docente->fecha_inicio = $fecha_inicio;
         $plazo_docente->fecha_fin = $fecha_fin. " 23:59:59";
 
         if ($plazo_docente->save()) {
 
-            //AHORA SE CREA LA NOTIFICACION PARA EL TERCERO 
-
+            //AHORA SE CREA LA NOTIFICACION PARA EL TERCERO
             $notificacion = new Notificaciones;
             $notificacion->notificacion = "Se ah generado un nuevo plazo-extra para el seguimiento con codigo ".$post->id_formato." con un nuevo lapso de tiempo durante el ".$fecha_inicio." hasta".$fecha_fin;
             $notificacion->id_tercero_envia = session('id_tercero_usuario');
             $notificacion->id_tercero_recibe = $post->id_tercero;
             $notificacion->id_dominio_tipo = config('global.notificacion_extra_pazo');
             $notificacion->id_formato = $post->id_formato;
+            $notificacion->id_dominio_tipo_formato = $post->id_dominio_tipo_formato;
             $notificacion->save();
         	return response()->json([
         		'error' => false,

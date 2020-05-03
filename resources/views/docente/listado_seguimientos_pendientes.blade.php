@@ -174,6 +174,7 @@
                 '_token' : token,
                 'id_tercero' : {{ $docente->id_tercero }},
                 'id_formato' : id_seguimiento,
+                'id_dominio_tipo_formato' : {{ config('global.seguimiento_asignatura') }},
                 'fechas_plazo' : fechas_plazo,
             }
             $.blockUI({

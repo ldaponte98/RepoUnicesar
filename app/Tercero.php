@@ -43,4 +43,53 @@ class Tercero extends Model
 		}
 		return $asignaturas;
 	}
+
+	public function asignaturas_por_periodo_academico($periodo)
+	{
+		$asignaturas = [];
+		foreach ($this->grupos as $grupo) {
+			$grupo = (object) $grupo;
+			if (in_array($grupo->asignatura, $asignaturas) == false) 
+			  { 
+			  	if ($grupo->id_periodo_academico == $periodo) {
+			  		array_push($asignaturas, $grupo->asignatura);
+			  	}
+			  }
+		}
+		return $asignaturas;
+	}
+
+	public function grupos_por_periodo_academico($periodo)
+	{
+		$grupos = [];
+		foreach ($this->grupos as $grupo) {
+			$grupo = (object) $grupo;
+		  	if ($grupo->id_periodo_academico == $periodo) {
+		  		array_push($grupos, $grupo);
+		  	}
+		}
+		return $grupos;
+	}
+
+	public function num_estudiantes_por_periodo_academico($periodo)
+	{
+		$total = 0;
+		foreach ($this->grupos as $grupo) {
+			$grupo = (object) $grupo;
+			if ($grupo->id_periodo_academico == $periodo) {
+		  		$total += $grupo->num_est_ini;
+		  	}
+		}
+		return $total;
+	}
+
+	public function total_horas_docencia($periodo)
+	{
+		$asignaturas = $this->asignaturas_por_periodo_academico($periodo);
+		$total = 0;
+			foreach ($asignaturas as $asignatura) {
+				$total += $asignatura->horas_teoricas + $asignatura->horas_practicas;
+			}
+		return $total;
+	}
 }

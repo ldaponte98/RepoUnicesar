@@ -79,6 +79,14 @@ Route::any('fechas/plazo_extra_por_docente','FechasEntregaController@plazo_extra
 Route::post('plazo_docente/registrar','PlazoDocenteController@registrar')->name('plazo_docente/registrar');
 
 
+//RUTAS PLAN DE TRABAJO
+Route::any('plan_trabajo/view','PlanTrabajoController@view')->name('plan_trabajo/view');
+Route::any('plan_trabajo/editar','PlanTrabajoController@editar')->name('plan_trabajo/editar');
+Route::get('plan_trabajo/consultar','PlanTrabajoController@listar')->name('plan_trabajo/consultar');
+Route::any('plan_trabajo/getReporte','PlanTrabajoController@getReporte')->name('plan_trabajo/getReporte');
+Route::get('plan_trabajo/imprimir/{id}','PlanTrabajoController@imprimir')->name('plan_trabajo/imprimir');
+
+
 
 
 

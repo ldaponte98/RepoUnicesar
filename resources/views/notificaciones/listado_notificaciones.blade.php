@@ -165,11 +165,11 @@
                                                     </td>
                                                     <td>{{ $tercero_recibe->getNameFull() }}</td>
                                                     <td>{{ $tipo->dominio }}</td>
-                                                    <td>{{ date('d-m-Y', strtotime($notificacion->fecha)) }}</td>
-                                                    <td>{{ date('H:i', strtotime($notificacion->fecha)) }}</td>
+                                                    <td><center>{{ date('d-m-Y', strtotime($notificacion->fecha)) }}</center></td>
+                                                    <td><center>{{ date('H:i', strtotime($notificacion->fecha)) }}</center></td>
                                                     
                                                     <td><center>
-                                                    <a type="button" data-container="body" data-toggle="popover" data-placement="top" title="{{ $tipo->dominio }}" data-content="{{ $tipo->dominio }}">
+                                                    <a type="button" data-container="body" data-toggle="popover" data-placement="top" title="{{ $tipo->dominio }}" data-content="{{ $notificacion->notificacion }}">
                                                       <i class="fa fa-comment"></i>
                                                     </a>
                                                     </center></td>    

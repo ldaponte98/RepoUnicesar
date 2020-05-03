@@ -3,12 +3,12 @@
 <head>
 	<title>Informe final Seguimiento Asignatura</title>
 
-	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
-	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"></script>
 	<style>
 		.page-break {
 		    page-break-after: always;
+		}
+		*{
+			font-family:'Helvetica','Verdana','Monaco',sans-serif;
 		}
 	</style>
 
@@ -18,7 +18,7 @@
     if (isset($pdf)) {
         $pdf->page_script('
             $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-            $pdf->text(455, 91, "$PAGE_NUM de $PAGE_COUNT", $font, 8.5);
+            $pdf->text(430, 83, "$PAGE_NUM de $PAGE_COUNT", $font, 8.5);
         ');
     }
 </script>
@@ -203,7 +203,7 @@
 				 <tr>
 				  <td rowspan="1" colspan="4" style="font-size: 14px">
 				  <center>
-				  SEGUIMIENTO POR CORTE PLAN DESARROLLO DE ASIGNATURA
+				  INFORME FINAL DESARROLLO DE <br>ASIGNATURA
 				  </center></td>
 				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina</td>
 				 </tr>
@@ -343,7 +343,7 @@
 				 <tr>
 				  <td rowspan="1" colspan="4" style="font-size: 14px">
 				  <center>
-				  SEGUIMIENTO POR CORTE PLAN DESARROLLO DE ASIGNATURA
+				  INFORME FINAL DESARROLLO DE <br>ASIGNATURA
 				  </center></td>
 				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina</td>
 				 </tr>
@@ -445,7 +445,7 @@
 				 <tr>
 				  <td rowspan="1" colspan="4" style="font-size: 14px">
 				  <center>
-				  SEGUIMIENTO POR CORTE PLAN DESARROLLO DE ASIGNATURA
+				  INFORME FINAL DESARROLLO DE <br>ASIGNATURA
 				  </center></td>
 				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina</td>
 				 </tr>
@@ -467,9 +467,16 @@ ACADEMICO NI CIENTIFICO) PARA MEJOR EFICIENCIA ACADEMICA. </td></tr></table>
 
 
 <br><br>
-<div style="margin-left: 50px;">
-	<label class="td_3" style="border-top: 1px solid #000000; width: 260px; margin-right: 30px;text-align: center;" >DOCENTE</label><label class="td_3" style="border-top: 1px solid #000000; width: 260px; margin-left: 30px; text-align: center;" >DIRECTOR DE DEPARTAMENTO</label></div>
+<table>
+	<tr>
+		<td colspan="2" style="border-top: 1px solid #000000; width: 50% !important"><center> DIRECTOR DE DEPARTAMENTO </center></td>
+		<td colspan="1"><center> &nbsp; </center></td>
+		<td colspan="3" style="border-top: 1px solid #000000; width: 50% !important"><center>   DOCENTE </center></td>
+	</tr>
+</table>
+	<br>
 <table><tr><td class="td_1">FECHA: </td><td><p style="width: 200px;">{{ date('d-m-Y',strtotime($seguimiento_3->fecha)) }}</p></td></tr></table>
+
 
 
 

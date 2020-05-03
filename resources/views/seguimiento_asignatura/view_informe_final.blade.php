@@ -571,7 +571,7 @@
 -->
 	<div align="center">
 		<input  type="hidden" name="x" value="{{ $seguimiento_final->id_asignatura }}">
-		<a href="{{ route('seguimiento/imprimir', $seguimiento_final->id_seguimiento) }}" class="btn  btn-success" style="color: white; width: 90px;" target="_blank">   Imprimir  </a>
+		<a href="{{ route('seguimiento/imprimir_informe_final', $seguimiento_final->id_seguimiento) }}" class="btn  btn-success" style="color: white; width: 90px;" target="_blank">   Imprimir  </a>
 		<a  id="btnimp" href="javascript:history.back(1)" class="btn  btn-danger" style="color: white; width: 90px;">   Volver  </a>
 		
             </div>
