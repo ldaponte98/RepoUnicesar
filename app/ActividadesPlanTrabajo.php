@@ -18,7 +18,8 @@ class ActividadesPlanTrabajo extends Model
     	'fecha_terminacion',
     	'institucion',
     	'horas_por_semana',
-    	'id_dominio_tipo'
+        'id_dominio_tipo',
+        'requiere_actividad_complementaria'
     ];
 
     public function tipo()

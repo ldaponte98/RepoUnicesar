@@ -132,7 +132,6 @@
                             <div class="form-group">
                                   <label style="color: black;"><b>Fecha de envio</b></label>
                                   <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="fecha" type="text" name="fecha" autocomplete="off" value="" placeholder ="Seleccione...">
-
                                                 
                             </div>
                         </div> 

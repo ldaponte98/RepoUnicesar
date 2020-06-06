@@ -18,7 +18,13 @@ Route::get('/', function () {
 Route::post('index','UsuarioController@login')->name('usuario/login');
 Route::get('usuario/logout','UsuarioController@logout')->name('logout');
 
+Route::get('email/email_retraso',function () {
+    return view('email.email_retraso');
+})->name('email/email_retraso');
 
+Route::get('email/email_formato_revisado',function () {
+    return view('email.email_formato_revisado');
+})->name('email/email_formato_revisado');
 
 //RUTAS DOCENTE
 Route::get('docente/listado_docentes','TerceroController@getDocentes')->name('docente/listado_docentes');
@@ -45,7 +51,7 @@ Route::post('grupo/buscar','GrupoController@buscar')->name('grupo/buscar');
 
 
 //RUTAS NOTIFICACIONES
-Route::post('notificacion/crear','NotificacionesController@crear')->name('notificacion/crear');
+Route::any('notificacion/crear','NotificacionesController@crear')->name('notificacion/crear');
 Route::any('notificacion/mis_notificaciones','NotificacionesController@listar_mis_notificaciones')->name('notificacion/mis_notificaciones');
 Route::get('notificacion/ver_notificacion/{id_notificacion}','NotificacionesController@ver_notificacion')->name('notificacion/ver_notificacion');
 
@@ -85,6 +91,23 @@ Route::any('plan_trabajo/editar','PlanTrabajoController@editar')->name('plan_tra
 Route::get('plan_trabajo/consultar','PlanTrabajoController@listar')->name('plan_trabajo/consultar');
 Route::any('plan_trabajo/getReporte','PlanTrabajoController@getReporte')->name('plan_trabajo/getReporte');
 Route::get('plan_trabajo/imprimir/{id}','PlanTrabajoController@imprimir')->name('plan_trabajo/imprimir');
+
+
+Route::get('actividades_complementarias/consultar','ActividadesComplementariasController@listar')->name('actividades_complementarias/consultar');
+Route::any('actividades_complementarias/getReporte','ActividadesComplementariasController@getReporte')->name('actividades_complementarias/getReporte');
+Route::any('actividades_complementarias/editar/{id}','ActividadesComplementariasController@editar')->name('actividades_complementarias/editar');
+Route::any('actividades_complementarias/editar_detalle/{id_actividad}/{id_tipo_actividad}','ActividadesComplementariasController@editar_detalle')->name('actividades_complementarias/editar_detalle');
+Route::any('actividades_complementarias/guardar_detalles','ActividadesComplementariasController@guardar_detalles')->name('actividades_complementarias/guardar_detalles');
+Route::get('actividades_complementarias/enviar_formato/{id}','ActividadesComplementariasController@enviar_formato')->name('actividades_complementarias/enviar_formato');
+
+Route::any('actividades_complementarias/imprimir/{id_actividad}/{id_actividad_plan_trabajo}','ActividadesComplementariasController@imprimir')->name('actividades_complementarias/imprimir');
+
+
+//RUTAS PARA ALIMENTAR DESDE ACADEMUSOFT
+Route::any('comunication/updateFacultades','ComunicationController@updateFacultades')->name('comunication/updateFacultades');
+Route::any('comunication/updateProgramasAcademicos','ComunicationController@updateProgramasAcademicos')->name('comunication/updateProgramasAcademicos');
+Route::any('comunication/updatePeriodosAcademicos','ComunicationController@updatePeriodosAcademicos')->name('comunication/updatePeriodosAcademicos');
+
 
 
 

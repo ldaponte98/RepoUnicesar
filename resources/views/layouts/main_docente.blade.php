@@ -47,6 +47,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="http://malsup.github.io/jquery.blockUI.js"></script>
     <script src="{{ asset('js/TableToExcel.js') }}"></script>
 
@@ -110,6 +115,17 @@
         font-size: 14px !important;
     }
 
+    .hidden-md-up{
+        margin-top: 15px !important;
+        margin-right: 40px !important;
+    }
+
+    @media (max-width: 767px){
+        .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+            left: -280px;
+        }   
+    }
+    
 
 </style>
     <script type="text/javascript">
@@ -370,6 +386,29 @@
                                 <li class="">
                                     <a href="{{ route('seguimiento/consultar_informe_final') }}">Informe final</a>
                                 </li>
+                            </ul>
+
+                            
+                        </li>
+
+                         <li>
+
+                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-align-justify m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
+                            @php
+                            $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
+                                                    ->where('id_tercero', $usuario->tercero->id_tercero)
+                                                    ->count();
+                             @endphp 
+                             @if ($total_actividades_pendientes > 0)
+                                <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
+                             @endif</span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li class="">
+                                    <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
+                                <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
+                             @endif</a>
+                                </li>
+                                
                             </ul>
 
                             

@@ -149,6 +149,7 @@
                                                 <td><b>Estado</b></td>
                                                 <td><b>Fecha de registro</b></td>
                                                 <td><b>Retraso</b></td>
+                                                <td><b>Progreso</b></td>
                                                 <td><b>Periodo academico</b></td>
                                                 <td><center><b>Acciones</b></center></td>
                                                 
@@ -201,6 +202,19 @@
                                 tabla += "<td>"+plan_trabajo.fecha+"</td>"+
                                          "<td>No tiene</td>"
                             }
+                             $color_progreso = ""
+                            if(plan_trabajo.progreso >= 0 && plan_trabajo.progreso <= 20) $color_progreso = "danger"
+                            if(plan_trabajo.progreso > 20 && plan_trabajo.progreso <= 40) $color_progreso = "warning"
+                            if(plan_trabajo.progreso > 40 && plan_trabajo.progreso <= 60) $color_progreso = "primary"
+                            if(plan_trabajo.progreso > 60 && plan_trabajo.progreso <= 80) $color_progreso = "secundary"
+                            if(plan_trabajo.progreso > 80 && plan_trabajo.progreso < 100) $color_progreso = "info"
+                            if(plan_trabajo.progreso == 100) $color_progreso = "success"
+
+                            tabla += "<td>"+
+                                     "<span class='text-"+$color_progreso+"'>"+plan_trabajo.progreso+"%</span>"+
+                                            "<div class='progress'>"+
+                                                "<div class='progress-bar bg-"+$color_progreso+"' role='progressbar' style='width: "+plan_trabajo.progreso+"%; height: 6px;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div>"+
+                                            "</div></td>"
 
                             tabla +="<td><center>"+plan_trabajo.periodo+"</center></td>"
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
@@ -253,6 +267,7 @@
                   </div>
                   <div class="modal-body">
                     <!--Material textarea-->
+                    <input type="hidden" name="" id="periodo_academico_oculto">
                     <div class="md-form">
                       <label for="msg_notificacion">Mensaje de notificacion</label>
                       <textarea id="msg_notificacion" class="md-textarea form-control" rows="6"></textarea>
@@ -273,6 +288,7 @@
             var mensaje = "El administrador notifica que se encuenta "+retraso+" en el plan de trabajo del periodo academico "+periodo_academico+".";
             id_tercero_recibe = id_tercero
             $("#msg_notificacion").val(mensaje)
+            $("#periodo_academico_oculto").val(periodo_academico)
             $('#modalNotificacion').modal('show')
         }
 
@@ -296,6 +312,7 @@
                 id_tercero_envia : id_tercero_envia,
                 id_tercero_recibe : id_tercero_recibe,
                 id_dominio_tipo : id_dominio_tipo,
+                periodo_academico : $("#periodo_academico_oculto").val(),
                 id_dominio_tipo_formato : {{ config('global.plan_trabajo') }},
                 _token : _token
             };

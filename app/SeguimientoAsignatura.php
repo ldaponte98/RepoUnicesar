@@ -144,21 +144,21 @@ class SeguimientoAsignatura extends Model
 
     	switch ($this->corte) {
         		case 1:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal1 and $fecha_actual >= $fechas_de_entrega->fechaInicial1 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
+        			if ($fecha_actual <= $fechas_de_entrega->fechafinal1 and $fecha_actual >= $fechas_de_entrega->fechainicial1 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
         			{
         				return true;
         			}else{
         				return false;
         			}
         		case 2:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal2 and $fecha_actual >= $fechas_de_entrega->fechaInicial2 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
+        			if ($fecha_actual <= $fechas_de_entrega->fechafinal2 and $fecha_actual >= $fechas_de_entrega->fechainicial2 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
         			{
         				return true;
         			}else{
         				return false;
         			}
         		case 3:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal3 and $fecha_actual >= $fechas_de_entrega->fechaInicial3 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
+        			if ($fecha_actual <= $fechas_de_entrega->fechafinal3 and $fecha_actual >= $fechas_de_entrega->fechainicial3 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
         			{
         				return true;
         			}else{
@@ -201,6 +201,7 @@ class SeguimientoAsignatura extends Model
 		            $diferencia = date_diff($fecha_actual,$fechacierre);
 		            $dias = $diferencia->days;
 		            $horas = $diferencia->h;
+                    $retraso = "";
 		            return "Retrasado $dias dias y $horas horas";
         			break;
         		case 2:

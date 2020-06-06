@@ -74,7 +74,7 @@ $is_admin = session('is_admin');
                                 @if ($fechas_de_entrega_plan_trabajo != null)
                                     <b>Desde {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_trabajo->fechainicial1))}} hasta {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_trabajo->fechafinal1))}}</b>
                                 @else
-                                    <center><b>Fechas no definidas </b></center>
+                                    <center><b>Fechas no asignadas </b></center>
                                 @endif 
                                 <br>
                                 <br>
@@ -102,7 +102,7 @@ $is_admin = session('is_admin');
                                 @if ($fechas_de_entrega_plan_desarrollo_asignatura != null)
                                     <b>Desde {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_desarrollo_asignatura->fechainicial1))}} hasta {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_desarrollo_asignatura->fechafinal1))}}</b>
                                 @else
-                                    <b>Fechas no definidas </b>
+                                    <b>Fechas no asignadas </b>
                                 @endif 
                                 <br>
                                 <br>
@@ -150,7 +150,7 @@ $is_admin = session('is_admin');
                                         @endif</p>
                                 @else
                                 <br><br><br><br>
-                                    <center><b>Fechas no definidas </b></center>
+                                    <center><b>Fechas no asignadas </b></center>
                                     <br>
                                     <br>
                                 @endif 
@@ -186,7 +186,7 @@ $is_admin = session('is_admin');
                                      <p id="txt_seguimiento_corte_1">{{ date('d/m/Y', strtotime($fechas_de_entrega_actividades_complementarias->fechainicial3)) }} hasta {{ date('d/m/Y', strtotime($fechas_de_entrega_actividades_complementarias->fechafinal3)) }}</p>
                                 @else
                                 <br><br><br><br>
-                                    <center><b>Fechas no definidas </b></center>
+                                    <center><b>Fechas no asignadas </b></center>
                                     <br>
                                     <br>
                                 @endif                                 
@@ -211,7 +211,7 @@ $is_admin = session('is_admin');
                                 @if ($fechas_de_entrega_plan_accion != null)
                                     <b>Desde {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_accion->fechainicial1))}} hasta {{ date('d/m/Y', strtotime($fechas_de_entrega_plan_accion->fechafinal1))}}</b>
                                 @else
-                                    <center><b>Fechas no definidas </b></center>
+                                    <center><b>Fechas no asignadas </b></center>
                                 @endif 
                                 <br>
                                 <br>

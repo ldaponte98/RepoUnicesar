@@ -47,9 +47,13 @@ class PlanTrabajo extends Model
 		return $this->hasMany(ActividadesPlanTrabajo::class, 'id_plan_trabajo');
 	}
 
+	public function actividades_complementarias()
+	{
+		return $this->hasMany(ActividadesComplementarias::class, 'id_plan_trabajo');
+	}
+
 	public static function tiene_permiso_para_editar($id_tercero,$id_periodo_academico, $id_plan_trabajo = null, $estado = null)
 	{
-
 		$periodo = PeriodoAcademico::find($id_periodo_academico);
     	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
                             ->where('id_dominio_tipo_formato',config('global.plan_trabajo'))
@@ -82,5 +86,56 @@ class PlanTrabajo extends Model
 			return false;
 		}
             
+	}
+
+	public function get_tipos_de_actividades()
+	{
+	 $actividades_plan_trabajo = ActividadesPlanTrabajo::all()->where('id_plan_trabajo', $this->id_plan_trabajo);
+	  $tipos_de_actividades = [];
+	  $tipos_de_actividades_ya_insertadas = [];
+	  foreach ($actividades_plan_trabajo as $actividad_plan_trabajo) {
+	  	if (!in_array($actividad_plan_trabajo->id_dominio_tipo, $tipos_de_actividades_ya_insertadas)) {
+	  		$tipo = Dominio::find($actividad_plan_trabajo->id_dominio_tipo);
+	  		array_push($tipos_de_actividades, $tipo);
+	  		array_push($tipos_de_actividades_ya_insertadas, $tipo->id_dominio);
+	  	}
+	  }
+
+	  return $tipos_de_actividades;
+	}
+
+	public function get_tipos_de_actividades_para_actividades_complementarias()
+	{
+	 $actividades_plan_trabajo = ActividadesPlanTrabajo::all()->where('id_plan_trabajo', $this->id_plan_trabajo);
+	  $tipos_de_actividades = [];
+	  $tipos_de_actividades_ya_insertadas = [];
+	  foreach ($actividades_plan_trabajo as $actividad_plan_trabajo) {
+	  	if($actividad_plan_trabajo->requiere_actividad_complementaria == 1){
+		  	if (!in_array($actividad_plan_trabajo->id_dominio_tipo, $tipos_de_actividades_ya_insertadas)) {
+		  		$tipo = Dominio::find($actividad_plan_trabajo->id_dominio_tipo);
+		  		array_push($tipos_de_actividades, $tipo);
+		  		array_push($tipos_de_actividades_ya_insertadas, $tipo->id_dominio);
+		  	}
+		}
+	  }
+
+	  return $tipos_de_actividades;
+	}
+
+	public function get_actividades_por_tipo($tipo_actividad)
+	{
+		$actividades = [];
+		foreach ($this->actividades as $actividad) {
+			if($actividad->id_dominio_tipo == $tipo_actividad) array_push($actividades, $actividad);
+		}
+	  return $actividades;
+	}
+
+	public function get_actividades_para_actividades_complementarias_por_tipo($tipo_actividad){
+		$actividades = [];
+		foreach ($this->actividades as $actividad) {
+			if($actividad->id_dominio_tipo == $tipo_actividad and $actividad->requiere_actividad_complementaria == 1) array_push($actividades, $actividad);
+		}
+	  return $actividades;
 	}
 }

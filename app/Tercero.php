@@ -92,4 +92,24 @@ class Tercero extends Model
 			}
 		return $total;
 	}
+
+	public function total_horas_atencion_a_estudiantes($periodo)
+	{
+		$asignaturas = $this->asignaturas_por_periodo_academico($periodo);
+		$total = 0;
+			foreach ($asignaturas as $asignatura) {
+				$total += $asignatura->horas_atencion_estudiantes;
+			}
+		return $total;
+	}
+
+	public function total_horas_preparacion_evaluacion($periodo)
+	{
+		$asignaturas = $this->asignaturas_por_periodo_academico($periodo);
+		$total = 0;
+			foreach ($asignaturas as $asignatura) {
+				$total += $asignatura->horas_preparacion_evaluacion;
+			}
+		return $total;
+	}
 }

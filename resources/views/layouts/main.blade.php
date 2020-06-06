@@ -111,6 +111,15 @@
     li .active{
         background-color:  #DAF7A6;
     }
+    .hidden-md-up{
+        margin-top: 15px !important;
+        margin-right: 40px !important;
+    }
+    @media (max-width: 767px){
+        .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+            left: -280px;
+        }   
+    }
 
 
 </style>
@@ -400,6 +409,30 @@
 
                                 </ul>
                                 </li>
+
+                                <li>
+
+                        <a class="has-arrow " href="#" aria-expanded="false"><span class="hide-menu">Actividades complementarias  
+                            @php
+                            
+                        $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
+                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
+                                            ->where('estado', 'Enviado')
+                                            ->where('id_licencia', session('id_licencia'))
+                                            ->count();
+                            @endphp
+                        </span></a>
+                            <ul aria-expanded="false" class="collapse">
+                                <li class="">
+                                    <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
+                                <span class="label label-rounded label-warning" title="{{ $total_actividades_pendientes }} sin revisar">{{ $total_actividades_pendientes }}</span></a>
+                             @endif</a>
+                                </li>
+                                
+                            </ul>
+
+                            
+                        </li>
                             </ul>
                         </li>
                        
