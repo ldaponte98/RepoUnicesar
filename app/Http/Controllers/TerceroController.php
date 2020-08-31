@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Tercero;
+use App\Horario;
 use App\SeguimientoAsignatura;
 
 
@@ -25,6 +26,44 @@ class TerceroController extends Controller
     	$docente = Tercero::find($id_tercero);
         if (session("is_admin")==true) return view('docente.view',compact('docente'));
         if (session("is_docente")==true) return view('docente.view_perfil',compact('docente'));
+    }
+
+    public function viewHorario(Request $request, $id_tercero)
+    {
+        $docente = Tercero::find($id_tercero);
+        if (session("is_docente") == true){
+            if(session("id_tercero_usuario") != $id_tercero){
+                echo "Este horario no coincide con su identidad.";
+                exit();
+            }
+        }else{
+            
+            if(session("id_licencia") != $docente->id_licencia){
+                echo "No puede acceder al horario de este docente debido a que no pertenece al programa academico a su cargo.";
+                exit();
+            }
+        }
+
+        $periodo_academico = DB::table('periodo_academico')
+                               ->orderBy('id_periodo_academico','desc')
+                               ->first();
+        $post = $request->all();
+        $horario = Horario::where('id_periodo_academico', $periodo_academico->id_periodo_academico)->where('id_tercero', $id_tercero)->first();
+        if ($post) {
+            $post = (object) $post;
+            $periodo_academico = DB::table('periodo_academico')
+                               ->where('id_periodo_academico', $post->id_periodo_escojido)
+                               ->first();
+            $horario = Horario::where('id_periodo_academico', $periodo_academico->id_periodo_academico)->where('id_tercero', $id_tercero)->first();
+        }
+        if(!$horario) $horario = new Horario;        
+        
+        return view('docente.view_horario',compact([
+            'horario',
+            'periodo_academico',
+            'docente'
+        ]));
+            
     }
 
     public function updateImageDocente(Request $request, $id_tercero){

@@ -249,7 +249,7 @@
                                         @php
                                             $tercero_envia = \App\Tercero::find($notificacion->id_tercero_envia);
                                             $imagen = 'assets/images/users/sin_foto.jpg';
-                                            if ($tercero_envia->foto)$imagen = '../../files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
+                                            if ($tercero_envia->foto)$imagen = 'files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
                                              $fecha = date("d-m-Y",strtotime($notificacion->fecha));
                                             $hora = date("H:m",strtotime($notificacion->fecha));
                                             $hoy =  date("d-m-Y");
@@ -314,7 +314,7 @@
                                 {{ 
                                     $imagen = 'assets/images/users/sin_foto.jpg';
                                 if($usuario->tercero->foto) 
-                                $imagen = '../../files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
+                                $imagen = 'files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
                                 
                             
                                  }}
@@ -332,6 +332,7 @@
                     </ul>
                 </div>
             </nav>
+            
         </header>
 
         <!-- ============================================================== -->
@@ -354,8 +355,8 @@
                         {{ echo $usuario->tercero->getNameFull();}}
                     @endphp</font></font><span class="caret"></span></a>
                         <div class="dropdown-menu animated flipInY">
-                            <a href="EditarDocenteUsu.php" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                            <a href="VerCalendarioAcademico.php" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
+                            <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
+                            <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
 
                             <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
                         </div>

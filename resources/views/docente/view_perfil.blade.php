@@ -56,7 +56,7 @@
                                     </div>
                                     @php
                                     $imagen = 'assets/images/users/sin_foto.jpg';
-                                    if ($docente->foto)$imagen = '../../files/'.$docente->cedula.'/'.$docente->foto;
+                                    if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
                                     @endphp
                                  <a> <img id="fotico" target="Ver imagen" src="{{ asset($imagen) }}" class="img-circle" width="200" height="200" /></a> 
                                     

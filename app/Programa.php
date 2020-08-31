@@ -13,4 +13,8 @@ class Programa extends Model
 	{
 	    return $this->belongsTo(Facultad::class, 'id_facultad');
 	}
+	public function licencia()
+	{
+	    return $this->belongsTo(Licencia::class, 'id_licencia');
+	}
 }

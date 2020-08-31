@@ -45,12 +45,13 @@
                     <tbody id="bodytable">
 
                     	@foreach ($docentes as $docente)
+                        
                     	  <tr class="fil" onclick="location.href = 'view/{{ $docente->id_tercero }}'">
                     		<td>
                     			<center>
                     			@php
                                 	$imagen = 'assets/images/users/sin_foto.jpg';
-                                	if ($docente->foto)$imagen = '../../files/'.$docente->cedula.'/'.$docente->foto;
+                                	if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
                                 @endphp
                                 <img src="{{ asset($imagen) }}" class="img-circle" width="35" height="35" />
                                 </center>

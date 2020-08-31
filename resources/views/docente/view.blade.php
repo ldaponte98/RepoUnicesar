@@ -53,7 +53,7 @@
                                     </div>
                                     @php
                                     $imagen = 'assets/images/users/sin_foto.jpg';
-                                    if ($docente->foto)$imagen = '../../files/'.$docente->cedula.'/'.$docente->foto;
+                                    if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
                                     @endphp
                                  <a> <img id="fotico" target="Ver imagen" src="{{ asset($imagen) }}" class="img-circle" width="200" height="200" /></a> 
                                     
@@ -104,14 +104,14 @@
                                     </div>                                    
                                     <div class="form-group">
                                         <div class="col-sm-12">
-                                            <!--<a style="color: white;" class="btn btn-success">Ver carga academica</a>-->
+                                            <a style="color: white;" class="btn btn-success" href="{{ route('docente/horario', $docente->id_tercero) }}" target="_blank"><i class="fa fa-calendar"></i> Ver Horario</a>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
                     </div>
-
+                    @if($docente->id_dominio_tipo_ter == 3)
                     <div class="col-lg-12 col-xlg-12 col-md-12">
                         <div class="card">
                             <div class="card-block">
@@ -133,6 +133,7 @@
                                       <a class="nav-link tab_header" id="asignaturas-tab" data-toggle="tab" href="#asignaturas_tab" role="tab" aria-controls="asignaturas_tab"
                                         aria-selected="false"><b>Asignaturas y grupos</b></a>
                                     </li>
+                                    
                                   </ul>
                                   <div class="tab-content" id="myTabContent">
                                     <div class="tab-pane fade show active" id="seg_pendientes" role="tabpanel" aria-labelledby="seg_pendientes-tab">
@@ -148,12 +149,13 @@
                                     <div class="tab-pane fade" id="asignaturas_tab" role="tabpanel" aria-labelledby="asignaturas-tab">
                                     {{ view('docente.listado_asignaturas',compact('docente')) }}     
                                     </div>
+                                    
                                   </div>
                                   </div>
                             </div>
                         </div>
                     </div>
-
+                    @endif
                     <!-- Column -->
                 </div>
 

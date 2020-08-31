@@ -703,6 +703,7 @@
                     })
                 }
             }).fail(function(error){
+                $.unblockUI();
                 toastr.error('Ah ocurrido un error al intentar registrar el seguimiento.', 'Error', {timeOut: 3000})
             })
 

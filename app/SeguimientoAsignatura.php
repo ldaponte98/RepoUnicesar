@@ -127,6 +127,7 @@ class SeguimientoAsignatura extends Model
                             ->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
                             ->where('id_licencia',session('id_licencia'))
     						->first();
+        if(!$fechas_de_entrega) return false;
     	$fecha_actual = date('Y-m-d');
 
         $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
@@ -178,6 +179,7 @@ class SeguimientoAsignatura extends Model
         						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
                                 ->where('id_licencia',session('id_licencia'))
         						->first();
+            if(!$fechas_de_entrega) return "En espera";
         	$fecha_actual = date('Y-m-d H:i:s'); 
             $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
                                        ->where('id_formato', $this->id_seguimiento)

@@ -60,7 +60,7 @@ class PlanTrabajo extends Model
                             ->where('id_licencia',session('id_licencia'))
     						->first();
     	$fecha_actual = date('Y-m-d');
-
+    	if($fechas_de_entrega){
         
         if ($fecha_actual <= $fechas_de_entrega->fechafinal1 and $fecha_actual >= $fechas_de_entrega->fechaInicial1){
         	if($estado == "Recibido"){//aca no puede modificar porq	el jefe ya lo reviso
@@ -85,6 +85,9 @@ class PlanTrabajo extends Model
 			}
 			return false;
 		}
+	}else{
+		return false;
+	}
             
 	}
 

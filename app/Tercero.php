@@ -20,6 +20,10 @@ class Tercero extends Model
 	    return $this->belongsTo(Dominio::class, 'id_dominio_tipo_ter');
 	}
 
+	 public function usuario()
+	{
+	    return $this->belongsTo(Usuario::class, 'id_tercero');
+	}
 
 	public function seguimientos_asignatura()
 	{

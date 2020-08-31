@@ -29,6 +29,7 @@ Route::get('email/email_formato_revisado',function () {
 //RUTAS DOCENTE
 Route::get('docente/listado_docentes','TerceroController@getDocentes')->name('docente/listado_docentes');
 Route::get('docente/view/{id}','TerceroController@viewDocente')->name('docente/view');
+Route::any('docente/horario/{id}','TerceroController@viewHorario')->name('docente/horario');
 Route::any('docente/update_image/{id_tercero}','TerceroController@updateImageDocente')->name('docente/update_image');
 
 
@@ -107,6 +108,8 @@ Route::any('actividades_complementarias/imprimir/{id_actividad}/{id_actividad_pl
 Route::any('comunication/updateFacultades','ComunicationController@updateFacultades')->name('comunication/updateFacultades');
 Route::any('comunication/updateProgramasAcademicos','ComunicationController@updateProgramasAcademicos')->name('comunication/updateProgramasAcademicos');
 Route::any('comunication/updatePeriodosAcademicos','ComunicationController@updatePeriodosAcademicos')->name('comunication/updatePeriodosAcademicos');
+Route::any('comunication/updateAsignaturas','ComunicationController@updateAsignaturas')->name('comunication/updateAsignaturas');
+Route::any('comunication/auth','ComunicationController@auth')->name('comunication/auth');
 
 
 

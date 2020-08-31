@@ -309,7 +309,7 @@
 
                     $imagen = 'assets/images/users/sin_foto.jpg';
                     if($usuario->tercero->foto) 
-                    $imagen = '../../files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
+                    $imagen = 'files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
 
                     @endphp
                     <!-- ============================================================== -->
@@ -361,6 +361,9 @@
                         </li>
                         <li>
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>
+                        </li>
+                        <li>
+                            <a href="{{ route('docente/horario', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-calendar m-r-10" aria-hidden="true"></i>Horario</a>
                         </li>
                         <li class="nav-devider"></li>
                         <li class="nav-small-cap">Formatos</li>
