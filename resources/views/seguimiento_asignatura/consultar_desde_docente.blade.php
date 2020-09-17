@@ -377,7 +377,19 @@
                                 id_dominio_tipo_formato : {{ config('global.seguimiento_asignatura') }},
                                 _token : _token
                             };
+                             $.blockUI({
+                                message: '<h1>Solicitando...</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                                css: {
+                                    border: 'none',
+                                    padding: '15px',
+                                    backgroundColor: '#000',
+                                    '-webkit-border-radius': '10px',
+                                    '-moz-border-radius': '10px',
+                                    opacity: .8,
+                                    color: '#ffffff'
+                                }});
                             $.post("{{ route('notificacion/crear') }}",data, function(response){
+                                $.unblockUI();
                                if (!response.error) toastr.success('Notificacion enviada exitosamente', 'Mensaje enviado', {timeOut: 3000}) 
                                if (response.error) toastr.error('Ocurrio un error al enviar la notificacion', 'Mensaje no enviado', {timeOut: 3000})
                             });

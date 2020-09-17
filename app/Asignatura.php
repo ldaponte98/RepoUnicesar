@@ -9,6 +9,10 @@ class Asignatura extends Model
     protected $table = 'asignatura';
     protected $primaryKey = 'id_asignatura';
 
+    public function licencia()
+    {
+    	return $this->belongsTo(licencia::class, 'id_licencia');
+    }
     public function grupos()
 	{
 		return $this->hasMany(Grupo::class, 'id_asignatura');

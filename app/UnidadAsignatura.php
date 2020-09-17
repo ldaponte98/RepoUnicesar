@@ -9,6 +9,7 @@ class UnidadAsignatura extends Model
     protected $table = 'unidad_asignatura';
     protected $primaryKey = 'id_unidad_asignatura';
 
+    public $ejes = [];
     public function ejes_tematicos()
 	{
 		return $this->hasMany(EjeTematico::class, 'id_unidad_asignatura');

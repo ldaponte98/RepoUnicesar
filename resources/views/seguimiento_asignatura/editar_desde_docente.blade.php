@@ -99,11 +99,13 @@
                                         <label class="col-md-12" style="color: black;">Unidades Programadas</label>
                                         <br><br>
                                         <div class="col-md-12" id="unidades">
+                                            @php 
+                                            $plan_asignatura = $seguimiento->plan_asignatura(); 
+                                            @endphp
+                                        	@foreach ($plan_asignatura->unidades() as $unidad)
+                                        	<input id="unidad_{{ $unidad->id_unidad }}" onchange="buscar_ejes({{ $unidad->id_unidad }})" style='cursor:hand; margin-left: -.1rem; margin-top: 5px;' class='form-check-input'  style='margin-left: -.25rem;'  value='{{ $unidad->id_unidad }}' type='checkbox' >
 
-                                        	@foreach ($seguimiento->asignatura->unidades as $unidad)
-                                        	<input id="unidad_{{ $unidad->id_unidad_asignatura }}" onchange="buscar_ejes({{ $unidad->id_unidad_asignatura }})" style='cursor:hand; margin-left: -.1rem; margin-top: 5px;' class='form-check-input'  style='margin-left: -.25rem;'  value='{{ $unidad->id_unidad_asignatura }}' type='checkbox' >
-
-                                        	<label for ="unidad_{{ $unidad->id_unidad_asignatura }}" style='margin-left: 13;' class='col-md-11'>{{ $unidad->nombre }}</label> <br>
+                                        	<label for ="unidad_{{ $unidad->id_unidad }}" style='margin-left: 13;' class='col-md-11'>{{ $unidad->nombre }}</label> <br>
                                         	@endforeach
                                             
                                         </div>
@@ -461,7 +463,7 @@
 		         .done(function(response){
 		        	unidades_seleccionadas.push(response)
 		        	establecer_ejes_tematicos()
-                     verificar_ejes_ya_checkeados()
+                    verificar_ejes_ya_checkeados()
 		        })
 	       	 }else{
 	       	 	//aca elimino la unidad si esta en el array 

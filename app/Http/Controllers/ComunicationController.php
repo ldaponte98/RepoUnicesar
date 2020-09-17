@@ -43,14 +43,14 @@ class ComunicationController extends Controller
         			//ahora registro la licencia del programa academico
         			$licencia = Licencia::where('id_programa', $p->id_programa)->first();
         			if (!$licencia) {
-        				$l = new Licencia;
-        				$l->id_programa = $p->id_programa;
+        				$licencia = new Licencia;
+        				$licencia->id_programa = $p->id_programa;
         			}
-        			$l->nombre = $programa->nombre;
-        			$l->email = $programa->email;
-        			$l->telefono = $programa->telefono;
-        			$l->sede = $programa->sede;
-        			$l->save();
+        			$licencia->nombre = $programa->nombre;
+        			$licencia->email = $programa->email;
+        			$licencia->telefono = $programa->telefono;
+        			$licencia->sede = $programa->sede;
+        			$licencia->save();
         		}else{
         			array_push($errors, array("id_programa_error" => $programa->id_programa));
         		}
@@ -69,6 +69,8 @@ class ComunicationController extends Controller
 	        	));
         }
     }
+
+
 
 
     public function updateFacultades(Request $request)
@@ -148,12 +150,18 @@ class ComunicationController extends Controller
         			$p->id_academusoft = $asignatura->id_asignatura;
         		}
         		$p->codigo = $asignatura->codigo;
-        		$p->nombre = $asignatura->nombre;
+                $p->nombre = $asignatura->nombre;
+                $p->tipo = $asignatura->tipo;
+                $p->naturaleza = $asignatura->naturaleza;
+                $p->prerrequisitos = $asignatura->prerrequisitos;
+                $p->correquisitos = $asignatura->correquisitos;
         		$p->num_creditos = $asignatura->num_creditos;
         		$p->horas_teoricas = $asignatura->horas_teoricas;
         		$p->horas_practicas = $asignatura->horas_practicas;
         		$p->horas_atencion_estudiantes = $asignatura->horas_atencion_estudiantes;
-        		$p->horas_preparacion_evaluacion = $asignatura->horas_preparacion_evaluacion;
+                $p->horas_preparacion_evaluacion = $asignatura->horas_preparacion_evaluacion;
+                $p->horas_totales_trabajo_independiente = $asignatura->horas_totales_trabajo_independiente;
+                $p->horas_totales_semestre = $asignatura->horas_totales_semestre;
         		$programa = Programa::where('id_academusoft', $asignatura->id_programa_perteneciente)->first();
         		if($programa){
         			$licencia = Licencia::where('id_programa', $programa->id_programa)->first();
@@ -465,6 +473,35 @@ class ComunicationController extends Controller
     	return response()->json(array(
         		"message" => "Error en datos enviados",
         		"errors" => $errors
+        ));
+    }
+
+    public function createJefeDepartamento(Request $request)
+    {
+        $post = $request->all();
+        
+        $errors = [];
+        if ($post) {
+            $post = (object) $post;
+            $tercero_post = $post->tercero;
+            foreach ($facultades as $facultad) {
+                $facultad = (object) $facultad;
+                $p = Facultad::where('id_academusoft', $facultad->id_facultad)->first();
+                if(!$p){
+                    $p = new Facultad;
+                    $p->id_academusoft = $facultad->id_facultad;
+                }
+                $p->nombre = $facultad->nombre;
+                $p->save();
+            }
+            return response()->json(array(
+                "message" => "Sincronización exitosa",
+                "errors" => $errors
+            ));
+        }
+        return response()->json(array(
+                "message" => "Error en datos enviados",
+                "errors" => $errors
         ));
     }
 }

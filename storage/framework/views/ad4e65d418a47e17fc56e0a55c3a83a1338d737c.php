@@ -394,6 +394,9 @@
                                 <li>
                                     <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect">Plan de trabajo</a>
                                 </li>
+                                <li>
+                                    <a href="<?php echo e(route('plan_asignatura/buscar_asignatura')); ?>" class="waves-effect">Plan de asignatura</a>
+                                </li>
                                 <li class="">
                                     <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
                                    
@@ -414,7 +417,7 @@
 
                                 <li>
 
-                        <a class="has-arrow " href="#" aria-expanded="false"><span class="hide-menu">Actividades complementarias  
+                        <a class="has-arrow " href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
                             <?php
                             
                         $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')

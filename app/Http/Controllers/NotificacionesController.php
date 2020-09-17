@@ -29,82 +29,101 @@ class NotificacionesController extends Controller
             $vista_email = "";
         	if ($notificacion->save()) {
                 if (session('is_admin')==true) {
-                switch (intval($notificacion->id_dominio_tipo)) {
-                    case 6: //revision
-                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
-                            $vista_email = "email.email_formato_revisado";
-                            $subject = "Revisión de Seguimiento de asignatura";
-                            $seguimiento = SeguimientoAsignatura::find($notificacion->id_formato);
-                            $data_email = array(
-                                "formato" => "Seguimiento de Asignatura",
-                                "asignatura" => "(". $seguimiento->asignatura->codigo.") ".$seguimiento->asignatura->nombre,
-                                "grupo" => $seguimiento->grupo->codigo,
-                                "corte" => $seguimiento->corte,
-                                "periodo_academico" => $seguimiento->grupo->periodo_academico->periodo,
-                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
-                            );
-                        }
-                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
-                            $vista_email = "email.email_formato_revisado";
-                            $subject = "Revisión de Plan de trabajo";
-                            $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
-                            $data_email = array(
-                                "formato" => "Plan de trabajo",
-                                "periodo_academico" => $post->periodo_academico,
-                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
-                            );
-                        }
-                        break;
-                    case 8: //extra-plazo
-                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
-                          
-                        }
-                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
-                            
-                        }
-                    case 9: //retraso
-                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
-                            $subject = "Aviso de retraso en Seguimiento de asignatura";
-                            $vista_email = "email.email_retraso";
-                            $seguimiento = SeguimientoAsignatura::find($notificacion->id_formato);
+	                switch (intval($notificacion->id_dominio_tipo)) {
+	                    case 6: //revision
+	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+	                            $vista_email = "email.email_formato_revisado";
+	                            $subject = "Revisión de Seguimiento de asignatura";
+	                            $seguimiento = SeguimientoAsignatura::find($notificacion->id_formato);
+	                            $data_email = array(
+	                                "formato" => "Seguimiento de Asignatura",
+	                                "asignatura" => "(". $seguimiento->asignatura->codigo.") ".$seguimiento->asignatura->nombre,
+	                                "grupo" => $seguimiento->grupo->codigo,
+	                                "corte" => $seguimiento->corte,
+	                                "periodo_academico" => $seguimiento->grupo->periodo_academico->periodo,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+	                            );
+	                        }
+	                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+	                            $vista_email = "email.email_formato_revisado";
+	                            $subject = "Revisión de Plan de trabajo";
+	                            $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
+	                            $data_email = array(
+	                                "formato" => "Plan de trabajo",
+	                                "periodo_academico" => $post->periodo_academico,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+	                            );
+	                        }
+	                        break;
+	                    case 8: //extra-plazo
+	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+	                          
+	                        }
+	                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+	                            
+	                        }
+	                    case 9: //retraso
+	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+	                            $subject = "Aviso de retraso en Seguimiento de asignatura";
+	                            $vista_email = "email.email_retraso";
+	                            $seguimiento = SeguimientoAsignatura::find($notificacion->id_formato);
 
-                            $data_email = array(
-                                "formato" => "Seguimiento de Asignatura",
-                                "asignatura" => "(". $seguimiento->asignatura->codigo.") ".$seguimiento->asignatura->nombre,
-                                "grupo" => $seguimiento->grupo->codigo,
-                                "corte" => $seguimiento->corte,
-                                "periodo_academico" => $seguimiento->grupo->periodo_academico->periodo,
-                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
-                            );
-                        }
-                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
-                            $subject = "Aviso de retraso en Plan de trabajo";
-                            $vista_email = "email.email_retraso";
-                            $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
-                            $data_email = array(
-                                "formato" => "Plan de trabajo",
-                                "periodo_academico" => $post->periodo_academico,
-                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
-                            );
-                        }
-                        if($notificacion->id_dominio_tipo_formato == config('global.actividades_complementarias')) {
-                            $subject = "Aviso de retraso en Actividades complementarias";
-                            $vista_email = "email.email_retraso";
-                            $actividades = ActividadesComplementarias::find($notificacion->id_formato);
+	                            $data_email = array(
+	                                "formato" => "Seguimiento de Asignatura",
+	                                "asignatura" => "(". $seguimiento->asignatura->codigo.") ".$seguimiento->asignatura->nombre,
+	                                "grupo" => $seguimiento->grupo->codigo,
+	                                "corte" => $seguimiento->corte,
+	                                "periodo_academico" => $seguimiento->grupo->periodo_academico->periodo,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+	                            );
+	                        }
+	                        if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
+	                            $subject = "Aviso de retraso en Plan de trabajo";
+	                            $vista_email = "email.email_retraso";
+	                            $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
+	                            $data_email = array(
+	                                "formato" => "Plan de trabajo",
+	                                "periodo_academico" => $post->periodo_academico,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+	                            );
+	                        }
+	                        if($notificacion->id_dominio_tipo_formato == config('global.actividades_complementarias')) {
+	                            $subject = "Aviso de retraso en Actividades complementarias";
+	                            $vista_email = "email.email_retraso";
+	                            $actividades = ActividadesComplementarias::find($notificacion->id_formato);
 
-                            $data_email = array(
-                                "formato" => "Actividades complementarias",
-                                "corte" => $actividades->corte,
-                                "periodo_academico" => $actividades->plan_trabajo->periodo_academico->periodo,
-                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
-                            );
-                        }
-                        break;
-                    default:
-                        echo "Accion invalida";
-                        break;
-                }
-            }
+	                            $data_email = array(
+	                                "formato" => "Actividades complementarias",
+	                                "corte" => $actividades->corte,
+	                                "periodo_academico" => $actividades->plan_trabajo->periodo_academico->periodo,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+	                            );
+	                        }
+	                        break;
+	                    default:
+	                        echo "Accion invalida";
+	                        break;
+	                }
+            	}else{
+            		 switch (intval($notificacion->id_dominio_tipo)) {
+            		 	 case 8: //extra-plazo
+	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
+	                          $subject = "Solicitud de plazo extra para seguimiento de asignatura por corte";
+	                            $vista_email = "email.solicitar_extraplazo";
+	                            $seguimiento = SeguimientoAsignatura::find($notificacion->id_formato);
+	                            $data_email = array(
+	                                "formato" => "Seguimiento de Asignatura por corte",
+	                                "asignatura" => "(". $seguimiento->asignatura->codigo.") ".$seguimiento->asignatura->nombre,
+	                                "grupo" => $seguimiento->grupo->codigo,
+	                                "corte" => $seguimiento->corte,
+	                                "periodo_academico" => $seguimiento->grupo->periodo_academico->periodo,
+	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre,
+	                                "nombre_docente" => $notificacion->tercero_envia->getNameFull()
+	                            );
+	                        }
+	                        break;
+            		 }
+            	}
 
                 
                 $for = $notificacion->tercero_recibe->email;

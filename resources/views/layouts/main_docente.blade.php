@@ -30,7 +30,7 @@
     <link href="{{ asset("assets/css/style.css") }}" rel="stylesheet">
     <!-- You can change the theme colors from here -->
     <link href="{{ asset("assets/css/colors/blue.css") }}" id="theme" rel="stylesheet">
-    <link href="{{ asset("Iconos/css/all.css") }}" rel="stylesheet">
+   
             <link href="{{ asset("css/estilos_card.css") }}" rel="stylesheet">
 
 
@@ -53,6 +53,8 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <script src="{{ asset('js/TableToExcel.js') }}"></script>
 
 
@@ -373,7 +375,7 @@
 
                         <li>
 
-                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fas fa-tasks m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
+                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-tasks m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
                             @php
                             $total_seguimientos_pendientes = \App\SeguimientoAsignatura::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
@@ -417,7 +419,7 @@
                             
                         </li>
                         <li class="">
-                            <a class="has-arrow " href="#" aria-expanded="false"><i class="far fa-clipboard m-r-10"></i><span class="hide-menu">Reportes</span></a>
+                            <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-clipboard m-r-10"></i><span class="hide-menu">Reportes</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li class="">
                                     <a href="fgdfgdf">.</a>

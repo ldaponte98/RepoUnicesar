@@ -1,4 +1,3 @@
-
 @extends((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'))
 @php
     $usuario = \App\Usuario::find(session('id_usuario'));

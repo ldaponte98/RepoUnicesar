@@ -111,7 +111,7 @@
                         
                 <?php
                 $imagen = 'assets/images/users/sin_foto.jpg';
-                if ($docente->foto)$imagen = '../../files/'.$docente->cedula.'/'.$docente->foto;
+                if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
                 ?>
                 <a> <img id="" target="Ver imagen" src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="50" height="50" /> <b> <?php echo e(strtoupper($docente->getNameFull())); ?></b></a> 
                 <br><br>

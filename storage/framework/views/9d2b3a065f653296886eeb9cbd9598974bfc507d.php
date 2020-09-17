@@ -98,11 +98,13 @@
                                         <label class="col-md-12" style="color: black;">Unidades Programadas</label>
                                         <br><br>
                                         <div class="col-md-12" id="unidades">
+                                            <?php 
+                                            $plan_asignatura = $seguimiento->plan_asignatura(); 
+                                            ?>
+                                        	<?php $__currentLoopData = $plan_asignatura->unidades(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unidad): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                        	<input id="unidad_<?php echo e($unidad->id_unidad); ?>" onchange="buscar_ejes(<?php echo e($unidad->id_unidad); ?>)" style='cursor:hand; margin-left: -.1rem; margin-top: 5px;' class='form-check-input'  style='margin-left: -.25rem;'  value='<?php echo e($unidad->id_unidad); ?>' type='checkbox' >
 
-                                        	<?php $__currentLoopData = $seguimiento->asignatura->unidades; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $unidad): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                        	<input id="unidad_<?php echo e($unidad->id_unidad_asignatura); ?>" onchange="buscar_ejes(<?php echo e($unidad->id_unidad_asignatura); ?>)" style='cursor:hand; margin-left: -.1rem; margin-top: 5px;' class='form-check-input'  style='margin-left: -.25rem;'  value='<?php echo e($unidad->id_unidad_asignatura); ?>' type='checkbox' >
-
-                                        	<label for ="unidad_<?php echo e($unidad->id_unidad_asignatura); ?>" style='margin-left: 13;' class='col-md-11'><?php echo e($unidad->nombre); ?></label> <br>
+                                        	<label for ="unidad_<?php echo e($unidad->id_unidad); ?>" style='margin-left: 13;' class='col-md-11'><?php echo e($unidad->nombre); ?></label> <br>
                                         	<?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             
                                         </div>
@@ -462,7 +464,7 @@
 		         .done(function(response){
 		        	unidades_seleccionadas.push(response)
 		        	establecer_ejes_tematicos()
-                     verificar_ejes_ya_checkeados()
+                    verificar_ejes_ya_checkeados()
 		        })
 	       	 }else{
 	       	 	//aca elimino la unidad si esta en el array 
@@ -704,6 +706,7 @@
                     })
                 }
             }).fail(function(error){
+                $.unblockUI();
                 toastr.error('Ah ocurrido un error al intentar registrar el seguimiento.', 'Error', {timeOut: 3000})
             })
 

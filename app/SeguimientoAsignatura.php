@@ -120,6 +120,14 @@ class SeguimientoAsignatura extends Model
 		return $this->hasMany(AnalisisCualitativoSeguimiento::class, 'id_seguimiento_asignatura');
 	}
 
+    public function plan_asignatura()
+    {
+        $plan_asignatura = PlanAsignatura::where('id_asignatura', $this->id_asignatura)
+                                         ->where('id_periodo_academico', $this->grupo->id_periodo_academico)
+                                         ->first();
+        return $plan_asignatura;
+    }
+
 	public function tiene_permiso_de_editar($value='')
 	{
 		$periodo = $this->grupo->periodo_academico;

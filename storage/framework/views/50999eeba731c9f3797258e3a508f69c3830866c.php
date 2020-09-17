@@ -80,7 +80,7 @@ if($is_admin==true){
       </div>
     </div>
     
-    <div class="table-responsive" id="tabla_<?php echo e($actividad_programada->id_actividad_plan_trabajo); ?>" style="display: none;">
+    <div class="table-responsive" id="tabla_<?php echo e($actividad_programada->id_actividad_plan_trabajo); ?>" >
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -201,6 +201,7 @@ if($is_admin==true){
     }
 
      function agregar_detalle() {
+      $("#modalNewDetalle").modal('hide')
       var detalle = {
         'id_actividad_plan_trabajo' : id_actividad_plan_trabajo_escojido, 
         'descripcion' : $("#descripcion").val(),

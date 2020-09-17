@@ -78,7 +78,7 @@
                                                         <center>
                                                         <?php
                                                             $imagen = 'assets/images/users/sin_foto.jpg';
-                                                            if ($tercero_envia->foto)$imagen = '../../files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
+                                                            if ($tercero_envia->foto)$imagen = 'files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
                                                         ?>
                                                         <img src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="35" height="35" />
                                                         </center>
@@ -156,7 +156,7 @@
                                                         <center>
                                                         <?php
                                                             $imagen = 'assets/images/users/sin_foto.jpg';
-                                                            if ($tercero_recibe->foto)$imagen = '../../files/'.$tercero_recibe->cedula.'/'.$tercero_recibe->foto;
+                                                            if ($tercero_recibe->foto)$imagen = 'files/'.$tercero_recibe->cedula.'/'.$tercero_recibe->foto;
                                                         ?>
                                                         <img src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="35" height="35" />
                                                         </center>

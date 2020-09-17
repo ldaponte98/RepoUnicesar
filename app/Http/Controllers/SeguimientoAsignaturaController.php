@@ -29,7 +29,8 @@ class SeguimientoAsignaturaController extends Controller
         	$seguimientos = $post->seguimientos;
         	foreach ($seguimientos as $key => $id_seguimiento) {
         		$seguimiento = SeguimientoAsignatura::find($id_seguimiento);
-        		
+        		$seguimiento->estado = "Recibido";
+                $seguimiento->save();
         	}
         	return response()->json(array(
 		        'error' => false
@@ -81,7 +82,7 @@ class SeguimientoAsignaturaController extends Controller
                                 ->where('id_grupo', $id_grupo)
                                 ->where('id_tercero', $id_tercero);
 
-            if ($seguimiento_3->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
+            if ($seguimiento_3->estado == 'Enviado' and session('is_admin')==true) {
                 $seguimiento_3->estado = 'Recibido';
                 $seguimiento_3->save();
             }
@@ -379,10 +380,21 @@ class SeguimientoAsignaturaController extends Controller
 
     public function getEjesTematicos($id_unidad,$id_seguimiento)
     {
-       $unidad = UnidadAsignatura::find($id_unidad);
+       $unidad = new UnidadAsignatura;
+
+
+       $seguimiento = SeguimientoAsignatura::find($id_seguimiento);
+       $plan_asignatura = $seguimiento->plan_asignatura();
+       foreach ($plan_asignatura->unidades() as $uni) {
+           if($uni->id_unidad == $id_unidad){
+             $unidad =  UnidadAsignatura::find($uni->id_unidad);
+             $unidad->ejes = $uni->ejes;
+             break;
+           }
+       }
        return response()->json([
                     "unidad" => $unidad,
-                    "ejes_tematicos" => $unidad->ejes_tematicos,
+                    "ejes_tematicos" => $unidad->ejes,
         ]);
     }
 
