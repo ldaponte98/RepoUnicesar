@@ -31,6 +31,7 @@ Route::get('docente/listado_docentes','TerceroController@getDocentes')->name('do
 Route::get('docente/view/{id}','TerceroController@viewDocente')->name('docente/view');
 Route::any('docente/horario/{id}','TerceroController@viewHorario')->name('docente/horario');
 Route::any('docente/update_image/{id_tercero}','TerceroController@updateImageDocente')->name('docente/update_image');
+Route::get('docente/buscar_asignaturas/{id_periodo_academico}/{id_tercero}','TerceroController@buscarAsignaturas')->name('docente/buscar_asignaturas');
 
 
 
@@ -106,8 +107,17 @@ Route::any('actividades_complementarias/imprimir/{id_actividad}/{id_actividad_pl
 Route::get('plan_asignatura/buscar_asignatura',function () {
     return view('plan_asignatura.buscar_asignatura');
 })->name('plan_asignatura/buscar_asignatura');
+Route::get('plan_asignatura/consultar_desde_docente',function () {
+    return view('plan_asignatura.consultar_desde_docente');
+})->name('plan_asignatura/consultar_desde_docente');
 Route::get('plan_asignatura/view/{id_asignatura}/{id_periodo_academico}','PlanAsignaturaController@view')->name('plan_asignatura/view');
 Route::post('plan_asignatura/editar','PlanAsignaturaController@editar')->name('plan_asignatura/editar');
+Route::get('plan_asignatura/imprimir/{id_plan_asignatura}','PlanAsignaturaController@imprimir')->name('plan_asignatura/imprimir');
+Route::post('plan_asignatura/cargar_plan_existente','PlanAsignaturaController@cargar_plan_existente')->name('plan_asignatura/cargar_plan_existente');
+Route::get('plan_asignatura/obtener_vista/{id_plan_asignatura}','PlanAsignaturaController@obtener_vista')->name('plan_asignatura/obtener_vista');
+
+
+
 //RUTAS PARA ALIMENTAR DESDE ACADEMUSOFT
 Route::any('comunication/updateFacultades','ComunicationController@updateFacultades')->name('comunication/updateFacultades');
 Route::any('comunication/updateProgramasAcademicos','ComunicationController@updateProgramasAcademicos')->name('comunication/updateProgramasAcademicos');

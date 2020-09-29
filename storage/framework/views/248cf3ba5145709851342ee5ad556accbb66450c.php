@@ -70,6 +70,9 @@
 		
 		<div class="container-login100">
 			<div class="wrap-login100">
+				<?php if($errors->first('mensaje') != ""): ?>
+						<div class="alert alert-danger"><strong><?= $errors->first('mensaje')?></strong></div>
+					<?php endif; ?>
 				<div id="mensajeprincipal" class="errores2">Esta cuenta no existe</div>
 			<form id="form-login" method="POST" action="<?php echo e(route('usuario/login')); ?>">
 					<input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>"></input>
@@ -96,17 +99,13 @@
 					<div class="container-login100-form-btn">
 						<div class="wrap-login100-form-btn">
 							<div  class="login100-form-bgbtn"></div>
-							<a style="cursor: pointer;" class="login100-form-btn" onclick="document.getElementById('form-login').submit()">
+							<button type="submit" style="cursor: pointer;" class="login100-form-btn" >
 								<b>Iniciar Sesion</b> 
 							</a>
-						</div>
+						</button>
 					</div>
-					<br>
-					<?php
-					?>
-					<?php if($errors->first('mensaje') != ""): ?>
-						<div class="alert alert-danger"><strong><?= $errors->first('mensaje')?></strong></div>
-					<?php endif; ?>
+					<br><br>
+					
 					
 
 				</form>

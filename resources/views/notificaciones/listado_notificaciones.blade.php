@@ -116,6 +116,12 @@
                                                     <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}">Ir</a>
                                                     </center></td>
                                                     @endif 
+
+                                                    @if ($notificacion->id_dominio_tipo == 32)
+                                                    <td><center>
+                                                    <a href="{{ route('notificacion/ver_notificacion', $notificacion->id_notificacion) }}">Revisar</a>
+                                                    </center></td>
+                                                    @endif 
                                                     </tr>
 
                                                 @endforeach

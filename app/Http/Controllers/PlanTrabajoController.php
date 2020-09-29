@@ -81,7 +81,9 @@ class PlanTrabajoController extends Controller
             if($plan_trabajo->save()){
             	//ahora se eliminan las actividades que antes tenia si tenia
                 //pero no se puede si tiene actividades complementarias enlazadas a estas
-            	$result_delete = DB::statement('delete from actividades_plan_trabajo where id_plan_trabajo = '.$plan_trabajo->id_plan_trabajo);
+            	$requiere_actividades_complementarias = false;
+
+                $result_delete = DB::statement('delete from actividades_plan_trabajo where id_plan_trabajo = '.$plan_trabajo->id_plan_trabajo);
             	if(isset($post->actividades)){
                 	foreach ($post->actividades as $a) {
                 		$a = (object) $a;
@@ -97,6 +99,8 @@ class PlanTrabajoController extends Controller
                         $actividad->id_dominio_tipo = $a->tipo;
                         $actividad->requiere_actividad_complementaria = $a->requiere_actividad_complementaria;
                 		$actividad->save();
+
+                        if($actividad->requiere_actividad_complementaria) $requiere_actividades_complementarias = true;
                 	}
                 }
 
@@ -126,17 +130,40 @@ class PlanTrabajoController extends Controller
                 }
 
 
+
+
             if($is_new == true){
-                //aca cuando es un nuevo plan de trabajo se crean 3 actividades complementarias por corte
-                for ($corte=1; $corte <= 3 ; $corte++) { 
-                    $actividad_complementaria = new ActividadesComplementarias;
-                    $actividad_complementaria->id_tercero = $plan_trabajo->id_tercero;
-                    $actividad_complementaria->id_plan_trabajo = $plan_trabajo->id_plan_trabajo;
-                    $actividad_complementaria->estado = 'Pendiente';
-                    $actividad_complementaria->corte = $corte;
-                    $actividad_complementaria->save();
+                if(isset($post->actividades) and $requiere_actividades_complementarias){
+                    //aca cuando es un nuevo plan de trabajo se crean 3 actividades complementarias por corte
+                    for ($corte=1; $corte <= 3 ; $corte++) { 
+                        $actividad_complementaria = new ActividadesComplementarias;
+                        $actividad_complementaria->id_tercero = $plan_trabajo->id_tercero;
+                        $actividad_complementaria->id_plan_trabajo = $plan_trabajo->id_plan_trabajo;
+                        $actividad_complementaria->estado = 'Pendiente';
+                        $actividad_complementaria->corte = $corte;
+                        $actividad_complementaria->save();
+                    }
                 }
                 
+            }else{
+                $actividades_del_plan_trabajo = ActividadesComplementarias::all()
+                                               ->where('id_plan_trabajo', $plan_trabajo->id_plan_trabajo);
+                
+                if(count($actividades_del_plan_trabajo) == 0 and isset($post->actividades)){
+                    //aca cuando es un nuevo plan de trabajo se crean 3 actividades complementarias por corte
+                    for ($corte=1; $corte <= 3 ; $corte++) { 
+                        $actividad_complementaria = new ActividadesComplementarias;
+                        $actividad_complementaria->id_tercero = $plan_trabajo->id_tercero;
+                        $actividad_complementaria->id_plan_trabajo = $plan_trabajo->id_plan_trabajo;
+                        $actividad_complementaria->estado = 'Pendiente';
+                        $actividad_complementaria->corte = $corte;
+                        $actividad_complementaria->save();
+                    }
+                }
+
+                if(!$requiere_actividades_complementarias and count($actividades_del_plan_trabajo) > 0){
+                    $result_delete = DB::statement('delete from actividades_complementarias where id_plan_trabajo = '.$plan_trabajo->id_plan_trabajo);
+                }
             }
             	return response()->json([
 	            	'error' => false,

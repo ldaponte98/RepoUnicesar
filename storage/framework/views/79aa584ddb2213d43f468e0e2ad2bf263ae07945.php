@@ -189,6 +189,7 @@
                             color: '#fff'
                         }});
                     $.post(url, data, function(response) { 
+                         $.unblockUI();
                         var tabla = ""
                         console.log(response)
                         response.forEach(function(actividad) {
@@ -221,6 +222,8 @@
                                      acciones = "<td><center><a href='editar/"+actividad.id_actividad_complementaria+"' style='color: blue; cursor: pointer;  font-size: 14px;' >Realizar</a></center></td>"
                                 }else if(actividad.retraso == "Tiene plazo-extra"){
                                     acciones = "<td><center><a href='editar/"+actividad.id_actividad_complementaria+"' style='color: blue; cursor: pointer;  font-size: 14px;' >Realizar</a></center></td>"
+                                }else if(actividad.retraso == "No se han configurado fechas"){
+                                     acciones = "<td><center></center></td>"
                                 }else{
                                      acciones = "<td><center><a onclick=\"OpenModalNotificarSolicitud('"+actividad.id_actividad_complementaria+"')\" style='color: blue; cursor: pointer;  font-size: 11px;' >Solicitar extra-plazo</a></center></td>"
                                 }
@@ -228,20 +231,23 @@
                             }
                             if(actividad.estado=='Recibido'){
                                 tabla += "<td>Sin retraso</td>"
-                                acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' target='_blank' href = 'editar/"+actividad.id_actividad_complementaria+"'>Ver</a></center></td>"
+                                acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;'  href = 'editar/"+actividad.id_actividad_complementaria+"'>Ver</a></center></td>"
                             }
                             if(actividad.estado=='Enviado'){
                                 tabla += "<td>Sin retraso</td>"
-                                acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;' target='_blank' href = 'editar/"+actividad.id_actividad_complementaria+"'>Ver o editar</a></center></td>"
+                                acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;'  href = 'editar/"+actividad.id_actividad_complementaria+"'>Ver o editar</a></center></td>"
                             }
 
                             tabla += acciones
-                            $.unblockUI(); //
+                            //
                         })
-                        $.unblockUI();
 
                         $("#bodytable").html(tabla)
                         $("#titulo_tabla").html("Actividades complementarias ("+response.length+")")
+                    }).fail((error)=>{
+                         $.unblockUI();
+                        toastr.error('Ha ocurrido un error al consultar las actividades complementarias.', 'Error', {timeOut: 3000})
+
                     })
 
                 }

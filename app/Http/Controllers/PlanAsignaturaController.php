@@ -25,6 +25,9 @@ class PlanAsignaturaController extends Controller
     	if(!$plan_asignatura){
     		$plan_asignatura = new PlanAsignatura;
     	}
+        if(session('is_docente') == true)
+            return view('plan_asignatura.view_docente', compact(['plan_asignatura','asignatura', 'periodo_academico']));
+
     	return view('plan_asignatura.view', compact(['plan_asignatura','asignatura', 'periodo_academico']));
     }
 
@@ -42,10 +45,16 @@ class PlanAsignaturaController extends Controller
 
             $plan_asignatura->descripcion_asignatura = $post->descripcion_asignatura;
             $plan_asignatura->objetivo_general = $post->objetivo_general;
+            $plan_asignatura->objetivos_especificos = $post->objetivos_especificos;
+            $plan_asignatura->estrategias_pedagogicas = $post->estrategias_pedagogicas;
+            $plan_asignatura->competencias_genericas = $post->competencias_genericas;
+            $plan_asignatura->mecanismos_evaluacion = $post->mecanismos_evaluacion;
+            $plan_asignatura->referencias_bibliograficas = $post->referencias_bibliograficas;
             $plan_asignatura->id_asignatura = $post->id_asignatura;
             $plan_asignatura->id_periodo_academico = $post->id_periodo_academico;
 
             if($plan_asignatura->save()){
+                /*
                 if(isset($post->detalles)){
                    foreach ($post->detalles as $detalle) {
                         $detalle = (object) $detalle;
@@ -57,6 +66,7 @@ class PlanAsignaturaController extends Controller
                         $detalle_plan_asignatura->save();
                     } 
                 }
+                */
                 
 
                 //ahora se guardan o actualizan las unidades y ejes tematicos
@@ -113,5 +123,76 @@ class PlanAsignaturaController extends Controller
             'message' => $message,
             'errors' => $errors
         ]);
+    }
+
+
+    public function imprimir($id_plan_asignatura)
+    {
+        $plan_asignatura = PlanAsignatura::find($id_plan_asignatura);
+        if($plan_asignatura){
+            $asignatura = $plan_asignatura->asignatura;
+            $periodo_academico = $plan_asignatura->periodo_academico;
+            $pdf = \PDF::loadView('plan_asignatura.pdf', compact([
+                'plan_asignatura',
+                'asignatura',
+                'periodo_academico'
+            ]));/*
+            return view('plan_asignatura.pdf', compact([
+                'plan_asignatura',
+                'asignatura',
+                'periodo_academico'
+            ]));*/
+
+            return $pdf->stream("Plan de asignatura ".$asignatura->nombre." de ".$periodo_academico->periodo.".pdf");
+        }
+    }
+
+    public function obtener_vista($id_plan_asignatura)
+    {
+        $plan_asignatura = PlanAsignatura::find($id_plan_asignatura);
+
+        if($plan_asignatura){
+            $asignatura = $plan_asignatura->asignatura;
+            $periodo_academico = $plan_asignatura->periodo_academico;
+            $vista = view('plan_asignatura.pdf', compact([
+                'plan_asignatura',
+                'asignatura',
+                'periodo_academico'
+            ]));
+
+            return response()->json($vista->render());
+        }
+    }
+
+
+    public function cargar_plan_existente(Request $request)
+    {
+        $post = $request->all();
+        $error = true;
+        $message = "";
+        if($post){
+            $post = (object) $post;
+            //validamos si puede cargar desde cero el plan de asignatura siempre y cuando 
+            //no hayan utilizado algun docente alguna de las unidades del plan
+            $plan_asignatura_actual = new PlanAsignatura;
+            if($post->id_plan_asignatura)
+                $plan_asignatura_actual = PlanAsignatura::find($post->id_plan_asignatura);
+ 
+            $plan_asignatura_actual->id_asignatura = $post->id_asignatura;
+            $plan_asignatura_actual->id_periodo_academico = $post->id_periodo_academico_actual;
+
+            //aca validamos todo para poder cargar
+            $carga = $plan_asignatura_actual->cargar_plan_existente($post->id_periodo_academico_carga);
+            $error = $carga->error;
+            $message = $carga->message;
+        }else{
+            $message = "Error con la información enviada.";
+        }
+
+        return response()->json([
+            'error' => $error,
+            'message' => $message
+        ]);
+
     }
 }

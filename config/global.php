@@ -7,6 +7,7 @@ return [
     'desarrollo_asignatura' => 13,
     'actividades_complementarias' => 14,
     'plan_accion' => 16,
+    'plan_asignatura' => 33,
 
 
 

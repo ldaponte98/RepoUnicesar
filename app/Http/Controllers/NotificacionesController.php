@@ -9,6 +9,7 @@ use App\Notificaciones;
 use App\SeguimientoAsignatura;
 use App\ActividadesComplementarias;
 use App\PlanTrabajo;
+use App\PlanAsignatura;
 use Mail;
 
 class NotificacionesController extends Controller
@@ -104,7 +105,10 @@ class NotificacionesController extends Controller
 	                        echo "Accion invalida";
 	                        break;
 	                }
-            	}else{
+            	}
+
+                if(session('is_docente')==true){
+
             		 switch (intval($notificacion->id_dominio_tipo)) {
             		 	 case 8: //extra-plazo
 	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
@@ -122,6 +126,20 @@ class NotificacionesController extends Controller
 	                            );
 	                        }
 	                        break;
+
+                            case 32: //Sugerencia plan de asignatura
+                            if($notificacion->id_dominio_tipo_formato == config('global.plan_asignatura')) {
+                                $subject = "Sugerencia para el plan de asignatura";
+                                $vista_email = "email.sugerencia_plan_asignatura";
+                                $plan_asignatura = PlanAsignatura::find($notificacion->id_formato);
+                                $data_email = array(
+                                    "asignatura" => "(". $plan_asignatura->asignatura->codigo.") ".$plan_asignatura->asignatura->nombre,
+                                    "mensaje" => $notificacion->notificacion,
+                                    "nombre_tercero" => $notificacion->tercero_recibe->nombre,
+                                    "nombre_docente" => $notificacion->tercero_envia->getNameFull()
+                                );
+                            }
+                            break;
             		 }
             	}
 
@@ -142,7 +160,7 @@ class NotificacionesController extends Controller
             'error' => true,
         ));
     }
-    public function ver_notificacion($id_notificacion)
+    public function ver_notificacion(Request $request, $id_notificacion)
     {
         $notificacion = Notificaciones::find($id_notificacion);
         if ($notificacion) {
@@ -184,7 +202,15 @@ class NotificacionesController extends Controller
                 switch ($notificacion->id_dominio_tipo) {
                     case 8: //extra-plazo
                             return redirect()->route('docente/view',['id' => $notificacion->tercero_envia->id_tercero]);
-                                 
+                    case 32: //sugerencia de plan de asignatura
+                            $plan_asignatura = PlanAsignatura::find($notificacion->id_formato);
+                            $request->session()->flash('sugerencia_flash', $notificacion->notificacion);
+                            $request->session()->flash('nombre_docente_sugerencia', $notificacion->tercero_envia->getNameFull());
+                            return redirect()->route('plan_asignatura/view',[
+                                'id_asignatura' => $plan_asignatura->id_asignatura,
+                                'id_periodo_academico' => $plan_asignatura->id_periodo_academico
+                            ]);
+                                   
                     default:
                         echo "Accion invalida";
                         break;

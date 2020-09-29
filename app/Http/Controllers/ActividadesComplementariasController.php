@@ -69,6 +69,7 @@ class ActividadesComplementariasController extends Controller
                //calculo el progreso que lleva de terminada las actividades complementarias segun el plan de trabajo
             	$total_actividades_a_entregar = count(PlanTrabajo::find($value->id_plan_trabajo)->get_tipos_de_actividades_para_actividades_complementarias());
             	$total_actividades_realizadas = count(ActividadesComplementarias::find($value->id_actividad_complementaria)->get_tipos_de_actividades_realizadas());
+              
               if($total_actividades_a_entregar != 0){
                 $actividad->progreso = ($total_actividades_realizadas / $total_actividades_a_entregar) * 100;
               }else{

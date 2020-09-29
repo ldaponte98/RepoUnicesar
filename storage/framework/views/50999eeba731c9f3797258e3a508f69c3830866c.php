@@ -33,6 +33,7 @@ if($is_admin==true){
   var lista_detalles = []
 
   function agregar_detalles_existentes(id_actividad_plan_trabajo, descripcion, evidencia, link, fecha) {
+   
     var detalle = {
       'id_actividad_plan_trabajo' : id_actividad_plan_trabajo, 
       'descripcion' : descripcion,
@@ -84,7 +85,7 @@ if($is_admin==true){
         <table class="table table-bordered">
             <thead>
                 <tr>
-                    <th><center><b>Descripcion de las actividades</b></center></th>
+                    <th><center><b>Descripción de las actividades</b></center></th>
                     <th><center><b>Evidencia (Anexar)</b></center></th>
                     <th><center><b>Fecha</b></center></th>
                     <?php if($tiene_permiso_editar == true): ?>
@@ -152,7 +153,7 @@ if($is_admin==true){
       <div class="modal-body">
 
           <div class="form-group">
-            <label for="message-text" class="col-form-label">Descripción de la accion realizada.</label>
+            <label for="message-text" class="col-form-label">Descripción de la acción realizada.</label>
             <textarea class="form-control" id="descripcion"  rows="4"></textarea>
           </div>
           <div class="form-group">
@@ -201,6 +202,10 @@ if($is_admin==true){
     }
 
      function agregar_detalle() {
+       if($("#descripcion").val().trim()==""){
+        alert("El campo descripcion de la acción realizada es obligatorio")
+        return false
+      }
       $("#modalNewDetalle").modal('hide')
       var detalle = {
         'id_actividad_plan_trabajo' : id_actividad_plan_trabajo_escojido, 
@@ -233,10 +238,12 @@ if($is_admin==true){
     $("#bodytable_"+id_actividad_plan_trabajo).html(tabla)
   }
   function eliminarDetalle(id_actividad_plan_trabajo, descripcion) {
+    let elimino = false
      lista_detalles.forEach((detalle)=>{
-        if(detalle.id_actividad_plan_trabajo == id_actividad_plan_trabajo && detalle.descripcion == descripcion){
+        if(!elimino && detalle.id_actividad_plan_trabajo == id_actividad_plan_trabajo && detalle.descripcion == descripcion){
           var posicion = lista_detalles.indexOf(detalle);
           lista_detalles.splice(posicion,1);
+          elimino = true
         }
      })  
      actualizar_tabla(id_actividad_plan_trabajo)  

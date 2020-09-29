@@ -43,8 +43,17 @@
                 <div class="row">
                     <div class="col-sm-9">
                         <h3><b>Plan de asignatura de {{ $asignatura->nombre }}</b></h3>
-                    </div>
-                    <div class="col-sm-3">
+                    </div> 
+                    <div class="col-sm-3" style="display: flex;">
+                      <div class="btn-group">
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-cog"></i>
+                          </button>
+                          <div class="dropdown-menu animated slideInUp" style="">
+                              <a class="dropdown-item" onclick="$('#modal_cargar_existente').modal('show')" style="cursor: pointer;"><i class="fa fa-upload"></i> &nbsp;Cargar existente</a>
+                              <a class="dropdown-item" onclick="exportar_google_site()" style="cursor: pointer;"><i class="fa fa-google-plus-official"></i> &nbsp;Exportar para Google Site</a>
+                          </div>
+                      </div>
                         @php
                             $periodos_academicos = \App\PeriodoAcademico::all();
                         @endphp
@@ -55,7 +64,13 @@
                         </select>
                     </div>
                 </div><br>
+                @if(session('sugerencia_flash'))
+                  <div class="alert alert-info">
+                    <strong>Sugerencia de {{ session('nombre_docente_sugerencia') }}: </strong>{{ session('sugerencia_flash') }}
+                  </div>
+                @endif
                 <div class="row">
+                  
                     <div class="col-sm-12">
                         <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
@@ -129,108 +144,110 @@
                           <td colspan="2">@if($asignatura->homologable == 0) <center><b>X</b></center> @endif</td>
                       </tr>
                       <tr>
-                          <td colspan="10" style="background-color: #38A970;">
+                          <td colspan="10" style="background-color: #38A970; color: #000000;">
                               <center><b>DESCRIPCIÓN DE LA ASIGNATURA</b></center>
                           </td>
                       </tr>
                       <tr>
-                          <td colspan="10">
-                              <textarea id="descripcion_asignatura" class="form-control" rows="4" placeholder="Describa brevemente el propósito de la asignatura, el semestre en el que está ubicado en el plan de estudios, área del plan de estudios a la que pertenece, importancia del curso en el plan de estudios. Explique cómo contribuye al logro del perfil de egreso y las competencias que debe desarrollar en el programa. Igualmente explique a cuáles áreas de desempeño de la profesión contribuye con su contenido y en general todo aquello que plantee una visión general de la asignatura y su contribución a la formación del estudiante." 
-                              value="{{ $plan_asignatura->descripcion_asignatura }}">{{ $plan_asignatura->descripcion_asignatura }}</textarea>
+                          <td colspan="10" >
+                            <textarea id="descripcion_asignatura">
+                              @php
+                                echo $plan_asignatura->descripcion_asignatura;
+                              @endphp 
+                            </textarea>
                           </td>
                       </tr>
                       <tr>
-                          <td colspan="10" style="background-color: #38A970;">
+                          <td colspan="10" style="background-color: #38A970; color: #000000;">
                               <center><b>OBJETIVO GENERAL </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <textarea id="objetivo_general" class="form-control" rows="3" placeholder="Escriba el objetivo general de la asignatura. Este objetivo debe redactarse centrado en la contribución de la asignatura en el proceso de formación del estudiante, de acuerdo con los objetivos y competencias del programa." 
-                              value="{{ $plan_asignatura->objetivo_general }}">{{ $plan_asignatura->objetivo_general }}</textarea>
+                            <textarea id="objetivo_general">
+                              @php
+                                echo $plan_asignatura->objetivo_general;
+                              @endphp 
+                            </textarea>
                           </td>
                       </tr>
                       <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000; ">
                               <center><b>OBJETIVOS ESPECÍFICOS <a style="cursor: pointer;" data-toggle="popover" title="Información" data-content="Declarar los objetivos específicos en términos de logros que, al ser desarrollados gradualmente, den cumplimiento al objetivo general y deben impactar su alcance. Los objetivos deben ser aplicables, verificables, medibles y alcanzables."><i class="fa fa-info-circle"></i></a>
                                 </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <table class="table">
-                                  <tbody id="tabla_detalles_27">
-                                      
-                                  </tbody>
-                              </table>
-                              <div><button class="pull-right btn btn-info" onclick="modal_detalle(27)">Nuevo</button></div>
+                              <textarea id="objetivos_especificos">
+                                @php
+                                  echo $plan_asignatura->objetivos_especificos;
+                                @endphp 
+                            </textarea>
                           </td>
                       </tr>
 
                       <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000; ">
                               <center><b>ESTRATEGIAS PEDAGÓGICAS Y METODÓLOGICAS <a style="cursor: pointer;" data-toggle="popover" title="Información" data-content="Escriba las estrategias pedagógicas, metodológicas y didácticas que empleará para lograr los resultados de aprendizaje propuestos. Las estrategias deben estar en coherencia con el modelo pedagógico Institucional “Cognitivo contextual de corte constructivista”."><i class="fa fa-info-circle"></i></a>
                                 </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <table class="table">
-                                  <tbody id="tabla_detalles_28">
-                                      
-                                  </tbody>
-                              </table>
-                              <div><button class="pull-right btn btn-info" onclick="modal_detalle(28)">Nuevo</button></div>
+                              <textarea id="estrategias_pedagogicas">
+                                @php
+                                  echo $plan_asignatura->estrategias_pedagogicas;
+                                @endphp 
+                              </textarea>
                           </td>
                       </tr>
 
                       <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000; ">
                               <center><b>COMPETENCIAS GENÉRICAS <a style="cursor: pointer;" data-toggle="popover" title="Información" data-content="Mencione las competencias genéricas que esta asignatura ayudará en la formación de los estudiantes, en concordancia con el PEI y el programa curricular. Estas competencias deben estar enfocadas al desarrollo del ser (axiológico, social, estético)."><i class="fa fa-info-circle"></i></a>
                                 </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <table class="table">
-                                  <tbody id="tabla_detalles_29">
-                                      
-                                  </tbody>
-                              </table>
-                              <div><button class="pull-right btn btn-info" onclick="modal_detalle(29)">Nuevo</button></div>
+                              <textarea id="competencias_genericas">
+                                @php
+                                  echo $plan_asignatura->competencias_genericas;
+                                @endphp 
+                              </textarea>
                           </td>
                       </tr>
 
                       <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000; ">
                               <center><b>MECANISMOS DE EVALUACIÓN <a style="cursor: pointer;" data-toggle="popover" title="Información" data-content="Describir los mecanismos efectivos de seguimiento, evaluación y análisis de los resultados de aprendizaje, de tal manera que se articulen de forma planificada y coherente con el proceso formativo, las actividades académicas, el nivel de formación y el o las modalidades en las cuales se ofrecerá el programa. Estos mecanismos de evaluación deben estar en concordancia con la normatividad institucional, deben quedar claros los porcentajes y todo aquello que es sujeto de valoración."><i class="fa fa-info-circle"></i></a>
                                 </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <table class="table">
-                                  <tbody id="tabla_detalles_30">
-                                  </tbody>
-                              </table>
-                              <div><button class="pull-right btn btn-info" onclick="modal_detalle(30)">Nuevo</button></div>
+                              <textarea id="mecanismos_evaluacion">
+                                @php
+                                  echo $plan_asignatura->mecanismos_evaluacion;
+                                @endphp 
+                              </textarea>
                           </td>
                       </tr>
 
                        <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000; ">
                               <center><b>REFERENCIAS BIBLIOGRÁFICAS <a style="cursor: pointer;" data-toggle="popover" title="Información" data-content="Escriba la bibliografía actualizada y necesaria para el desarrollo de la asignatura, disponibles en medio físico y en las bases de datos con la que cuenta la Institución. Observación: se recomienda el uso de las bases de datos por ser un recurso abierto con contenidos altamente significativos y actualizados."><i class="fa fa-info-circle"></i></a>
                                 </b></center>
                           </td>
                       </tr>
                       <tr>
                           <td colspan="10">
-                              <table class="table">
-                                  <tbody id="tabla_detalles_31">
-                                      
-                                  </tbody>
-                              </table>
-                              <div><button class="pull-right btn btn-info" onclick="modal_detalle(31)">Nuevo</button></div>
+                              <textarea id="referencias_bibliograficas">
+                                @php
+                                  echo $plan_asignatura->referencias_bibliograficas;
+                                @endphp 
+                              </textarea>
                           </td>
                       </tr>
                       <tr>
@@ -267,10 +284,45 @@
                     </div>
                 </div>
                 <br>
-                <center><button class="btn btn-info" onclick="guardar()"><i class="fa fa-save"></i>&nbsp;Guardar cambios</button></center>
+                <center><button class="btn btn-info" onclick="guardar()"><i class="fa fa-save"></i>&nbsp;Guardar cambios</button>&nbsp;&nbsp;&nbsp;@if($plan_asignatura->id_plan_asignatura)<a target="_blank" href="{{ route('plan_asignatura/imprimir', $plan_asignatura->id_plan_asignatura) }}" class="btn btn-danger"><i class="fa fa-print"></i> Imprimir</a> @endif</center>
                 </div>
             </div>
         </div>
+        </div>
+
+        <div class="modal fade" id="modal_cargar_existente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Carga de plan de asignatura existente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group" >
+                        <input type="hidden" id="tipo_detalle">
+                        <label for="recipient-name" class="col-form-label">Escoje el periodo academico del plan de asignatura que desea cargar.</label>
+                          @php
+                            $periodos_academicos = \App\PeriodoAcademico::all();
+                          @endphp
+                          <select id="id_periodo_academico_carga_existente" class="custom-select" style="width: 100%" >
+                               <option value="">Seleccione...</option>
+                                @foreach ($periodos_academicos as $d)
+                                @if($d->id_periodo_academico != $periodo_academico->id_periodo_academico)  
+                                <option value="{{ $d->id_periodo_academico }}"  > Periodo {{ $d->periodo }}</option>
+                                @endif
+                                @endforeach
+                          </select>
+                      </div>
+                      
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" onclick="if($('#id_periodo_academico_carga_existente').val()){ window.open('/plan_asignatura/view/{{ $asignatura->id_asignatura }}/'+$('#id_periodo_academico_carga_existente').val(), '_blank')} else{ alert('Es necesario que seleccione el periodo academico.')}" class="btn btn-warning">Vista previa</button>
+                    <button type="button" onclick="cargar_plan_existente()" class="btn btn-info">Cargar</button>
+                  </div>
+                </div>
+              </div>
         </div>
         <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
@@ -370,17 +422,26 @@
 
         @csrf
         <script type="text/javascript">
-            $(function () {
-              cargar_informacion()
-              $('[data-toggle="popover"]').popover()
+           
 
-            })
-
+            var editor_descripcion_asignatura = null;
+            var editor_objetivo_general = null;
+            var editor_objetivos_especificos = null;
+            var editor_estrategias_pedagogicas = null;
+            var editor_competencias_genericas = null;
+            var editor_mecanismos_evaluacion = null;
+            var editor_referencias_bibliograficas = null;
             var detalles = []
             var unidades = []
             var posicion_detalle_editar = null
             var posicion_unidad_editar = null
             var posicion_competencia_editar = null
+
+            $(function () {
+              cargar_informacion()
+              inicializar_editores()
+              $('[data-toggle="popover"]').popover()
+            })
 
             function modal_detalle(tipo_detalle) {
                 $("#modal_nombre").val("")
@@ -437,8 +498,6 @@
                 }
               }  
             }
-
-
 
             var competencias_especificas_actuales = []
 
@@ -691,13 +750,14 @@
             }
 
             function validar_data() {
-              if($("#descripcion_asignatura").val().trim() == ""){ alert("La descripcion de la asignatura es obligatoria"); return false }
-              if($("#objetivo_general").val().trim() == ""){ alert("Los objetivos generales son obligatorios"); return false }
+              if(this.editor_descripcion_asignatura.getData() == ""){ alert("La descripcion de la asignatura es obligatoria"); return false }
+              if(this.editor_objetivo_general.getData() == ""){ alert("El objetivo general es obligatorio"); return false }
               if(this.unidades.length == 0) { alert("Es necesario el registro de unidades tematicas al plan de asignatura"); return false }
               return true
             }
 
             function guardar() {
+              
               if(validar_data()){
                 let url = '{{ route('plan_asignatura/editar') }}'
                 let _token = ""
@@ -707,9 +767,13 @@
                     'id_plan_asignatura' : '{{ $plan_asignatura->id_plan_asignatura }}',
                     'id_asignatura' : '{{ $asignatura->id_asignatura }}',
                     'id_periodo_academico' : '{{ $periodo_academico->id_periodo_academico }}',
-                    'descripcion_asignatura' : $("#descripcion_asignatura").val(),
-                    'objetivo_general' : $("#objetivo_general").val(),
-                    'detalles' : this.detalles,
+                    'descripcion_asignatura' : editor_descripcion_asignatura.getData().replace(/&nbsp;/gi,' '),
+                    'objetivo_general' : editor_objetivo_general.getData().replace(/&nbsp;/gi,' '),
+                    'objetivos_especificos' : editor_objetivos_especificos.getData().replace(/&nbsp;/gi,' '),
+                    'estrategias_pedagogicas' : editor_estrategias_pedagogicas.getData().replace(/&nbsp;/gi,' '),
+                    'competencias_genericas' : editor_competencias_genericas.getData().replace(/&nbsp;/gi,' '),
+                    'mecanismos_evaluacion' : editor_mecanismos_evaluacion.getData().replace(/&nbsp;/gi,' '),
+                    'referencias_bibliograficas' : editor_referencias_bibliograficas.getData().replace(/&nbsp;/gi,' '),
                     'unidades' : this.unidades
                 }
                 $.blockUI({
@@ -721,7 +785,7 @@
                     '-webkit-border-radius': '10px',
                     '-moz-border-radius': '10px',
                     opacity: .8,
-                    color: '#fff'
+                    color: '#ffffff'
                 }});
             
                 //peticion http
@@ -763,19 +827,140 @@
                 }) 
                 competencias = []
                @endforeach
-
-
-               @foreach($plan_asignatura->detalles as $detalle)
-                this.detalles.push({
-                    'id_detalle' : {{ $detalle->id_plan_asignatura_detalle }},
-                    'nombre' : '{{ $detalle->nombre }}',
-                    'tipo' : '{{ $detalle->id_dominio_tipo }}'
-                }) //agregar
-               @endforeach
                actualizar_tabla_unidades()
                actualizar_tablas()
+            }
+
+            function exportar_google_site(){
+              let url = '{{ route('plan_asignatura/obtener_vista', $plan_asignatura->id_plan_asignatura) }}'
+              $.get(url, (response) => {
+                copiar(response)
+              }).fail((error) => {
+                toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
+              })
+            }
+
+            function copiar(value){
+              var aux = document.createElement("input");
+              aux.setAttribute("value", value);
+              document.body.appendChild(aux);
+              aux.select();
+              document.execCommand("copy");
+              document.body.removeChild(aux);
+              toastr.options.newestOnTop = false;
+              toastr.info('Pagina para Google Site copiada.', 'Copiada', {timeOut: 5000})
+            }
+
+            function cargar_plan_existente() {
+              let id_periodo_academico = $("#id_periodo_academico_carga_existente").val()
+              if(!id_periodo_academico){
+                alert("Es necesario que seleccione el periodo academico.")
+                return false
+              }
+
+              confirmacion = confirm("¿Seguro que desea cargar la misma información de esta asignatura con respecto al periodo academico seleccionado?");
+
+              if(confirmacion){
+                $("#modal_cargar_existente").modal("hide")
+                var url = '{{ route('plan_asignatura/cargar_plan_existente') }}'
+                let _token = ""
+                $("[name='_token']").each(function() { _token = this.value })
+                let request = {
+                    '_token' : _token,
+                    'id_plan_asignatura' : '{{ $plan_asignatura->id_plan_asignatura }}',
+                    'id_asignatura' : '{{ $asignatura->id_asignatura }}',
+                    'id_periodo_academico_actual' : '{{ $periodo_academico->id_periodo_academico }}',
+                    'id_periodo_academico_carga' : id_periodo_academico,
+                }
+                $.blockUI({
+                message: '<h1>Cargando plan de asignatura</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .8,
+                }});
+
+                $.post(url, request, (response) => {
+                  $.unblockUI();
+                  if(response.error == false){
+                        toastr.success(response.message, 'Cargado correctamente', {timeOut: 5000})
+                        location.reload();
+                  }else{
+                      toastr.error(response.message, 'Error', {timeOut: 5000})
+                  }
+                })
+                .fail((error)=>{
+                    toastr.error("Ocurrio un error en el servicio. Por favor comuniquese con el encargado", 'Error', {timeOut: 5000})
+                    $.unblockUI();
+                })
+              }
+              
+            }
+
+
+            function inicializar_editores() {
+              
+              ClassicEditor
+              .create( document.querySelector( '#descripcion_asignatura' ), {
+              } ).then( editor => {
+                this.editor_descripcion_asignatura = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#objetivo_general' ), {
+              } ).then( editor => {
+                this.editor_objetivo_general = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#objetivos_especificos' ), {
+              } ).then( editor => {
+                this.editor_objetivos_especificos = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#estrategias_pedagogicas' ), {
+              } ).then( editor => {
+                this.editor_estrategias_pedagogicas = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#competencias_genericas' ), {
+              } ).then( editor => {
+                this.editor_competencias_genericas = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#mecanismos_evaluacion' ), {
+              } ).then( editor => {
+                this.editor_mecanismos_evaluacion = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
+
+              ClassicEditor
+              .create( document.querySelector( '#referencias_bibliograficas' ), {
+              } ).then( editor => {
+                this.editor_referencias_bibliograficas = editor;
+              } ).catch( err => {
+                console.error( err.stack );
+              } );
             }
 
 </script>
             
 @endsection
+

@@ -64,6 +64,8 @@ class ActividadesComplementarias extends Model
                 }
             }
 
+        if(!$fechas_de_entrega) return false;
+
     	switch ($this->corte) {
         		case 1:
         			if ($fecha_actual <= $fechas_de_entrega->fechafinal1 and $fecha_actual >= $fechas_de_entrega->fechainicial1 and ($this->estado == 'Pendiente' or $this->estado == 'Enviado'))
@@ -114,6 +116,9 @@ class ActividadesComplementarias extends Model
                 }
                 
             }
+
+            if(!$fechas_de_entrega) return "No se han configurado fechas";
+
         	switch ($this->corte) {
         		case 1:
         			if ($fecha_actual <= $fechas_de_entrega->fechafinal1) return "En espera";

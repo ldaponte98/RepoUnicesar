@@ -16,6 +16,7 @@ use App\Grupo;
 use App\AsignaturaPrograma;
 use App\SeguimientoAsignatura;
 use App\HorarioDetalle;
+use App\PlanAsignatura;
 
 
 class ComunicationController extends Controller
@@ -122,7 +123,15 @@ class ComunicationController extends Controller
         		$p->periodo = $periodo->periodo;
         		$p->fechaInicio = $periodo->fecha_inicio;
         		$p->fechaFin = $periodo->fecha_fin;
-        		$p->save();
+        		if($p->save()){
+                    $creacion_planes_asignatura = $this->crear_planes_asignatura($p);
+                    $errors = $creacion_planes_asignatura->errors;
+                }else{
+                    return response()->json(array(
+                        "message" => "No se pudo guardar el periodo academico",
+                        "errors" => $p->errors
+                    ));
+                }
         	}
         	return response()->json(array(
         		"message" => "Sincronización exitosa",
@@ -133,6 +142,52 @@ class ComunicationController extends Controller
         		"message" => "Error en datos enviados",
         		"errors" => $errors
         ));
+    }
+
+    public function crear_planes_asignatura($periodo_academico)
+    {
+        $error = true;
+        $errors = [];
+        $message = "";
+        //buscamos el ultimo periodo academico registrado
+        $ultimo_periodo = DB::table('periodo_academico') 
+                              ->orderBy('id_periodo_academico', 'desc')
+                              ->where('id_periodo_academico','<>',$periodo_academico->id_periodo_academico)
+                              ->first();
+        if($ultimo_periodo){
+            //Buscamos todas las asignaturas
+            $asignaturas = Asignatura::all()->where('id_licencia', 6);
+            foreach ($asignaturas as $asignatura) {
+                //miramos si ya existe el plan de asignatura y se deja como esta
+                $existe = PlanAsignatura::where('id_periodo_academico',$periodo_academico->id_periodo_academico)
+                                                   ->where('id_asignatura', $asignatura->id_asignatura)
+                                                   ->first();
+                if (!$existe) {
+                    //creamos los planes de asignatura a las asignaturas
+                    $plan_asignatura = new PlanAsignatura;
+                    $plan_asignatura->id_asignatura = $asignatura->id_asignatura;
+                    $plan_asignatura->id_periodo_academico = $periodo_academico->id_periodo_academico;
+                    
+                    //le cargamos al nuevo plan de asignatura el plan de asignatura del ultimi
+                    $carga = $plan_asignatura->cargar_plan_existente($ultimo_periodo->id_periodo_academico);
+                    $error = $carga->error;
+                    $message = $carga->message; 
+
+                    if($error){
+                        $errors[] = $message;
+                    }
+                }
+            }
+            $error = false;
+        }else{
+            $error = false;
+            $message = "No hay periodos academicos antiguos"; 
+        }
+
+        return (object)[
+            'errors' => $errors,
+            'message' => $message
+        ];
     }
 
     public function updateAsignaturas(Request $request)
@@ -155,7 +210,10 @@ class ComunicationController extends Controller
                 $p->naturaleza = $asignatura->naturaleza;
                 $p->prerrequisitos = $asignatura->prerrequisitos;
                 $p->correquisitos = $asignatura->correquisitos;
-        		$p->num_creditos = $asignatura->num_creditos;
+                $p->num_creditos = $asignatura->num_creditos;
+                $p->habilitable = $asignatura->habilitable;
+                $p->validable = $asignatura->validable;
+                $p->homologable = $asignatura->homologable;
         		$p->horas_teoricas = $asignatura->horas_teoricas;
         		$p->horas_practicas = $asignatura->horas_practicas;
         		$p->horas_atencion_estudiantes = $asignatura->horas_atencion_estudiantes;
@@ -361,7 +419,7 @@ class ComunicationController extends Controller
     	 	}
     	 	if($tercero->id_dominio_tipo_ter == 3) $usuario->id_perfil = 2;
     	 	if($tercero->id_dominio_tipo_ter == 2) $usuario->id_perfil = 1;
-    	 	$usuario->usuario = $tercero->nombre;
+    	 	$usuario->usuario = strtolower(explode(' ', $tercero->nombre)[0]);
     	 	$usuario->save();
 
     	 	//si es docente debemos modificar la carga academica

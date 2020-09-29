@@ -371,15 +371,15 @@ if($is_admin==true){
                         </div>
                       </div>
                       
-                      <div class="table-responsive" id="tabla_proyectos_grado" style="display: none;">
+                      <div class="table-responsive" id="tabla_proyectos_grado" >
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
                                       <th><center><b>Titulo</b></center></th>
                                       <th><center><b>Acta de aprobacion</b></center></th>
                                       <th><center><b>Fecha de aprobacion</b></center></th>
-                                      <th><center><b>fecha de iniciacion</b></center></th>  
-                                      <th><center><b>fecha de terminacion</b></center></th>  
+                                      <th><center><b>Fecha de iniciación</b></center></th>  
+                                      <th><center><b>Fecha de finalización</b></center></th>  
                                       <th><center><b>Horas por semana</b></center></th>  
                                       
                                   </tr>
@@ -449,15 +449,15 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_investigaciones_aprobadas" style="display: none;">
+                      <div class="table-responsive" id="tabla_investigaciones_aprobadas" >
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
                                       <th><center><b>Titulo</b></center></th>
                                       <th><center><b>Acta de aprobacion</b></center></th>
                                       <th><center><b>Fecha de aprobacion</b></center></th>
-                                      <th><center><b>fecha de iniciacion</b></center></th>  
-                                      <th><center><b>fecha de terminacion</b></center></th>  
+                                      <th><center><b>Fecha de iniciación</b></center></th>  
+                                      <th><center><b>Fecha de finalización</b></center></th>  
                                       <th><center><b>Horas por semana</b></center></th>  
                                   </tr>
                               </thead>
@@ -528,7 +528,7 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_proyeccion_social" style="display: none;">
+                      <div class="table-responsive" id="tabla_proyeccion_social" >
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
@@ -602,7 +602,7 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_cooperacion" style="display: none;">
+                      <div class="table-responsive" id="tabla_cooperacion">
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
@@ -674,7 +674,7 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_crecimiento" style="display: none;">
+                      <div class="table-responsive" id="tabla_crecimiento">
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
@@ -747,7 +747,7 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_actividades_Administrativas" style="display: none;">
+                      <div class="table-responsive" id="tabla_actividades_Administrativas">
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
@@ -821,7 +821,7 @@ if($is_admin==true){
                         </div>
                       </div>
 
-                      <div class="table-responsive" id="tabla_otras_actividades" style="display: none;">
+                      <div class="table-responsive" id="tabla_otras_actividades" >
                           <table class="table table-bordered">
                               <thead>
                                   <tr>
@@ -1104,11 +1104,11 @@ if($is_admin==true){
           </div>
 
           <div class="form-group">
-            <label for="recipient-name" class="col-form-label">Fecha de iniciacion</label>
+            <label for="recipient-name" class="col-form-label">Fecha de iniciación</label>
             <input id="modal_fecha_iniciacion" type="text" class="form-control" readonly>
           </div>
           <div class="form-group" id="div_fecha_terminacion">
-            <label for="recipient-name" class="col-form-label">Fecha de terminacion</label>
+            <label for="recipient-name" class="col-form-label">Fecha de finalización</label>
             <input id="modal_fecha_terminacion" type="text" class="form-control" readonly>
           </div>
 
@@ -1433,6 +1433,9 @@ if($is_admin==true){
       alert("El campo de horas semanales solo permite numeros.")
       return false
     } 
+
+    //buscamos cuantas horas tiene registrada la actividad en el horario
+
     var actividad = {
         'tipo' : tipo_actual,
         'nombre' : $('#modal_nombre_actividad').val(),
@@ -1450,12 +1453,22 @@ if($is_admin==true){
        var cont = 0;
        lista_actividades.forEach((actividad_lista)=>{
         if(cont==posicion_editar){
+
+
           posicion_editar = -1;
           //se validan antes de editar la actividad de que pueda agregar las horas solicitadas
-          //en las horas no validas se colocan las horas antiguas para que saqeu la diferencia con las horas ahora solicitadas
+          //en las horas no validas se colocan las horas antiguas para que calcule la diferencia con las horas ahora solicitadas
           var validacion = validarHorasPermitidas(actividad_lista.horas_semanales,actividad.horas_semanales)
           if(validacion.error == true){
             alert(validacion.mensaje)
+            return false
+          }
+
+          //validamos si las horas a editar no sean menores a las registradas en el horario
+          
+          var busqueda_en_horario = horario.filter(evento => evento.id_tipo_evento == actividad_lista.tipo && evento.nombre == actividad_lista.nombre)
+          if(parseInt(actividad.horas_semanales) < busqueda_en_horario.length){
+            alert("No puede establecer menos horas de las ya agendadas")
             return false
           }
           var nombre_antiguo_actividad = actividad_lista.nombre;
@@ -1520,14 +1533,19 @@ if($is_admin==true){
     //antes de elminar la actividad hay que borrar del calendario donde este registrada
     horario.forEach((evento)=>{
         if(evento.nombre == nombre_actividad && evento.id_tipo_evento == tipo){
-          console.log("entro a eliminar del horario")
+          //console.log("entro a eliminar del horario")
           var posicion_en_horario = horario.indexOf(evento);
-          horario.splice(posicion_en_horario,1);
+          //horario.splice(posicion_en_horario,1);
           $("#td_"+evento.dia+"_"+evento.hora).html("")
           //aca por alguna razon se abre el modal entonces siempre toca poner una bandera para cuando acaba de eliminar
           bandera_elimino = true
         }
     })
+
+
+   var horario_temp = horario.filter(evento => evento.nombre != nombre_actividad && evento.id_tipo_evento != tipo)
+    console.log(horario_temp)
+    this.horario = horario_temp;
 
     //ahora si se eliminan las actividades
      lista_actividades.forEach((actividad)=>{
@@ -1545,6 +1563,7 @@ if($is_admin==true){
 
 
   function guardar(){
+    
     var url = '{{ route('plan_trabajo/editar') }}'
     var token = $("#form-plan-trabajo").serialize().split("&")[0].split("=")[1];
      var _data = {
@@ -1571,6 +1590,8 @@ if($is_admin==true){
       'actividades' : lista_actividades,
       'horario' : horario
      }
+
+
             
           
     $.blockUI({
@@ -1592,15 +1613,16 @@ if($is_admin==true){
       success: function(response) {
         $.unblockUI();
            if(response.error == false){
-                    toastr.success('El plan de trabajo se ah registrado correctamente.', 'Guardado correctamente', {timeOut: 3000})
+                    toastr.success('El plan de trabajo se ha registrado correctamente.', 'Guardado correctamente', {timeOut: 3000})
                    location.reload()
                 }else{ 
                     console.log(response)
-                    toastr.error(response.mensaje, 'Error', {timeOut: 5000})
+                    toastr.error(response.mensaje, 'Error', {timeOut: 8000})
                 }
       },
       error: function() {
-        toastr.error('Ah ocurrido un error al intentar registrar el plan de trabajo.', 'Error', {timeOut: 3000})
+        $.unblockUI();
+        toastr.error('Ha ocurrido un error al intentar registrar el plan de trabajo.', 'Error', {timeOut: 3000})
       }
   });
             

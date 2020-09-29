@@ -97,7 +97,7 @@ if($is_admin==true){
                   <div class="comment-footer">
                       <span class="text-muted float-right">Ultima actualizacion: {{ $actividad_complementaria->get_ultima_fecha_actualizada($tipo_actividad_programada->id_dominio) }}</span>
                       @if ($total_actividades_programadas != $total_actividades_realizadas)
-                        <span class="label label-light-warning">
+                        <span class="label label-light-danger">
                           Pendiente
                         </span>
                       @else
@@ -106,13 +106,9 @@ if($is_admin==true){
                         </span>
                       @endif
                       @if ($tiene_permiso_editar == true)
-                      <span class="action-icons">
                               <a href="{{ route('actividades_complementarias/editar_detalle',['id_actividad' =>  $actividad_complementaria->id_actividad_complementaria , 'id_tipo_actividad' => $tipo_actividad_programada->id_dominio]) }}"><i class="ti-pencil-alt"></i></a>
-                      </span>
                       @else
-                      <span class="action-icons">
                               <a href="{{ route('actividades_complementarias/editar_detalle',['id_actividad' =>  $actividad_complementaria->id_actividad_complementaria , 'id_tipo_actividad' => $tipo_actividad_programada->id_dominio]) }}" title="Ver informes"><i class="ti-eye"></i></a>
-                      </span>
                       @endif
                   </div>
               </div>

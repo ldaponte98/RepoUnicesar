@@ -23,8 +23,11 @@ class AsignaturaController extends Controller
     public function viewAsignatura($id_asignatura)
     {
     	$asignatura = Asignatura::find($id_asignatura);
-
-        return view('asignatura.view',compact('asignatura'));
+        $periodo_academico = DB::table('periodo_academico')
+                               ->orderBy('id_periodo_academico','desc')
+                               ->first();
+        $periodo_academico = (object) $periodo_academico;
+        return view('asignatura.view',compact(['asignatura', 'periodo_academico']));
     }
     public function buscarGrupos($id)
     {

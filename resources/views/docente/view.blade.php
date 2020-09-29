@@ -72,39 +72,47 @@
                             <div class="card-block">
 
                                 <form class="form-horizontal form-material">
-                                    <div class="form-group">
-                                        <label class="col-md-12"><b>Identificacion</b></label>
-                                        <div class="col-md-12">
-                                            <input disabled="" type="text" value="{{ $docente->cedula }}"  class="form-control form-control-line " data-validate="">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label><b>Identificacion</b></label>
+                                                <input disabled="" type="text" value="{{ $docente->cedula }}"  class="form-control form-control-line " data-validate="">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label ><b>Nombres</b></label>
+                                                <input disabled="" id="nom" type="text"  value="{{ $docente->nombre }}"  class="form-control form-control-line ">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12"><b>Nombre Completo</b></label>
-                                        <div class="col-md-12">
-                                            <input disabled="" id="nom" type="text"  value="{{ $docente->nombre }}"  class="form-control form-control-line ">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label><b>Apellidos</b></label>    
+                                                <input disabled="" id="ape" type="text"  value="{{ $docente->apellido }}" class="form-control form-control-line ">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label ><b>Email</b></label>    
+                                                <input disabled="" id="ema"  value="{{ $docente->email }}" type="email" placeholder="@unicesar.edu.co" class="form-control form-control-line " >
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-md-12"><b>Apellidos</b></label>
-                                        <div class="col-md-12">
-                                            <input disabled="" id="ape" type="text"  value="{{ $docente->apellido }}" class="form-control form-control-line ">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                             <div class="form-group">
+                                                <label><b>Tipo de vinculacion</b></label>
+                                                <input disabled="" id="ema"  value="{{ $docente->servicio }}" type="email" class="form-control form-control-line " >
+                                            </div>  
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label  class="col-md-12"><b>Email</b></label>
-                                        <div class="col-md-12">
-                                            <input disabled="" id="ema"  value="{{ $docente->email }}" type="email" placeholder="@unicesar.edu.co" class="form-control form-control-line " >
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-12"><b>Tipo de vinculacion</b></label>
-                                        <div class="col-md-12">
-                                            <input disabled="" id="ema"  value="{{ $docente->servicio }}" type="email" class="form-control form-control-line " >
-                                        </div>
-                                    </div>                                    
-                                    <div class="form-group">
-                                        <div class="col-sm-12">
-                                            <a style="color: white;" class="btn btn-success" href="{{ route('docente/horario', $docente->id_tercero) }}" target="_blank"><i class="fa fa-calendar"></i> Ver Horario</a>
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <br>
+                                                 <a style="color: white;" class="btn btn-success" href="{{ route('docente/horario', $docente->id_tercero) }}" target="_blank"><i class="fa fa-calendar"></i> Ver Horario</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </form>

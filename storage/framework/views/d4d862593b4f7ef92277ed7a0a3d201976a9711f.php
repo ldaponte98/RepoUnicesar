@@ -41,21 +41,24 @@
     <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
+
 <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 <script src="http://malsup.github.io/jquery.blockUI.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-    <script src="<?php echo e(asset('js/TableToExcel.js')); ?>"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+<script src="<?php echo e(asset('js/TableToExcel.js')); ?>"></script>
 
 
      <style type="text/css">
@@ -126,6 +129,10 @@
         .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
             left: -280px;
         }   
+    }
+
+    .blockMsg h1{
+        color: #ffffff !important;
     }
     
 
@@ -317,11 +324,24 @@
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
                     <!-- ============================================================== -->
+
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
-                            <a href="" class="nav-link  text-muted waves-effect waves-dark"  aria-haspopup="true" aria-expanded="false"><img width="35" height="35" src="<?php echo e(asset($imagen)); ?> " alt="user" class="profile-pic m-r-5" />
-                               <b> <?php echo e(strtoupper($usuario->usuario)); ?> </b>
-                           </a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="<?php echo e(asset($imagen)); ?>" alt="user" class="rounded-circle" width="50" height="50"></a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <div class="d-flex no-block align-items-center p-3 mb-2 border-bottom">
+                                    <div class=""><img src="<?php echo e(asset($imagen)); ?>" alt="user" class="rounded" width="80"></div>
+                                    <div class="ml-2">
+                                        <h4 class="mb-0"><?php echo e(ucwords(strtolower($usuario->tercero->nombre))); ?></h4>
+                                        <p class=" mb-0"><?php echo e($usuario->tercero->email); ?></p>
+                                        <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="btn btn-rounded btn-danger btn-sm">Ver perfil</a>
+                                    </div>
+                                </div>
+                                <a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
+                                <a href="<?php echo e(route('notificacion/mis_notificaciones')); ?>" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
+                               
+                                <div class="dropdown-divider"></div> <a href="<?php echo e(route('logout')); ?>" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -372,6 +392,9 @@
                         <li>
                             <a href="<?php echo e(route('plan_trabajo/view')); ?>" class="waves-effect"><i class="fa fa-briefcase m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
                         </li>
+                        <li>
+                            <a href="<?php echo e(route('plan_asignatura/consultar_desde_docente')); ?>" class="waves-effect"><i class="fa fa-book m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
+                        </li>
 
                         <li>
 
@@ -398,7 +421,7 @@
 
                          <li>
 
-                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-align-justify m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
+                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-align-justify m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
                             <?php
                             $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
@@ -427,9 +450,6 @@
                             </ul>
                         </li>
                
-                    <li>
-                            <a href="<?php echo e(route('logout')); ?>" class="waves-effect"><i class="fa fa-times m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
-                        </li>
                     </ul>
                     </ul>
                     

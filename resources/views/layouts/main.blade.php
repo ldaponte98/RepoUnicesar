@@ -56,6 +56,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+
+<script src="{{ asset('ckeditor.js') }}"></script>
+<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
      <style type="text/css">
      #fotico:hover{
        cursor: hand;
@@ -119,6 +123,10 @@
         .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
             left: -280px;
         }   
+    }
+
+    .blockMsg h1{
+        color: #ffffff !important;
     }
 
 
@@ -251,7 +259,7 @@
                                             $imagen = 'assets/images/users/sin_foto.jpg';
                                             if ($tercero_envia->foto)$imagen = 'files/'.$tercero_envia->cedula.'/'.$tercero_envia->foto;
                                              $fecha = date("d-m-Y",strtotime($notificacion->fecha));
-                                            $hora = date("H:m",strtotime($notificacion->fecha));
+                                            $hora = date("H:i",strtotime($notificacion->fecha));
                                             $hoy =  date("d-m-Y");
                                             if ($fecha == date("d-m-Y")) $fecha = "Hoy";
                                             if ($fecha == date("d-m-Y",strtotime($hoy."- 1 days"))) $fecha = "Ayer";
@@ -324,10 +332,21 @@
                     <!-- ============================================================== -->
                     <ul class="navbar-nav my-lg-0">
                         <li class="nav-item dropdown">
-                            <a href="" class="nav-link  text-muted waves-effect waves-dark"  aria-haspopup="true" aria-expanded="false"><img width="35" height="35" src="{{ asset($imagen) }} " alt="user" class="profile-pic m-r-5" />
-                            @php
-                                {{ echo $usuario->usuario; }}
-                            @endphp  </a>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ asset($imagen) }}" alt="user" class="rounded-circle" width="50" height="50"></a>
+                            <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
+                                <div class="d-flex no-block align-items-center p-3 mb-2 border-bottom">
+                                    <div class=""><img src="{{ asset($imagen) }}" alt="user" class="rounded" width="80"></div>
+                                    <div class="ml-2">
+                                        <h4 class="mb-0">{{ ucwords(strtolower($usuario->tercero->nombre)) }}</h4>
+                                        <p class=" mb-0">{{ $usuario->tercero->email }}</p>
+                                        <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="btn btn-rounded btn-danger btn-sm">Ver perfil</a>
+                                    </div>
+                                </div>
+                                <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Fechas generales</a>
+                                <a href="{{ route('notificacion/mis_notificaciones') }}" class="dropdown-item"><i class="mdi mdi-alarm"></i> Notificaciones</a>
+                               
+                                <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
+                            </div>
                         </li>
                     </ul>
                 </div>
@@ -447,9 +466,7 @@
                                 <li><a href="{{ route('fechas/fechas_de_entrega') }}">Fechas Generales</a></li>
                             </ul>
                         </li>
-                        <li>
-                            <a href="{{ route('logout') }}" class="waves-effect"><i class="fa fa-sign-out m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
-                        </li>
+                        
                         
 
                         

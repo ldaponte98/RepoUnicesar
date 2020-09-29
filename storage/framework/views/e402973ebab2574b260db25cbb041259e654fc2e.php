@@ -113,6 +113,12 @@
                                                     <a href="<?php echo e(route('notificacion/ver_notificacion', $notificacion->id_notificacion)); ?>">Ir</a>
                                                     </center></td>
                                                     <?php endif; ?> 
+
+                                                    <?php if($notificacion->id_dominio_tipo == 32): ?>
+                                                    <td><center>
+                                                    <a href="<?php echo e(route('notificacion/ver_notificacion', $notificacion->id_notificacion)); ?>">Revisar</a>
+                                                    </center></td>
+                                                    <?php endif; ?> 
                                                     </tr>
 
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>

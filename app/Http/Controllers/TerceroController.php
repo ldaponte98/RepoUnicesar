@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Tercero;
 use App\Horario;
 use App\SeguimientoAsignatura;
+use App\Grupo;
 
 
 class TerceroController extends Controller
@@ -26,6 +27,24 @@ class TerceroController extends Controller
     	$docente = Tercero::find($id_tercero);
         if (session("is_admin")==true) return view('docente.view',compact('docente'));
         if (session("is_docente")==true) return view('docente.view_perfil',compact('docente'));
+    }
+
+    public function buscarAsignaturas($id_periodo_academico, $id_tercero)
+    {
+        $grupos = Grupo::all()
+                          ->where('id_periodo_academico', $id_periodo_academico)
+                          ->where('id_tercero', $id_tercero);
+        $asignaturas = [];
+        if(count($grupos) > 0){
+            foreach ($grupos as $grupo) {
+                $asignatura['id_asignatura'] = $grupo->asignatura->id_asignatura;
+                $asignatura['nombre'] = $grupo->asignatura->nombre." (".$grupo->asignatura->codigo.")";
+                if(!in_array($asignatura, $asignaturas)) $asignaturas[] = $asignatura;
+            }
+        }
+        return response()->json([
+            'asignaturas' => $asignaturas
+        ]);
     }
 
     public function viewHorario(Request $request, $id_tercero)
