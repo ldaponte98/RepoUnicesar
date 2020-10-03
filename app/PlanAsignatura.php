@@ -32,13 +32,15 @@ class PlanAsignatura extends Model
 			$unidades = [];
 			foreach ($data as $uni) {
 				$uni = (object) $uni;
-				$unidad['nombre'] =  UnidadAsignatura::find($uni->id_unidad)->nombre;
-				$unidad['id_unidad'] = $uni->id_unidad;
-				$unidad['resultados_aprendizaje'] = $uni->resultados_aprendizaje;
-				$unidad['horas_hdd'] = $uni->horas_hdd;
-				$unidad['horas_htp'] = $uni->horas_htp;
-				$unidad['horas_hti'] = $uni->horas_hti;
-				$unidad['horas_htt'] = $uni->horas_htt;
+
+				$unidad = (object)[];
+				$unidad->nombre =  UnidadAsignatura::find($uni->id_unidad)->nombre;
+				$unidad->id_unidad = $uni->id_unidad;
+				$unidad->resultados_aprendizaje = $uni->resultados_aprendizaje;
+				$unidad->horas_hdd = $uni->horas_hdd;
+				$unidad->horas_htp = $uni->horas_htp;
+				$unidad->horas_hti = $uni->horas_hti;
+				$unidad->horas_htt = $uni->horas_htt;
 
 
 				//ahora miramos si la unidad la usaron en el mismo periodo academico 
@@ -53,12 +55,12 @@ class PlanAsignatura extends Model
 				$seguimientos_que_usaron_la_unidad = DB::select($sql);
 
 				if(count($seguimientos_que_usaron_la_unidad) > 0){
-					$unidad['puede_eliminar'] = false;
+					$unidad->puede_eliminar = false;
 				}else{
-					$unidad['puede_eliminar'] = true;
+					$unidad->puede_eliminar = true;
 				}
-				$unidad['ejes'] = [];
-				$unidad = (object) $unidad;
+				$unidad->ejes = [];
+				
 				$sql_ejes = "select id_eje_tematico from plan_asignatura_eje_tematico where id_plan_asignatura_unidad = ".$uni->id_plan_asignatura_unidad;
 				$data_ejes = DB::select($sql_ejes);
 				foreach ($data_ejes as $eje) {

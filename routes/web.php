@@ -94,16 +94,16 @@ Route::get('plan_trabajo/consultar','PlanTrabajoController@listar')->name('plan_
 Route::any('plan_trabajo/getReporte','PlanTrabajoController@getReporte')->name('plan_trabajo/getReporte');
 Route::get('plan_trabajo/imprimir/{id}','PlanTrabajoController@imprimir')->name('plan_trabajo/imprimir');
 
-
+//RUTAS ACTIVIDADES COMPLEMENTARIAS
 Route::get('actividades_complementarias/consultar','ActividadesComplementariasController@listar')->name('actividades_complementarias/consultar');
 Route::any('actividades_complementarias/getReporte','ActividadesComplementariasController@getReporte')->name('actividades_complementarias/getReporte');
 Route::any('actividades_complementarias/editar/{id}','ActividadesComplementariasController@editar')->name('actividades_complementarias/editar');
 Route::any('actividades_complementarias/editar_detalle/{id_actividad}/{id_tipo_actividad}','ActividadesComplementariasController@editar_detalle')->name('actividades_complementarias/editar_detalle');
 Route::any('actividades_complementarias/guardar_detalles','ActividadesComplementariasController@guardar_detalles')->name('actividades_complementarias/guardar_detalles');
 Route::get('actividades_complementarias/enviar_formato/{id}','ActividadesComplementariasController@enviar_formato')->name('actividades_complementarias/enviar_formato');
-
 Route::any('actividades_complementarias/imprimir/{id_actividad}/{id_actividad_plan_trabajo}','ActividadesComplementariasController@imprimir')->name('actividades_complementarias/imprimir');
 
+//RUTAS PLAN ASIGNATURA
 Route::get('plan_asignatura/buscar_asignatura',function () {
     return view('plan_asignatura.buscar_asignatura');
 })->name('plan_asignatura/buscar_asignatura');
@@ -116,6 +116,14 @@ Route::get('plan_asignatura/imprimir/{id_plan_asignatura}','PlanAsignaturaContro
 Route::post('plan_asignatura/cargar_plan_existente','PlanAsignaturaController@cargar_plan_existente')->name('plan_asignatura/cargar_plan_existente');
 Route::get('plan_asignatura/obtener_vista/{id_plan_asignatura}','PlanAsignaturaController@obtener_vista')->name('plan_asignatura/obtener_vista');
 
+//RUTAS PLAN DESARROLLO ASIGNATURA
+Route::get('plan_desarrollo_asignatura/consultar_desde_docente',function () {
+    return view('plan_desarrollo_asignatura.consultar_desde_docente');
+})->name('plan_desarrollo_asignatura/consultar_desde_docente');
+Route::get('plan_desarrollo_asignatura/view/{id_tercero}/{id_asignatura}/{id_periodo_academico}','PlanDesarrolloAsignaturaController@view')->name('plan_asignatura/view');
+Route::post('plan_desarrollo_asignatura/obtener_fecha_sugerida','PlanDesarrolloAsignaturaController@obtener_fecha_sugerida')->name('plan_desarrollo_asignatura/obtener_fecha_sugerida');
+
+
 
 
 //RUTAS PARA ALIMENTAR DESDE ACADEMUSOFT
@@ -124,8 +132,6 @@ Route::any('comunication/updateProgramasAcademicos','ComunicationController@upda
 Route::any('comunication/updatePeriodosAcademicos','ComunicationController@updatePeriodosAcademicos')->name('comunication/updatePeriodosAcademicos');
 Route::any('comunication/updateAsignaturas','ComunicationController@updateAsignaturas')->name('comunication/updateAsignaturas');
 Route::any('comunication/auth','ComunicationController@auth')->name('comunication/auth');
-
-
 
 
 

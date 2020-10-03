@@ -52,8 +52,8 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 <script src="http://malsup.github.io/jquery.blockUI.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
@@ -395,6 +395,12 @@
                         <li>
                             <a href="<?php echo e(route('plan_asignatura/consultar_desde_docente')); ?>" class="waves-effect"><i class="fa fa-book m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
                         </li>
+                        <li>
+                            <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar_desde_docente')); ?>" class="waves-effect">
+                                <i class="fa fa-trophy m-r-10" aria-hidden="true"></i>
+                                <span class="hide-menu">Plan desarrollo asignatura </span> 
+                            </a>
+                        </li>
 
                         <li>
 
@@ -421,7 +427,7 @@
 
                          <li>
 
-                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-align-justify m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
+                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-th-list m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
                             <?php
                             $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
@@ -441,6 +447,7 @@
 
                             
                         </li>
+
                         <li class="">
                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-clipboard m-r-10"></i><span class="hide-menu">Reportes</span></a>
                             <ul aria-expanded="false" class="collapse">

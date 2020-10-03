@@ -848,7 +848,7 @@
               document.execCommand("copy");
               document.body.removeChild(aux);
               toastr.options.newestOnTop = false;
-              toastr.info('Pagina para Google Site copiada.', 'Copiada', {timeOut: 5000})
+              toastr.info('Pagina copiada para Google Site.', 'Copiada', {timeOut: 5000})
             }
 
             function cargar_plan_existente() {

@@ -48,6 +48,24 @@
                     <div class="col-sm-9">
                         <h3><b>Plan de asignatura de {{ $asignatura->nombre }}  {{ $periodo_academico->periodo }}</b></h3>
                     </div>
+                    <div class="col-sm-3" style="display: flex;">
+                      <div class="btn-group">
+                          <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="fa fa-cog"></i>
+                          </button>
+                          <div class="dropdown-menu animated slideInUp" style="">
+                              <a class="dropdown-item" onclick="exportar_google_site()" style="cursor: pointer;"><i class="fa fa-google-plus-official"></i> &nbsp;Exportar para Google Site</a>
+                          </div>
+                      </div>
+                        @php
+                            $periodos_academicos = \App\PeriodoAcademico::all();
+                        @endphp
+                        <select id="id_periodo_academico" class="custom-select" style="width: 100%" onchange="location.href = '/plan_asignatura/view/{{ $asignatura->id_asignatura }}/'+$('#id_periodo_academico').val()">
+                            @foreach ($periodos_academicos as $d)
+                            <option value="{{ $d->id_periodo_academico }}" @if($d->id_periodo_academico == $periodo_academico->id_periodo_academico) selected @endif > Periodo {{ $d->periodo }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div><br>
                 <div class="row">
                     <div class="col-sm-12">
@@ -501,6 +519,26 @@
                
                actualizar_tabla_unidades()
                actualizar_tablas()
+            }
+
+            function exportar_google_site(){
+              let url = '{{ route('plan_asignatura/obtener_vista', $plan_asignatura->id_plan_asignatura) }}'
+              $.get(url, (response) => {
+                copiar(response)
+              }).fail((error) => {
+                toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
+              })
+            }
+
+            function copiar(value){
+              var aux = document.createElement("input");
+              aux.setAttribute("value", value);
+              document.body.appendChild(aux);
+              aux.select();
+              document.execCommand("copy");
+              document.body.removeChild(aux);
+              toastr.options.newestOnTop = false;
+              toastr.info('Pagina copiada para Google Site.', 'Copiada', {timeOut: 5000})
             }
 
 </script>
