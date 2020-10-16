@@ -13,14 +13,6 @@
 	</style>
 </head>
 <body>
-	<script type="text/php">
-    if (isset($pdf)) {
-        $pdf->page_script('
-            $font = $fontMetrics->get_font("Arial, Helvetica, sans-serif", "normal");
-            $pdf->text(430, 85, "$PAGE_NUM de $PAGE_COUNT", $font, 8.5);
-        ');
-    }
-</script>
 	   <center>
 			<table border="1" cellpadding="0" cellspacing="0" width="100%">
 				 <tr>
@@ -38,7 +30,7 @@
 				  PLAN DE TRABAJO
 				  	</div>
 				  </center></td>
-				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina </td>
+				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina 1 de 1</td>
 				 </tr>
 			</table>
 		</center>

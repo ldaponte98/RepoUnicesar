@@ -4,8 +4,8 @@
 @endphp
 @if ($usuario == null)
     <script>
-        location.href = '{{ route('logout') }}'
-     </script>
+      location.href = '{{ route('logout') }}'
+    </script>
   @php
        die();
   @endphp
@@ -59,9 +59,23 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
 <script src="{{ asset('js/TableToExcel.js') }}"></script>
+<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+
+<script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
 
 
      <style type="text/css">
+
+        body {
+            --ck-z-default: 100;
+            --ck-z-modal: calc( var(--ck-z-default) + 999 );
+        }
+        .ck-link_selected{
+            text-decoration: underline !important;
+        }
+        .ck a{
+            text-decoration: underline !important;
+        }
      #fotico:hover{
        cursor: hand;
        width: 205;

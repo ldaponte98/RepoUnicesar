@@ -21,6 +21,10 @@
       padding: 10px !important;
       font-size: 12px;
     }
+    hr {
+      margin-top: 0 !important;
+      margin-bottom: 15px !important;
+    }
 </style>
 	<div class="row page-titles">
     <div class="col-md-6 col-8 align-self-center">
@@ -36,10 +40,21 @@
     </div>
 @endsection
 @section('content')
+@php
+  $puede_editar = $plan_desarrollo_asignatura->puede_editar();
+@endphp
  <div class="row">
         <div class="col-lg-12 col-xlg-12 col-md-12">
             <div class="card">
                 <div class="card-block">
+                  <!--<div class="alert alert-info">
+                    Formato en proceso de desarrollo
+                  </div>-->
+                  @if(session('is_docente') and !$puede_editar)
+                    <div class="alert alert-warning">
+                      <strong>No esta dentro de las fechas validas para realizar este formato.</strong>
+                    </div>
+                  @endif  
                   <div class="row">
                       <div class="col-sm-9">
                           <h3><b>Plan desarrollo asignatura de {{ $asignatura->nombre }}</b></h3>
@@ -147,23 +162,19 @@
                       </tbody>
                     </table>
                     <div>
-                      <button class="btn btn-info pull-right" onclick="show_modal_detalle(false)"><i class="fa fa-plus"></i> Agregar semana</button>
+                      @if($puede_editar)
+                        <button id="btn_agregar_semana" class="btn btn-info pull-right" onclick="show_modal_detalle(false)"><i class="fa fa-plus"></i> Agregar semana</button>
+                      @endif
                     </div>
                     </div>
                 </div>
                 <br>
-                <center><button class="btn btn-info" onclick="guardar()"><i class="fa fa-save"></i>&nbsp;Guardar cambios</button>&nbsp;&nbsp;&nbsp;@if($plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)<a target="_blank" href="{{ route('plan_asignatura/imprimir', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura) }}" class="btn btn-danger"><i class="fa fa-print"></i> Imprimir</a> @endif</center>
-                </div>
-            </div>
-        </div>
-</div>
-<style type="text/css">
-  .custom-control-label{
-    font-size: 13px !important;
-  }
-</style>
+                 
 
-<div class="modal fade" id="modal_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <center>@if($puede_editar) <button class="btn btn-info" onclick="guardar()"><i class="fa fa-save"></i>&nbsp;Guardar cambios</button>&nbsp;&nbsp;&nbsp; @endif  @if($plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)<a target="_blank" href="{{ route('plan_desarrollo_asignatura/imprimir', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura) }}" class="btn btn-danger"><i class="fa fa-print"></i> Imprimir</a> @endif</center>
+                </div>
+
+                <div class="modal fade"  data-focus="false" id="modal_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -175,10 +186,19 @@
       <div class="modal-body">
           <input type="hidden" id="dia_escojido">
           <input type="hidden" id="hora_escojida">
-          <div class="form-group">
-            <label for="recipient-name" class="col-form-label"><strong><b>Fecha de desarrollo</b></strong></label>
-            <input class="form-control" type="text" id="fecha_desarrollo_semana">
+          <div class="row">
+            <div class="col-sm-6">
+              <div class="form-group">
+                <label for="recipient-name" class="col-form-label"><strong><b>Fecha de desarrollo</b></strong></label>
+                <input class="form-control" type="text" id="fecha_desarrollo_semana">
+              </div>
+            </div>
+            <div class="col-sm-6" style="padding-top: 37px !important;">
+              <input  onclick="escojer_semana_parciales()" type="checkbox" id="semana_parciales">
+              <label class="col-form-label" for="semana_parciales"><strong><b>Es semana de parciales</b></strong></label>
+            </div>
           </div>
+          
           <!--<div class="form-group">
             <label for="recipient-name" class="col-form-label"><b>Unidades</b></label><br>
             <select style="width: 100%" class="form-control" id="select_unidades" multiple="multiple">
@@ -187,7 +207,8 @@
               @endforeach
             </select>
           </div>-->
-          <div class="row">
+          
+          <div class="row" id="div_unidades_ejes">
             <div class="col-sm-6">
               <label class="col-form-label"><strong><b>Ejes tematicos</b></strong></label><hr>
               @foreach($plan_asignatura->unidades() as $unidad)
@@ -203,28 +224,88 @@
               </div>
             </div>
           </div>
+          <div class="form-group" id="div_semana_parciales" style="display: none;">
+            <label for="recipient-name" class="col-form-label"><strong><b>Titulo o enunciado para semana</b></strong></label><br>
+            <textarea id="titulo_semana_parciales"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label"><strong><b>Temas de trabajo independiente</b></strong></label><br>
+            <textarea id="temas_trabajo"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label"><strong><b>Estrategias metodológicas o acciones pedagógicas</b></strong></label><br>
+            <textarea id="estrategias_metodologicas"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label"><strong><b>Competencias</b></strong></label><br>
+            <textarea id="competencias"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label"><strong><b>Evaluación académica</b></strong></label><br>
+            <textarea id="evaluacion_academica"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="recipient-name" class="col-form-label"><strong><b>Bibliografía (capítulos, páginas)</b></strong></label><br>
+            <textarea id="bibliografia"></textarea>
+          </div>
+          
           
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-        <button type="button" onclick="" class="btn btn-info">Guardar</button>
+        @if($puede_editar)
+          <button type="button" id="btn_eliminar_detalle" onclick="eliminar_detalle()" class="btn btn-danger">Eliminar</button>
+          <button type="button" onclick="agregar_semana()" class="btn btn-info">Guardar</button>
+        @endif
       </div>
     </div>
   </div>
 </div>
 
 
+            </div>
+        </div>
+</div>
+<style type="text/css">
+  .custom-control-label{
+    font-size: 13px !important;
+  }
+  b, strong {
+    font-weight: bold !important;
+  }
+
+  .tr_tabla:hover{
+    cursor: pointer;
+    background-color: #daf7a675;
+  }
+</style>
 @csrf
 <script>
   var detalles = []
   var semana_actual = 0
   var fecha_inicio_semestre = '{{ date('d/m/Y', strtotime($periodo_academico->fechaInicio)) }}'
-  var fecha_fin_semestre = '{{ date('d/m/Y', strtotime($periodo_academico->fechaFin)) }}'
+  var fecha_fin_semestre = '{{ date('d/m/Y', strtotime($periodo_academico->fechaFin." +30 days")) }}'
   var ejes_escojidos_tmp = []
   var unidades = []
+  var editor_temas_trabajo = null;
+  var editor_estrategias_metodologicas = null
+  var editor_competencias = null
+  var editor_evaluacion_academica = null
+  var editor_bibliografia = null
+  var editor_titulo_semana_parciales = null
+
+  var posicion_detalle_editar = -1
+              
 
   $(document).ready(function(){
+
      inicializar_unidades()
+     inicializar_editores()
       $('#fecha_desarrollo_semana').daterangepicker({
           autoApply: true,
           autoUpdateInput: true,
@@ -235,27 +316,76 @@
             cancelLabel: 'Clear'
           }
     });
+      cargar_informacion_plan_desarrollo()
   })
-  function show_modal_detalle(editar) {
-    if(editar){
 
+  function escojer_semana_parciales() {
+    if($("#semana_parciales").prop("checked")){
+      $("#div_unidades_ejes").fadeOut()
+      $("#div_semana_parciales").fadeIn()
     }else{
+      $("#div_unidades_ejes").fadeIn()
+      $("#div_semana_parciales").fadeOut()
+    }
+  }
+  function pintar_datos_editar() {
+    limpiar_modal()
+    var detalle = this.detalles[posicion_detalle_editar]
+    if(detalle.puede_eliminar) $("#btn_eliminar_detalle").fadeIn()
+    $("#titulo_modal_detalle").html("Modificacion en semana "+detalle.semana)
+    $("#fecha_desarrollo_semana").data('daterangepicker').setStartDate(detalle.fecha_inicio);
+    $("#fecha_desarrollo_semana").data('daterangepicker').setEndDate(detalle.fecha_fin);
+    if(detalle.semana_parciales){
+      $("#div_unidades_ejes").fadeOut()
+      $("#div_semana_parciales").fadeIn()
+      $("#semana_parciales").prop("checked", true)
+      this.editor_titulo_semana_parciales.setData(detalle.titulo_semana_parciales)
+    }else{
+      $("#div_unidades_ejes").fadeIn()
+      $("#div_semana_parciales").fadeOut()
+      this.ejes_escojidos_tmp = []
+      detalle.unidades_escojidas.forEach((unidad) => {
+        $("#unidad_"+unidad.id_unidad).prop('checked', true)
+          unidad.ejes.forEach((eje) => {
+            this.ejes_escojidos_tmp.push(parseInt(eje.id_eje))
+          })
+      })
+      mostrar_ejes()
+    }
+    this.editor_temas_trabajo.setData(detalle.temas_trabajo)
+    this.editor_estrategias_metodologicas.setData(detalle.estrategias_metodologicas)
+    this.editor_competencias.setData(detalle.competencias)
+    this.editor_evaluacion_academica.setData(detalle.evaluacion_academica)
+    this.editor_bibliografia.setData(detalle.bibliografia)
+    this.editor_titulo_semana_parciales.setData(detalle.titulo_semana_parciales)
+  }
+
+  function show_modal_detalle(editar) {
+    limpiar_modal()
+    if(editar){
+      this.pintar_datos_editar()
+    }else{
+      $("#btn_eliminar_detalle").fadeOut()
+      posicion_detalle_editar = -1
       semana_actual = detalles.length + 1
       this.buscar_fecha_sugerida(semana_actual)
+      $("#titulo_modal_detalle").html("Desarrollo en semana "+semana_actual)
     }
-    $("#titulo_modal_detalle").html("Desarrollo en semana "+semana_actual)
+    
     $("#modal_detalle").modal('show')
   }
 
   function buscar_fecha_sugerida(semana) {
     let saltarse_domingo = 1
     let fecha = ""
-    if(semana = 1){
+
+    if(semana == 1){
       //es la primera semana
       saltarse_domingo = 0
       fecha = '{{ date('Y-m-d', strtotime($periodo_academico->fechaInicio)) }}'
     }else{
       //buscamos la ultima fecha fin de los detalles registrados
+      fecha = this.buscar_ultima_fecha()
     }
     let _token = ""
     $("[name='_token']").each(function() { _token = this.value })
@@ -270,6 +400,13 @@
       $('#fecha_desarrollo_semana').data('daterangepicker').setEndDate(response.fecha_fin);
     })
   }
+
+  function buscar_ultima_fecha() {
+    let detalle = this.detalles[detalles.length - 1]
+    let ultima_fecha = detalle.fecha_fin
+    return ultima_fecha.split("/").reverse().join("-")
+  }
+
 
   function mostrar_ejes() {
     $("#div_ejes").html("<center><i>Actualizando...</i></center>")
@@ -300,16 +437,279 @@
       let posicion = this.ejes_escojidos_tmp.indexOf(id_eje);
       this.ejes_escojidos_tmp.splice(posicion, 1)
     }
-    console.log(this.ejes_escojidos_tmp)
   }
 
   function eje_esta_escojido(id_eje) {
-    console.log("se averiguo si esta escojido el id_eje = "+id_eje)
     let posicion = this.ejes_escojidos_tmp.indexOf(parseInt(id_eje));
-    console.log("la posicion encontrada fue "+posicion)
     if(posicion != -1) return true 
     return false;
   }
+
+
+  function agregar_semana() {
+  //
+    let semana_parciales = false
+    if($("#semana_parciales").prop('checked')){
+      semana_parciales = true
+    }
+    let unidades_escojidas = [];
+    if(!semana_parciales){
+      let validar_unidades_escojidas = obtener_unidades_ejes_escojidos()
+      if(validar_unidades_escojidas.error) return false
+
+      unidades_escojidas = validar_unidades_escojidas.result;
+    }else{
+      if(editor_titulo_semana_parciales.getData().replace(/&nbsp;/gi,' ').trim() == "") {alert("Debe suministrar el titulo o enunciado del parcial de la semana."); return false}
+    }
+    
+    
+
+    let detalle = {
+      'id_detalle' : null,
+      'puede_eliminar' : true,
+      'semana' : semana_actual,
+      'fecha_inicio' : $('#fecha_desarrollo_semana').val().split(' - ')[0],
+      'fecha_fin' : $('#fecha_desarrollo_semana').val().split(' - ')[1],
+      'unidades_escojidas' : unidades_escojidas,
+      'temas_trabajo' : editor_temas_trabajo.getData().replace(/&nbsp;/gi,' '),
+      'estrategias_metodologicas' : editor_estrategias_metodologicas.getData().replace(/&nbsp;/gi,' '),
+      'competencias' : editor_competencias.getData().replace(/&nbsp;/gi,' '),
+      'evaluacion_academica' : editor_evaluacion_academica.getData().replace(/&nbsp;/gi,' '),
+      'bibliografia' : editor_bibliografia.getData().replace(/&nbsp;/gi,' '),
+      'semana_parciales' : semana_parciales,
+      'titulo_semana_parciales' : editor_titulo_semana_parciales.getData().replace(/&nbsp;/gi,' '),
+    }
+
+    if(posicion_detalle_editar == -1){
+      this.detalles.push(detalle)
+    }else{
+      this.detalles.splice(posicion_detalle_editar, 1, detalle)
+    }
+    
+    $("#modal_detalle").modal('hide')
+    limpiar_modal()
+    actualizar_tabla()
+  }
+
+  function eliminar_detalle() {
+    let r = confirm("Seguro desea eliminar esta semana del plan de desarrollo?");
+    if(r){
+      let detalles_tmp = []
+      this.detalles.forEach((detalle) => {
+        detalles_tmp.push(detalle)
+      })
+      console.log(detalles_tmp)
+      this.detalles.splice(posicion_detalle_editar, 1);
+      //se actualizan las semanas
+      let cont = 0
+      console.log(detalles_tmp)
+      detalles_tmp.forEach((detalle_tmp) => {
+        if(cont < this.detalles.length){
+          let detalle = this.detalles[cont]
+          detalle.semana = detalle_tmp.semana
+          detalle.fecha_inicio = detalle_tmp.fecha_inicio
+          detalle.fecha_fin = detalle_tmp.fecha_fin
+          this.detalles.splice(cont, 1, detalle)
+          cont++ 
+        }
+      })
+      $("#modal_detalle").modal('hide')
+      limpiar_modal()
+      actualizar_tabla()
+    }
+    
+  }
+
+
+  function actualizar_tabla() {
+    let tabla = ""
+    this.detalles.forEach((detalle) => {
+      let texto_fecha = obtener_texto_fecha(detalle.fecha_inicio, detalle.fecha_fin)
+      tabla += "<tr class='tr_tabla' onclick='modal_opciones("+this.detalles.indexOf(detalle)+")'>\n\
+                    <td><center><b>"+detalle.semana+"</b><br>"+texto_fecha+"</center></td>"
+
+      let ejes = "";
+      if(detalle.semana_parciales){
+        tabla += "<td><center><b>"+detalle.titulo_semana_parciales+"</b></center></td>"
+      }else{
+        tabla += "<td>"
+        detalle.unidades_escojidas.forEach((unidad) => {
+          tabla += "<center><b> Unidad No "+unidad.numero+"</b></center>\n\
+                    <center>"+unidad.nombre+"</center><br><br>"
+                    unidad.ejes.forEach((eje) => {
+                      ejes += "<b>"+unidad.numero+"."+eje.numero+"</b> "+eje.nombre+"<br><br>"
+                    })
+        })
+        tabla += "</td>"
+      }
+
+       tabla +=     "<td>"+ejes+"</td>\n\
+                    <td>"+detalle.temas_trabajo+"</td>\n\
+                    <td>"+detalle.estrategias_metodologicas+"</td>\n\
+                    <td>"+detalle.competencias+"</td>\n\
+                    <td>"+detalle.evaluacion_academica+"</td>\n\
+                    <td>"+detalle.bibliografia+"</td>\n\
+                </tr>"
+    })
+    $("#tabla_detalles").html(tabla)
+
+    //miramos si ya registro el numero maximo de semanas
+    let num_max_semanas = {{ $periodo_academico->total_semanas }};
+
+    if(this.detalles.length == num_max_semanas){
+      $("#btn_agregar_semana").fadeOut()
+    }else{
+      $("#btn_agregar_semana").fadeIn()
+    }
+  }
+
+  function modal_opciones(posicion_detalle) {
+    posicion_detalle_editar = posicion_detalle
+    @if($puede_editar)
+      this.show_modal_detalle(true)
+    @endif
+  }
+
+  function obtener_texto_fecha(fecha_inicio, fecha_fin) {
+    let dia_inicio = fecha_inicio.split("/")[0]
+    let mes_inicio = fecha_inicio.split("/")[1]
+    let año_inicio = fecha_inicio.split("/")[2]
+
+    let dia_fin = fecha_fin.split("/")[0]
+    let mes_fin = fecha_fin.split("/")[1]
+    let año_fin = fecha_fin.split("/")[2]
+
+    let meses = [
+                  'enero', 
+                  'febrero', 
+                  'marzo',
+                  'abril',
+                  'mayo',
+                  'junio',
+                  'julio',
+                  'agosto',
+                  'septiembre',
+                  'octubre',
+                  'noviembre',
+                  'diciembre'
+                ]
+
+    if(mes_inicio == mes_fin && año_inicio == año_fin){
+      return "Del "+dia_inicio+" al "+dia_fin+" de "+meses[parseInt(mes_inicio) - 1]+" de "+año_inicio
+    }
+
+    if(mes_inicio != mes_fin && año_inicio == año_fin){
+      return "Del "+dia_inicio+" de "+meses[parseInt(mes_inicio) - 1]+" al "+dia_fin+" de "+meses[parseInt(mes_fin) - 1]+" de "+año_inicio
+    }
+
+    if(mes_inicio != mes_fin && año_inicio != año_fin){
+      return "Del "+dia_inicio+" de "+meses[parseInt(mes_inicio) - 1]+" de "+año_inicio+" al "+dia_fin+" de "+meses[parseInt(mes_fin) - 1]+" de "+año_fin
+    }
+
+    return "Fecha no valida";
+
+  }
+
+  function limpiar_modal() {
+    
+    this.unidades.forEach((unidad) => {
+      $("#unidad_"+unidad.id_unidad).prop('checked', false)      
+    })
+    $("#div_ejes").html("")
+    this.ejes_escojidos_tmp = []
+    this.editor_temas_trabajo.setData("")
+    this.editor_estrategias_metodologicas.setData("")
+    this.editor_competencias.setData("")
+    this.editor_evaluacion_academica.setData("")
+    this.editor_bibliografia.setData("")
+    this.editor_titulo_semana_parciales.setData("")
+
+    $("#semana_parciales").prop("checked", false)
+    $("#div_unidades_ejes").fadeIn()
+    $("#div_semana_parciales").fadeOut()
+    
+  }
+
+  function obtener_unidades_ejes_escojidos() {
+    let unidades_escojidas = []
+    let error = false
+
+    this.unidades.forEach((unidad) => {
+        let unidad_escojida = {
+          'id_unidad' : unidad.id_unidad,
+          'nombre' : unidad.nombre,
+          'numero' : unidad.numero,
+          'ejes' : []
+        }
+        if($("#unidad_"+unidad.id_unidad).prop('checked')){
+          unidad.ejes.forEach((eje) => {
+            if(this.eje_esta_escojido(eje.id_eje)) unidad_escojida.ejes.push(eje)
+          })
+          if(unidad_escojida.ejes.length == 0){
+            error = true
+            alert("Debe seleccionar los temas de docencia directa del eje tematico "+unidad.numero+". "+unidad.nombre);
+            return false
+          }
+          unidades_escojidas.push(unidad_escojida)
+        }
+    }) 
+    if(unidades_escojidas.length == 0 && error == false){
+      error = true
+      alert("Es necesario que escoja ejes tematicos para el desarrollo de la semana ");
+    }
+    return {
+      'result' : unidades_escojidas,
+      'error' : error
+    }
+  }
+
+  function guardar() {
+    if(this.detalles.length == 0){
+      alert("Debe diligenciar por lo menos una semana para registrar el formato.")
+      return false
+    }
+
+    let url = '{{ route("plan_desarrollo_asignatura/editar") }}'
+
+    let _token = ""
+    $("[name='_token']").each(function() { _token = this.value })
+    let request = {
+        '_token' : _token,
+        'id_plan_desarrollo_asignatura' : '{{ $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura}}',
+        'id_asignatura' : '{{ $asignatura->id_asignatura }}',
+        'id_periodo_academico' : '{{ $periodo_academico->id_periodo_academico }}',
+        'detalles' : this.detalles
+    }
+    $.blockUI({
+      message: '<h1>Guardando</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+      css: {
+          border: 'none',
+          padding: '15px',
+          backgroundColor: '#000',
+          '-webkit-border-radius': '10px',
+          '-moz-border-radius': '10px',
+          opacity: .8,
+          color: '#ffffff'
+      }});
+
+    $.post(url, request, (response) => {
+      $.unblockUI();
+      if(response.error == false){
+        toastr.success(response.message, 'Guardado correctamente', {timeOut: 5000})
+        location.reload();
+      }else{
+        toastr.error(response.message, 'Error', {timeOut: 5000})
+      }
+    }).fail((error) => {
+      $.unblockUI();
+      console.log(error)
+      toastr.error("Ocurrio un error en el servicio. Por favor comuniquese con el encargado", 'Error', {timeOut: 5000})
+    })
+  }
+
+
+
+  //configuraciones
 
   function inicializar_unidades() {
     let unidad = {
@@ -319,15 +719,20 @@
       'ejes' : []
     }
     let cont_unidades = 1
+    let cont_ejes = 1
     @foreach($plan_asignatura->unidades() as $unidad)
         unidad.id_unidad = '{{ $unidad->id_unidad }}'
         unidad.nombre = '{{ $unidad->nombre }}'
         unidad.numero = cont_unidades
+        cont_ejes = 1
         @foreach($unidad->ejes as $eje)
+
             unidad.ejes.push({
               'id_eje' : '{{ $eje->id_eje_tematico }}',
+              'numero' : cont_ejes,
               'nombre' : '{{ $eje->nombre }}'
             })
+            cont_ejes++
         @endforeach
         this.unidades.push(unidad)
         unidad = {
@@ -338,7 +743,157 @@
         }
         cont_unidades++
     @endforeach
-    console.log(this.unidades)
+  }
+
+  function inicializar_editores() {
+    var config = {
+      ckfinder: {
+        uploadUrl: "{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json') }}",
+      },
+      toolbar: ["heading", "bold", "italic", "link", "numberedList", "bulletedList",  "blockQuote", "ckfinder", "imageTextAlternative",  "imageStyle:full", "imageStyle:side", "indent", "outdent", "selectAll", "undo", "redo", "insertTable", "tableColumn", "tableRow", "mergeTableCells"]
+      ,
+      heading: {
+          options: [
+              { model: 'paragraph', title: 'Fuente', class: 'ck-heading_paragraph' },
+              { model: 'heading1', view: 'h1', title: 'Grande', class: 'ck-heading_heading1' },
+              { model: 'heading2', view: 'h2', title: 'Mediano', class: 'ck-heading_heading2' },
+              { model: 'heading3', view: 'h3', title: 'Pequeño', class: 'ck-heading_heading3' }
+          ]
+      },
+    }
+
+
+    ClassicEditor
+    .create( document.querySelector( '#temas_trabajo' ), config ).then( editor => {
+      this.editor_temas_trabajo = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+
+    ClassicEditor
+    .create( document.querySelector( '#estrategias_metodologicas' ), config ).then( editor => {
+      this.editor_estrategias_metodologicas = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+
+    ClassicEditor
+    .create( document.querySelector( '#competencias' ), config ).then( editor => {
+      this.editor_competencias = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+
+    ClassicEditor
+    .create( document.querySelector( '#evaluacion_academica' ), config ).then( editor => {
+      this.editor_evaluacion_academica = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+
+    ClassicEditor
+    .create( document.querySelector( '#bibliografia' ), config ).then( editor => {
+      this.editor_bibliografia = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+
+    ClassicEditor
+    .create( document.querySelector( '#titulo_semana_parciales' ), config ).then( editor => {
+      this.editor_titulo_semana_parciales = editor;
+    } ).catch( err => {
+      console.error( err.stack );
+    } );
+  }
+
+  function obtener_eje(id_eje) {
+    let eje_encontado = {
+        'id_eje' : '',
+        'numero' : -1,
+        'nombre' : ''
+    }
+    this.unidades.forEach((unidad) => {
+      unidad.ejes.forEach((eje) => {
+        if(eje.id_eje == id_eje){
+          eje_encontado = {
+              'id_eje' : eje.id_eje,
+              'numero' : eje.numero,
+              'nombre' : eje.nombre
+          }
+        } 
+      })
+    })
+     
+    return eje_encontado
+  }
+  function obtener_unidad(id_unidad) {
+    let uni= {
+          'id_unidad' : '',
+          'nombre' : '',
+          'numero' : '',
+          'ejes' : []
+    }
+     this.unidades.forEach((unidad) => {
+      if(unidad.id_unidad == id_unidad) {
+        uni= {
+          'id_unidad' : unidad.id_unidad,
+          'nombre' : unidad.nombre,
+          'numero' : unidad.numero,
+          'ejes' : []
+        }
+      }
+     })
+     return uni
+  }
+
+  function cargar_informacion_plan_desarrollo() {
+    @php
+      $cont_detalles = 1;
+    @endphp
+    let unidades_antiguas = []
+    let unidad_antigua = null;
+    let ejes_antiguos = []
+    @foreach($plan_desarrollo_asignatura->detalles as $detalle)
+      unidades_antiguas = []
+      @foreach($detalle->unidades as $unidad_plan_desarrollo)
+        ejes_antiguos = []
+        @foreach($unidad_plan_desarrollo->ejes as $eje_plan_desarrollo)
+          ejes_antiguos.push(obtener_eje('{{ $eje_plan_desarrollo->id_eje_tematico }}'))
+        @endforeach
+        unidad_antigua = obtener_unidad('{{ $unidad_plan_desarrollo->id_unidad_asignatura }}');
+        unidad_antigua.ejes = ejes_antiguos
+       unidades_antiguas.push(unidad_antigua)
+       unidad_antigua = null; 
+      @endforeach
+
+      this.detalles.push({
+        'id_detalle' : '{{ $detalle->id_plan_desarrollo_asignatura_detalle }}',
+        'puede_eliminar' : {{ $detalle->puede_eliminar() }},
+        'semana' : {{ $cont_detalles }},
+        'fecha_inicio' : '{{ date('d/m/Y', strtotime($detalle->fecha_inicio)) }}',
+        'fecha_fin' : '{{ date('d/m/Y', strtotime($detalle->fecha_fin)) }}',
+        'unidades_escojidas' : unidades_antiguas,
+        'temas_trabajo' : '@php echo $detalle->temas_trabajo_independiente; @endphp',
+        'estrategias_metodologicas' : '@php echo $detalle->estrategias_metodologicas; @endphp',
+        'competencias' : '@php echo $detalle->competencias; @endphp',
+        'evaluacion_academica' : '@php echo $detalle->evaluacion_academica; @endphp',
+        'bibliografia' : '@php echo $detalle->bibliografia; @endphp',
+        'semana_parciales' : @php 
+                              if($detalle->is_semana_parciales){
+                                echo 'true';
+                              } else{
+                                echo 'false';
+                              }
+                            @endphp,
+        'titulo_semana_parciales' : '@php echo $detalle->titulo_semana_parciales; @endphp',
+      })
+      this.semana_actual = {{ $cont_detalles }}
+      @php
+        $cont_detalles++;
+      @endphp
+    @endforeach
+
+    actualizar_tabla()
   }
   
 </script>

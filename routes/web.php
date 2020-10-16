@@ -122,6 +122,8 @@ Route::get('plan_desarrollo_asignatura/consultar_desde_docente',function () {
 })->name('plan_desarrollo_asignatura/consultar_desde_docente');
 Route::get('plan_desarrollo_asignatura/view/{id_tercero}/{id_asignatura}/{id_periodo_academico}','PlanDesarrolloAsignaturaController@view')->name('plan_asignatura/view');
 Route::post('plan_desarrollo_asignatura/obtener_fecha_sugerida','PlanDesarrolloAsignaturaController@obtener_fecha_sugerida')->name('plan_desarrollo_asignatura/obtener_fecha_sugerida');
+Route::post('plan_desarrollo_asignatura/editar','PlanDesarrolloAsignaturaController@editar')->name('plan_desarrollo_asignatura/editar');
+Route::get('plan_desarrollo_asignatura/imprimir/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@imprimir')->name('plan_desarrollo_asignatura/imprimir');
 
 
 

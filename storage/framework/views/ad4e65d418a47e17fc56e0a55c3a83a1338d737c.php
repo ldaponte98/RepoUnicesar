@@ -60,77 +60,85 @@
 <script src="<?php echo e(asset('ckeditor.js')); ?>"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-     <style type="text/css">
-     #fotico:hover{
-       cursor: hand;
-       width: 205;
-    }
-    div#iconedit{
-        width: 40;
-        height: 40;
-        background-color: rgba(160, 191, 76, 1);
-        position: absolute;
-        right: 65;
-        top: 200;
+    <style type="text/css">
+        body {
+            --ck-z-default: 100;
+            --ck-z-modal: calc( var(--ck-z-default) + 999 );
+        }
+        .ck-link_selected{
+            text-decoration: underline !important;
+        }
+        .ck a{
+            text-decoration: underline !important;
+        }
+        #fotico:hover{
+           cursor: hand;
+           width: 205;
+        }
+        div#iconedit{
+            width: 40;
+            height: 40;
+            background-color: rgba(160, 191, 76, 1);
+            position: absolute;
+            right: 65;
+            top: 200;
 
-    }
-    div#iconedit a{
-        color : white;
-        top: 12;
-        position: relative;
-    }
+        }
+        div#iconedit a{
+            color : white;
+            top: 12;
+            position: relative;
+        }
 
-    div#iconedit:hover{
-         background-color: rgba(160, 191, 76, 0.9);
-    }
-    .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
-    text-decoration: none;
-    background-color: #9bbf4c;
-    }
-    .search{
-    line-height: inherit;
-    height: 31px;
-    background-color: #f2f7f8;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: #ddd;
-    }
-    .search:focus{
-       border-bottom-color: black; 
-       transition: 2.5s;
-    }
-    .fil{
-        cursor: pointer;
-    }
-    .fil:hover{
-        background-color: #DAF7A6;
+        div#iconedit:hover{
+             background-color: rgba(160, 191, 76, 0.9);
+        }
+        .dropdown-item.active, .dropdown-item:active {
+        color: #fff;
+        text-decoration: none;
+        background-color: #9bbf4c;
+        }
+        .search{
+        line-height: inherit;
+        height: 31px;
+        background-color: #f2f7f8;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        border-bottom-color: #ddd;
+        }
+        .search:focus{
+           border-bottom-color: black; 
+           transition: 2.5s;
+        }
+        .fil{
+            cursor: pointer;
+        }
+        .fil:hover{
+            background-color: #daf7a675;
 
-    }
-    input[type="checkbox"] {
-        cursor: pointer;
-    }
+        }
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
 
-    li .active{
-        background-color:  #DAF7A6;
-    }
-    .hidden-md-up{
-        margin-top: 15px !important;
-        margin-right: 40px !important;
-    }
-    @media (max-width: 767px){
-        .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
-            left: -280px;
-        }   
-    }
+        li .active{
+            background-color:  #DAF7A6;
+        }
+        .hidden-md-up{
+            margin-top: 15px !important;
+            margin-right: 40px !important;
+        }
+        @media (max-width: 767px){
+            .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+                left: -280px;
+            }   
+        }
 
-    .blockMsg h1{
-        color: #ffffff !important;
-    }
-
-
-</style>
+        .blockMsg h1{
+            color: #ffffff !important;
+        }
+    </style>
     <script type="text/javascript">
     $(document).ready(function () {
     $('#txtfiltro').keyup(function () {

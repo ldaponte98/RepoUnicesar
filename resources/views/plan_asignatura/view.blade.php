@@ -900,9 +900,26 @@
               
             }
 
+            
+
 
             function inicializar_editores() {
-              
+              var config = {
+                ckfinder: {
+                  uploadUrl: "{{ asset('ckfinder/core/connector/php/connector.php?command=QuickUpload&type=Files&responseType=json') }}",
+                },
+                toolbar: ["heading", "bold", "italic", "link",  "numberedList", "bulletedList",  "blockQuote", "ckfinder", "imageTextAlternative",  "imageStyle:full", "imageStyle:side", "indent", "outdent", "selectAll", "undo", "redo", "insertTable", "tableColumn", "tableRow", "mergeTableCells"]
+                ,
+                heading: {
+                    options: [
+                        { model: 'paragraph', title: 'Fuente', class: 'ck-heading_paragraph' },
+                        { model: 'heading1', view: 'h1', title: 'Grande', class: 'ck-heading_heading1' },
+                        { model: 'heading2', view: 'h2', title: 'Mediano', class: 'ck-heading_heading2' },
+                        { model: 'heading3', view: 'h3', title: 'Pequeño', class: 'ck-heading_heading3' }
+                    ]
+                },
+              }
+
               ClassicEditor
               .create( document.querySelector( '#descripcion_asignatura' ), {
               } ).then( editor => {

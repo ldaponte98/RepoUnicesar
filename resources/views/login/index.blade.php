@@ -75,6 +75,7 @@
 					@endif
 				<div id="mensajeprincipal" class="errores2">Esta cuenta no existe</div>
 			<form id="form-login" method="POST" action="{{route('usuario/login')}}">
+					@csrf
 					<input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
 					<span class="login100-form-title p-b-26">
 						Bienvenido

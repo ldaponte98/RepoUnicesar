@@ -13,4 +13,9 @@ class PlanDesarrolloAsignaturaDetalle extends Model
     {
     	return $this->hasMany(PlanDesarrolloAsignaturaUnidad::class, 'id_plan_desarrollo_asignatura_detalle');
     }
+
+    public function puede_eliminar()
+    {
+    	return true;
+    }
 }

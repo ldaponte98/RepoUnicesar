@@ -91,16 +91,11 @@
                     </script>
                   </div>
             </div>
-            
-
             <div class="col-sm-2">
                 <br>
                 <button type="submit" onclick="if($('#id_asignatura').val() != null && $('#id_periodo_academico').val() != null){ location.href = '/plan_desarrollo_asignatura/view/{{ session('id_tercero_usuario') }}/'+$('#id_asignatura').val()+'/'+$('#id_periodo_academico').val() }else{alert('Es necesario que escoja la asignatura y el periodo academico.')}" class="btn btn-info">Consultar</button>
             </div>
-
-                    
             </div>
-                  
           </div>
       </div>
   </div>
