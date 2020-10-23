@@ -116,7 +116,7 @@ class PlanAsignatura extends Model
                 $message = "Este plan de asignatura no se puede cargar debido a que hay docentes que han utilizado las unidades y competencias unicas actuales.";
             }
         }else{
-            $message = "No existe un plan de trabajo registrado con este periodo academico para la asignatura ".$this->asignatura->nombre.".";
+            $message = "No existe un plan de asignatura registrado con este periodo academico para la asignatura ".$this->asignatura->nombre.".";
         }
         
         return (object)[

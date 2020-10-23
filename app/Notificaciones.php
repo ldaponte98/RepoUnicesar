@@ -22,4 +22,6 @@ class Notificaciones extends Model
 	{
 	    return $this->belongsTo(Tercero::class, 'id_tercero_recibe');
 	}
+
+	
 }

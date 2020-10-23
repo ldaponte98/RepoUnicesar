@@ -259,20 +259,22 @@
                             <div class="dropdown-menu mailbox animated bounceInDown">
                                 <ul>
                                     <li>
-                                        <div class="drop-title">Notificaciones</div>
+                                        <div class="drop-title">Tienes {{ $total_notificaciones }} pendientes</div>
                                     </li>
                                     <li style="overflow: visible;">
-                                        <div class="slimScrollDiv" style="position: relative; overflow: visible; width: auto; height: 250px;"><div class="message-center" style="overflow: hidden; width: auto; height: 250px;">                                           
+                                        <div class="slimScrollDiv" style="position: relative; overflow: visible; width: auto; height: 250px;"><div class="message-center" style="width: auto; height: 250px;">                                           
                                         @php
                                             $notificaciones = Illuminate\Support\Facades\DB::table('notificaciones') 
                                                             ->where('id_tercero_recibe', $usuario->tercero->id_tercero)
                                                             ->orderBy('fecha', 'desc')
                                                             ->get();
+                                                            $cont = 0;
                                         @endphp
 
                                         @foreach ($notificaciones as $notificacion)
 
                                         @php
+
                                         $notificacion = (object) $notificacion;
                                         if ($notificacion->id_dominio_tipo == 6) $icono = "fa fa-calendar-check-o";
                                         if ($notificacion->id_dominio_tipo == 7) $icono = "fa fa-bullhorn";
@@ -296,6 +298,7 @@
                                             <div class="mail-contnet">
                                                 <h5>{{ \App\Dominio::find($notificacion->id_dominio_tipo)->dominio }}<span class="pull-right" style="font-size: 9px">{{ $fecha }}</span></h5> <span class="mail-desc">{{ $notificacion->notificacion }}</span> <span class="time">{{ $hora }}</span> 
                                                 @if ($notificacion->estado == 0)
+                                                @php $cont++ @endphp
                                                     <div class="notify"> 
                                                     <span class="heartbit"></span> <span class="point"></span>
                                                     </div>
@@ -361,6 +364,57 @@
                 </div>
             </nav>
         </header>
+
+        <style type="text/css">
+                            .cuadro_busqueta{
+                                background: white; 
+                                position: absolute;
+                                border-radius: 5px;
+                                padding: 15px;
+                                width: 400px;
+                            }
+
+                            .link_search:hover{
+                                color: #9bbf4c;
+                                cursor: pointer;
+                            }
+                            .link_search{
+                                color: #54667a;
+                            }
+                            .topbar .top-navbar .app-search .srh-btn {
+                                position: absolute;
+                                top: 13px;
+                                cursor: pointer;
+                                background: #ffffff;
+                                width: 15px;
+                                height: 15px;
+                                right: 10px;
+                                font-size: 14px;
+                            }
+
+                            @media(max-width: 767px){
+                                .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
+                                    padding-left: .75rem;
+                                    padding-right: .75rem;
+                                    font-size: 25px;
+                                    line-height: 50px;
+                                }
+
+                                .mini-sidebar .top-navbar .navbar-header {
+                                    width: 20px;
+                                    text-align: center;
+                                }
+                                .hidden-md-up {
+                                    margin-top: 15px !important;
+                                    margin-right: 10px !important;
+                                }
+                                #icon_message{
+                                    padding-top: 16px !important;
+                                }
+                            }
+                            
+
+                        </style>
 
         <!-- ============================================================== -->
         <!-- End Topbar header -->

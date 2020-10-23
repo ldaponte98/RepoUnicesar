@@ -219,7 +219,7 @@
                             tabla +="<td><center>"+plan_trabajo.periodo+"</center></td>"
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(plan_trabajo.estado=='Pendiente'){
-                                if(plan_trabajo.retraso != "En espera"){
+                                if(plan_trabajo.retraso != "En espera" && plan_trabajo.retraso != "Fechas sin definir"){
                                     acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;'"+
                                  "onclick=\"OpenModalNotificarRetraso("+plan_trabajo.id_tercero+",\'"+plan_trabajo.retraso+"\',\'"+plan_trabajo.periodo+"\')\">Notificar retraso</a></center></td>"
                                 }else{

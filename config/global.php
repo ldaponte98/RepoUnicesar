@@ -16,5 +16,7 @@ return [
     'notificacion_extra_pazo' => 8,
     'notificacion_retraso' => 9,
 
+
+    'email_general' => 'repounicesar@gmail.com'
 ]
 ?>

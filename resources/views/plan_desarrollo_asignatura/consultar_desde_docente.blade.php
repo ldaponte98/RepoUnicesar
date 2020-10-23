@@ -58,7 +58,7 @@
                 <div class="col-sm-5">
                     <div class="form-group">
                         @php
-                            $periodos_academicos = \App\PeriodoAcademico::all();
+                            $periodos_academicos = \App\PeriodoAcademico::orderBy('id_periodo_academico', 'desc')->get();
                         @endphp
                     <label style="color: black;"><b>Periodo academico</b></label>
                     <select onchange="buscar_carga_academica(this.value)" class="form-control hasDatepicker form-control-line" id="id_periodo_academico" name="id_periodo_academico">
@@ -72,6 +72,7 @@
                         $("#id_periodo_academico").select2({
                             width : '100%',
                         })
+
                     });
                     </script>
                   </div>

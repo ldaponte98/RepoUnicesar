@@ -10,6 +10,7 @@ use App\SeguimientoAsignatura;
 use App\ActividadesComplementarias;
 use App\PlanTrabajo;
 use App\PlanAsignatura;
+use App\PlanDesarrolloAsignatura;
 use Mail;
 
 class NotificacionesController extends Controller
@@ -147,7 +148,7 @@ class NotificacionesController extends Controller
                 $for = $notificacion->tercero_recibe->email;
                 
                 Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
-                    $msj->from("repounicesar@gmail.com","Universidad Popular Del Cesar");
+                    $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
                     $msj->subject($subject);
                     $msj->to($for);
                 });
@@ -174,6 +175,14 @@ class NotificacionesController extends Controller
                         }
                         if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
                             return redirect()->route('plan_trabajo/view');
+                        }
+                        if($notificacion->id_dominio_tipo_formato == config('global.desarrollo_asignatura')) {
+                            $plan_desarrollo_asignatura = PlanDesarrolloAsignatura::find($notificacion->id_formato);
+                            return redirect()->route('plan_desarrollo_asignatura/view',[
+                                'id_tercero' => $plan_desarrollo_asignatura->id_tercero,
+                                'id_asignatura' => $plan_desarrollo_asignatura->id_asignatura,
+                                'id_periodo_academico' => $plan_desarrollo_asignatura->id_periodo_academico
+                            ]);
                         }
                     case 8: //extra-plazo
                         if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {

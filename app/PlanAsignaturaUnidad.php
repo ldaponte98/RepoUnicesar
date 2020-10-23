@@ -13,4 +13,8 @@ class PlanAsignaturaUnidad extends Model
     {
     	return $this->hasMany(PlanAsignaturaEjeTematico::class, 'id_plan_asignatura_unidad');
     }
+    public function asignatura()
+	{
+		return $this->belongsTo(Asignatura::class, 'id_asignatura');
+	}
 }

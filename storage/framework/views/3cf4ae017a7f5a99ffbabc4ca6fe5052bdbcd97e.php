@@ -348,7 +348,7 @@
                 }
 
                  function OpenModalNotificarSolicitud(id_seguimiento) {
-                            var mensaje = "El docente "+'<?php echo e($usuario->tercero->getNameFull()); ?>'+" solicita un plazo exta para el seguimiento de asignatura "+id_seguimiento;
+                            var mensaje = "El docente "+'<?php echo e($usuario->tercero->getNameFull()); ?>'+" solicita un plazo extra para el seguimiento de asignatura "+id_seguimiento;
                             id_seguimiento_escojido = id_seguimiento
                             $("#msg_notificacion").val(mensaje)
                             $('#modalNotificacion').modal('show')

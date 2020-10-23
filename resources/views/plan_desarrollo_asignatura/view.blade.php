@@ -1,5 +1,4 @@
-@extends('layouts.main_docente')
-@section('header_content')
+@extends((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'))@section('header_content')
 <style type="text/css">
     .font-small{
         font-size: 13px;
@@ -51,24 +50,46 @@
                     Formato en proceso de desarrollo
                   </div>-->
                   @if(session('is_docente') and !$puede_editar)
-                    <div class="alert alert-warning">
-                      <strong>No esta dentro de las fechas validas para realizar este formato.</strong>
+                    <div class="alert alert-warning" id="msg_alert">
+                      <strong>No esta dentro de las fechas validas para modificar este formato.</strong>
                     </div>
+                    <script type="text/javascript">
+                      setTimeout(()=>{$("#msg_alert").fadeOut()},8000)
+                    </script>
                   @endif  
+                  @if($plan_desarrollo_asignatura->estado == "Enviado" and session('is_docente'))
+                  <div class="alert alert-info">
+                        Formato <strong>Enviado</strong>, ultima actualización {{ date('d-m-Y',strtotime($plan_desarrollo_asignatura->updated_at)) }} {{ date('H:i',strtotime($plan_desarrollo_asignatura->updated_at)) }}
+                  </div>
+                  @endif
+                  @if($plan_desarrollo_asignatura->estado == "Recibido" and session('is_docente'))
+                  <div class="alert alert-success">
+                        Formato <strong>Recibido</strong> por jefe de departamento, ultima actualización {{ date('d-m-Y',strtotime($plan_desarrollo_asignatura->updated_at)) }} {{ date('H:i',strtotime($plan_desarrollo_asignatura->updated_at)) }}
+                  </div>
+                  @endif
+                   @if($plan_desarrollo_asignatura->estado == "Pendiente" and session('is_docente'))
+                  <div class="alert alert-warning">
+                        Formato <strong>Pendiente</strong>, no se ha enviado ningun registro de este formato en este periodo academico. 
+                  </div>
+                  @endif
                   <div class="row">
                       <div class="col-sm-9">
                           <h3><b>Plan desarrollo asignatura de {{ $asignatura->nombre }}</b></h3>
                       </div> 
                       <div class="col-sm-3" style="display: flex;">
+                        @if(session('is_docente') == true)
                         <div class="btn-group">
                             <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-cog"></i>
                             </button>
-                            <div class="dropdown-menu animated slideInUp" style="">
-                                <a class="dropdown-item" onclick="$('#modal_cargar_existente').modal('show')" style="cursor: pointer;"><i class="fa fa-upload"></i> &nbsp;Cargar existente</a>
-                                <a class="dropdown-item" onclick="exportar_google_site()" style="cursor: pointer;"><i class="fa fa-google-plus-official"></i> &nbsp;Exportar para Google Site</a>
-                            </div>
+                            
+                              <div class="dropdown-menu animated slideInUp" style="">
+                                 @if($puede_editar) <a class="dropdown-item" onclick="$('#modal_cargar_existente').modal('show')" style="cursor: pointer;"><i class="fa fa-upload"></i> &nbsp;Cargar existente</a> @endif
+                                  <a class="dropdown-item" onclick="exportar_google_site()" style="cursor: pointer;"><i class="fa fa-google-plus-official"></i> &nbsp;Exportar para Google Site</a>
+                              </div>
+                           
                         </div>
+                         @endif
                           @php
                               $periodos_academicos = \App\PeriodoAcademico::all();
                           @endphp
@@ -165,13 +186,18 @@
                       @if($puede_editar)
                         <button id="btn_agregar_semana" class="btn btn-info pull-right" onclick="show_modal_detalle(false)"><i class="fa fa-plus"></i> Agregar semana</button>
                       @endif
+
                     </div>
-                    </div>
+                   
+                   </div>
                 </div>
                 <br>
                  
 
                 <center>@if($puede_editar) <button class="btn btn-info" onclick="guardar()"><i class="fa fa-save"></i>&nbsp;Guardar cambios</button>&nbsp;&nbsp;&nbsp; @endif  @if($plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)<a target="_blank" href="{{ route('plan_desarrollo_asignatura/imprimir', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura) }}" class="btn btn-danger"><i class="fa fa-print"></i> Imprimir</a> @endif</center>
+                <br>
+                
+                
                 </div>
 
                 <div class="modal fade"  data-focus="false" id="modal_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -262,6 +288,9 @@
           <button type="button" id="btn_eliminar_detalle" onclick="eliminar_detalle()" class="btn btn-danger">Eliminar</button>
           <button type="button" onclick="agregar_semana()" class="btn btn-info">Guardar</button>
         @endif
+
+        
+      
       </div>
     </div>
   </div>
@@ -271,6 +300,42 @@
             </div>
         </div>
 </div>
+
+
+<div class="modal fade" id="modal_cargar_existente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Carga de plan de desarrollo asignatura existente</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                      <div class="form-group" >
+                        <input type="hidden" id="tipo_detalle">
+                        <label for="recipient-name" class="col-form-label">Escoje el periodo academico del plan de desarrollo asignatura que desea cargar.</label>
+                          @php
+                            $periodos_academicos = \App\PeriodoAcademico::all();
+                          @endphp
+                          <select id="id_periodo_academico_carga_existente" class="custom-select" style="width: 100%" >
+                               <option value="">Seleccione...</option>
+                                @foreach ($periodos_academicos as $d)
+                                @if($d->id_periodo_academico != $periodo_academico->id_periodo_academico)  
+                                <option value="{{ $d->id_periodo_academico }}"  > Periodo {{ $d->periodo }}</option>
+                                @endif
+                                @endforeach
+                          </select>
+                      </div>
+                      
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" onclick="if($('#id_periodo_academico_carga_existente').val()){ window.open('/plan_desarrollo_asignatura/view/{{ $tercero->id_tercero }}/{{ $asignatura->id_asignatura }}/'+$('#id_periodo_academico_carga_existente').val(), '_blank')} else{ alert('Es necesario que seleccione el periodo academico.')}" class="btn btn-warning">Vista previa</button>
+                    <button type="button" onclick="cargar_plan_existente()" class="btn btn-info">Cargar</button>
+                  </div>
+                </div>
+              </div>
+        </div>
 <style type="text/css">
   .custom-control-label{
     font-size: 13px !important;
@@ -330,7 +395,9 @@
   }
   function pintar_datos_editar() {
     limpiar_modal()
+
     var detalle = this.detalles[posicion_detalle_editar]
+    this.semana_actual = detalle.semana
     if(detalle.puede_eliminar) $("#btn_eliminar_detalle").fadeIn()
     $("#titulo_modal_detalle").html("Modificacion en semana "+detalle.semana)
     $("#fecha_desarrollo_semana").data('daterangepicker').setStartDate(detalle.fecha_inicio);
@@ -895,6 +962,86 @@
 
     actualizar_tabla()
   }
+
+
+  function cargar_plan_existente() {
+        let id_periodo_academico = $("#id_periodo_academico_carga_existente").val()
+        if(!id_periodo_academico){
+          alert("Es necesario que seleccione el periodo academico.")
+          return false
+        }
+
+        confirmacion = confirm("¿Seguro que desea cargar la misma información de este plan de desarrollo asignatura con respecto al periodo academico seleccionado?");
+
+        if(confirmacion){
+          
+          var url = '{{ route('plan_desarrollo_asignatura/cargar_plan_existente') }}'
+          let _token = ""
+          $("[name='_token']").each(function() { _token = this.value })
+          let request = {
+              '_token' : _token,
+              'id_plan_desarrollo_asignatura' : '{{ $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura }}',
+              'id_asignatura' : '{{ $asignatura->id_asignatura }}',
+              'id_periodo_academico_actual' : '{{ $periodo_academico->id_periodo_academico }}',
+              'id_periodo_academico_carga' : id_periodo_academico,
+          }
+          $.blockUI({
+          message: '<h1>Cargando plan desarrollo de asignatura</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+          css: {
+              border: 'none',
+              padding: '15px',
+              backgroundColor: '#000',
+              '-webkit-border-radius': '10px',
+              '-moz-border-radius': '10px',
+              opacity: .8,
+          }});
+
+          $.post(url, request, (response) => {
+            $.unblockUI();
+            if(response.error == false){
+                  $("#modal_cargar_existente").modal("hide")
+                  toastr.success(response.message, 'Cargado correctamente', {timeOut: 5000})
+                  location.reload();
+            }else{
+                toastr.error(response.message, 'Error', {timeOut: 5000})
+            }
+          })
+          .fail((error)=>{
+              toastr.error("Ocurrio un error en el servicio. Por favor comuniquese con el encargado", 'Error', {timeOut: 5000})
+              $.unblockUI();
+          })
+        }
+      }
+
+      function exportar_google_site(){
+        let url = '@php
+          if ($plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)
+            echo route('plan_desarrollo_asignatura/obtener_vista', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura);
+          else
+            echo "";
+          @endphp'
+          if(url.trim()==""){
+              toastr.error('Este plan de desarrollo asignatura no se ha realizado para poder exportarlo', 'Error', {timeOut: 5000})
+          }else{
+            $.get(url, (response) => {
+              copiar(response)
+            }).fail((error) => {
+              toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
+            })
+          }
+        
+      }
+
+      function copiar(value){
+        var aux = document.createElement("input");
+        aux.setAttribute("value", value);
+        document.body.appendChild(aux);
+        aux.select();
+        document.execCommand("copy");
+        document.body.removeChild(aux);
+        toastr.options.newestOnTop = false;
+        toastr.info('Plan de desarrollo asignatura copiado para Google Site.', 'Copiada', {timeOut: 5000})
+      }
   
 </script>
 

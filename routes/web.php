@@ -120,10 +120,15 @@ Route::get('plan_asignatura/obtener_vista/{id_plan_asignatura}','PlanAsignaturaC
 Route::get('plan_desarrollo_asignatura/consultar_desde_docente',function () {
     return view('plan_desarrollo_asignatura.consultar_desde_docente');
 })->name('plan_desarrollo_asignatura/consultar_desde_docente');
-Route::get('plan_desarrollo_asignatura/view/{id_tercero}/{id_asignatura}/{id_periodo_academico}','PlanDesarrolloAsignaturaController@view')->name('plan_asignatura/view');
+Route::get('plan_desarrollo_asignatura/consultar',function () {
+    return view('plan_desarrollo_asignatura.consultar');
+})->name('plan_desarrollo_asignatura/consultar');
+Route::get('plan_desarrollo_asignatura/view/{id_tercero}/{id_asignatura}/{id_periodo_academico}','PlanDesarrolloAsignaturaController@view')->name('plan_desarrollo_asignatura/view');
 Route::post('plan_desarrollo_asignatura/obtener_fecha_sugerida','PlanDesarrolloAsignaturaController@obtener_fecha_sugerida')->name('plan_desarrollo_asignatura/obtener_fecha_sugerida');
 Route::post('plan_desarrollo_asignatura/editar','PlanDesarrolloAsignaturaController@editar')->name('plan_desarrollo_asignatura/editar');
 Route::get('plan_desarrollo_asignatura/imprimir/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@imprimir')->name('plan_desarrollo_asignatura/imprimir');
+Route::post('plan_desarrollo_asignatura/cargar_plan_existente','PlanDesarrolloAsignaturaController@cargar_plan_existente')->name('plan_desarrollo_asignatura/cargar_plan_existente');
+Route::get('plan_desarrollo_asignatura/obtener_vista/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@obtener_vista')->name('plan_desarrollo_asignatura/obtener_vista');
 
 
 

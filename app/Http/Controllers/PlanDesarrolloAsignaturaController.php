@@ -14,6 +14,8 @@ use App\PeriodoAcademico;
 use App\EjeTematico;
 use App\UnidadAsignatura;
 use App\Tercero;
+use App\Notificaciones;
+use Mail;
 
 class PlanDesarrolloAsignaturaController extends Controller
 {
@@ -33,11 +35,44 @@ class PlanDesarrolloAsignaturaController extends Controller
     		$plan_desarrollo_asignatura = new PlanDesarrolloAsignatura;
             $plan_desarrollo_asignatura->id_periodo_academico = $periodo_academico->id_periodo_academico;
             $plan_desarrollo_asignatura->id_asignatura = $asignatura->id_asignatura;
+            $plan_desarrollo_asignatura->id_tercero = $id_tercero;
+            $plan_desarrollo_asignatura->estado = "Pendiente";
     	}
-        if(session('is_admin') == true){
-            return view('plan_desarrollo_asignatura.view_admin', compact(['plan_desarrollo_asignatura','tercero', 'asignatura', 'periodo_academico']));
+        if(session('is_admin') == true and $plan_desarrollo_asignatura->estado == "Enviado"){
+            $this->marcar_revision($plan_desarrollo_asignatura);
         }
     	return view('plan_desarrollo_asignatura.view', compact(['plan_desarrollo_asignatura','tercero', 'asignatura', 'periodo_academico', 'plan_asignatura']));
+    }
+
+    public function marcar_revision($plan_desarrollo_asignatura)
+    {
+                $notificacion = new Notificaciones;
+                $notificacion->notificacion = 'El jefe de departamento ha revisado el plan de desarrollo de la asignatura '.$plan_desarrollo_asignatura->asignatura->nombre." - ".$plan_desarrollo_asignatura->asignatura->codigo; 
+                $notificacion->id_tercero_envia = session('id_tercero_usuario');
+                $notificacion->id_tercero_recibe = $plan_desarrollo_asignatura->id_tercero;
+                $notificacion->id_dominio_tipo = 6;
+                $notificacion->id_formato = $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura;
+                $notificacion->id_dominio_tipo_formato = config('global.desarrollo_asignatura');
+                $vista_email = "";
+                if ($notificacion->save()) {
+                    //aca enviamos el email de revision
+                    $vista_email = "email.email_formato_revisado";
+                    $subject = "Revisión de Plan de desarrollo asignatura";
+                    $data_email = array(
+                                "formato" => "Plan de desarrollo asignatura",
+                                "periodo_academico" => $plan_desarrollo_asignatura->periodo_academico->periodo,
+                                "asignatura" => $plan_desarrollo_asignatura->asignatura->nombre." - ".$plan_desarrollo_asignatura->asignatura->codigo,
+                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
+                            );
+                    $for = $notificacion->tercero_recibe->email;
+                    Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
+                        $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
+                        $msj->subject($subject);
+                        $msj->to($for);
+                    });
+                }
+                    $plan_desarrollo_asignatura->estado = 'Recibido';
+                    $plan_desarrollo_asignatura->save();
     }
 
     public function obtener_fecha_sugerida(Request $request)
@@ -75,8 +110,10 @@ class PlanDesarrolloAsignaturaController extends Controller
                 $plan_desarrollo->id_tercero = session('id_tercero_usuario');
                 $plan_desarrollo->id_asignatura = $post->id_asignatura;
                 $plan_desarrollo->id_periodo_academico = $post->id_periodo_academico;
-                $plan_desarrollo->save();
             }
+            $plan_desarrollo->updated_at = date('Y-m-d H:i:s');
+            $plan_desarrollo->save();
+
 
             $result_delete = DB::statement('delete from plan_desarrollo_asignatura_eje_tematico where id_plan_desarrollo_asignatura = '.$plan_desarrollo->id_plan_desarrollo_asignatura);
             $result_delete = DB::statement('delete from plan_desarrollo_asignatura_unidad where id_plan_desarrollo_asignatura = '.$plan_desarrollo->id_plan_desarrollo_asignatura);
@@ -155,6 +192,76 @@ class PlanDesarrolloAsignaturaController extends Controller
 
     public function imprimir($id_plan_desarrollo_asignatura)
     {
-        echo "<br><br><br><center><h1>Formato en proceso de desarrollo</h1></center>";
+        $plan_desarrollo_asignatura = PlanDesarrolloAsignatura::find($id_plan_desarrollo_asignatura);
+        if($plan_desarrollo_asignatura){
+            $asignatura = $plan_desarrollo_asignatura->asignatura;
+            $periodo_academico = $plan_desarrollo_asignatura->periodo_academico;
+            $tercero = $plan_desarrollo_asignatura->tercero;
+            $pdf = \PDF::loadView('plan_desarrollo_asignatura.pdf', compact([
+                'plan_desarrollo_asignatura',
+                'asignatura',
+                'periodo_academico',
+                'tercero'
+            ]));/*
+            return view('plan_asignatura.pdf', compact([
+                'plan_asignatura',
+                'asignatura',
+                'periodo_academico'
+            ]));*/
+
+            return $pdf->stream("Plan de desarrollo asignatura ".$asignatura->nombre." de ".$periodo_academico->periodo.".pdf");
+        }
+    }
+
+    public function cargar_plan_existente(Request $request)
+    {
+        $post = $request->all();
+        $error = true;
+        $message = "";
+        if($post){
+            $post = (object) $post;
+            //validamos si puede cargar desde cero el plan de asignatura siempre y cuando 
+            //no hayan utilizado algun docente alguna de las unidades del plan
+            $plan_desarrollo_asignatura_actual = new PlanDesarrolloAsignatura;
+            if($post->id_plan_desarrollo_asignatura)
+                $plan_desarrollo_asignatura_actual = PlanDesarrolloAsignatura::find($post->id_plan_desarrollo_asignatura);
+ 
+            $plan_desarrollo_asignatura_actual->id_tercero = session('id_tercero_usuario');
+            $plan_desarrollo_asignatura_actual->id_asignatura = $post->id_asignatura;
+            $plan_desarrollo_asignatura_actual->id_periodo_academico = $post->id_periodo_academico_actual;
+
+            //aca validamos todo para poder cargar
+            $carga = $plan_desarrollo_asignatura_actual->cargar_plan_existente($post->id_periodo_academico_carga);
+            $error = $carga->error;
+            $message = $carga->message;
+        }else{
+            $message = "Error con la información enviada.";
+        }
+
+        return response()->json([
+            'error' => $error,
+            'message' => $message
+        ]);
+
+    }
+
+
+    public function obtener_vista($id_plan_desarrollo_asignatura)
+    {
+        $plan_desarrollo_asignatura = PlanDesarrolloAsignatura::find($id_plan_desarrollo_asignatura);
+
+        if($plan_desarrollo_asignatura){
+            $asignatura = $plan_desarrollo_asignatura->asignatura;
+            $periodo_academico = $plan_desarrollo_asignatura->periodo_academico;
+            $tercero = $plan_desarrollo_asignatura->tercero;
+            $vista = view('plan_desarrollo_asignatura.pdf', compact([
+                'plan_desarrollo_asignatura',
+                'asignatura',
+                'periodo_academico',
+                'tercero'
+            ]));
+
+            return response()->json($vista->render());
+        }
     }
 }

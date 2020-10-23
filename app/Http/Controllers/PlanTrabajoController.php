@@ -232,18 +232,23 @@ class PlanTrabajoController extends Controller
                         $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo_academico->id_periodo_academico)
                                 ->where('id_dominio_tipo_formato',config('global.plan_trabajo'))
                                 ->first();
-
-                        if ($fecha_actual <= $fechas_de_entrega->fechafinal1){
-                            $plan['retraso'] = "En espera";
+                        if($fechas_de_entrega){
+                            if ($fecha_actual <= $fechas_de_entrega->fechafinal1){
+                                $plan['retraso'] = "En espera";
+                            }else{
+                                $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
+                                $fecha_actual = date_create($fecha_actual);
+                                $fechacierre = date_create($fechacierre);
+                                $diferencia = date_diff($fecha_actual,$fechacierre);
+                                $dias = $diferencia->days;
+                                $horas = $diferencia->h;
+                                $plan['retraso'] = "Retrasado $dias dias y $horas horas";
+                            }
                         }else{
-                            $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
-                            $fecha_actual = date_create($fecha_actual);
-                            $fechacierre = date_create($fechacierre);
-                            $diferencia = date_diff($fecha_actual,$fechacierre);
-                            $dias = $diferencia->days;
-                            $horas = $diferencia->h;
-                            $plan['retraso'] = "Retrasado $dias dias y $horas horas";
+                            $plan['retraso'] = "Fechas sin definir";
                         }
+
+                        
                     }
                     $plan_trabajo_progreso = PlanTrabajo::find($plan['id_plan_trabajo']);
                     if($plan_trabajo_progreso){
@@ -282,7 +287,7 @@ class PlanTrabajoController extends Controller
 
         $plan_trabajo = PlanTrabajo::find($id_plan_trabajo);
         if($plan_trabajo){
-            if ($plan_trabajo->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
+            if ($plan_trabajo->estado == 'Enviado' and session('is_admin')==true) {
                 $notificacion = new Notificaciones;
                 $notificacion->notificacion = 'El administrador te ah revisado el plan de trabajo del periodo '.$plan_trabajo->periodo_academico->periodo;
                 $notificacion->id_tercero_envia = session('id_tercero_usuario');
@@ -302,7 +307,7 @@ class PlanTrabajoController extends Controller
                             );
                     $for = $notificacion->tercero_recibe->email;
                     Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
-                        $msj->from("ldaponte98@gmail.com","Universidad Popular Del Cesar");
+                        $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
                         $msj->subject($subject);
                         $msj->to($for);
                     });

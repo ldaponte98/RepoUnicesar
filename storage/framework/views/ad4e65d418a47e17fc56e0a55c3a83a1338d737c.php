@@ -60,6 +60,7 @@
 <script src="<?php echo e(asset('ckeditor.js')); ?>"></script>
 <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<script src="https://unpkg.com/feather-icons"></script>
     <style type="text/css">
         body {
             --ck-z-default: 100;
@@ -232,7 +233,7 @@
 
 
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" id="2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
+                            <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark" href="" id="icon_message" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-email"></i>
                                 <div class="notify"> 
                                      <?php
                                      $total_notificaciones = \App\Notificaciones::where('estado', 0) 
@@ -249,10 +250,10 @@
                             <div class="dropdown-menu mailbox animated bounceInDown" aria-labelledby="2">
                                 <ul>
                                     <li>
-                                        <div class="drop-title">Tienes <?php echo e($total_notificaciones); ?> notificaciones</div>
+                                        <div class="drop-title">Tienes <?php echo e($total_notificaciones); ?> pendientes</div>
                                     </li>
                                     <li style="overflow: visible;">
-                                        <div class="slimScrollDiv" style="position: relative; overflow: visible hidden; width: auto; height: 250px;"><div class="message-center" style="overflow: hidden; width: auto; height: 250px;">
+                                        <div class="slimScrollDiv" style="position: relative; overflow: visible ; width: auto; height: 250px;"><div class="message-center" style=" width: auto; height: 250px;">
                                             <!-- Message -->
                                        <?php
                                             $notificaciones = Illuminate\Support\Facades\DB::table('notificaciones') 
@@ -312,11 +313,43 @@
                             .link_search{
                                 color: #54667a;
                             }
+                            .topbar .top-navbar .app-search .srh-btn {
+                                position: absolute;
+                                top: 13px;
+                                cursor: pointer;
+                                background: #ffffff;
+                                width: 15px;
+                                height: 15px;
+                                right: 10px;
+                                font-size: 14px;
+                            }
+
+                            @media(max-width: 767px){
+                                .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
+                                    padding-left: .75rem;
+                                    padding-right: .75rem;
+                                    font-size: 25px;
+                                    line-height: 50px;
+                                }
+
+                                .mini-sidebar .top-navbar .navbar-header {
+                                    width: 20px;
+                                    text-align: center;
+                                }
+                                .hidden-md-up {
+                                    margin-top: 15px !important;
+                                    margin-right: 10px !important;
+                                }
+                                #icon_message{
+                                    padding-top: 16px !important;
+                                }
+                            }
+                            
 
                         </style>
                         <li class="nav-item hidden-sm-down">
                             <form class="app-search p-l-20">
-                                <input type="text" class="form-control" placeholder="Buscar aqui..."> <a class="srh-btn"><i class="ti-search"></i></a>
+                                <input type="text" class="form-control" placeholder="Buscar aqui..."> <a class="srh-btn"><i class="ti-search mt-3"></i></a>
                                 <div class="cuadro_busqueta" id="ul_listado" style="display: none;">
                                     <div class="ul-filter"><a class="link_search" href="ww.com">LUIS DANIEL APONTE DAZA </a></div><hr>
                                     <div class="ul-filter"><a class="link_search" href="ww.com">ALFREDO JOSE MAESTRE BALENZUELA</a></div>
@@ -391,17 +424,19 @@
                 </div>
                 <ul id="sidebarnav" class="in">
                         <li >
-                            <a class="waves-effect "><i class="fa fa-window-restore m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Tablero</font></font></a>
+                            <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>
+                            <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="user" class="m-r-10" aria-hidden="true"></i></i>Mi perfil</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(route('docente/listado_docentes')); ?>" class="waves-effect"><i class="fa fa-users m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docentes</font></font></a>
+
+
+                            <a href="<?php echo e(route('docente/listado_docentes')); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="users" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docentes</font></font></a>
                         </li>
                         
                         <li >
-                            <a href="<?php echo e(route('asignatura/listado_asignaturas')); ?>" class="waves-effect "><i class="fa fa-book m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
+                            <a href="<?php echo e(route('asignatura/listado_asignaturas')); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="book" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
                         </li>
 
                          
@@ -416,13 +451,16 @@
                                             ->count();
                         ?> 
                         <li class="">
-                            <a class="has-arrow " href="#" aria-expanded="false"><i class="mdi mdi-file-chart m-r-10"></i><span class="hide-menu">Reportes</span></a>
+                            <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Gestion docencia</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li>
-                                    <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect">Plan de trabajo</a>
+                                    <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect" style="font-size:14px;">Plan de trabajo</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo e(route('plan_asignatura/buscar_asignatura')); ?>" class="waves-effect">Plan de asignatura</a>
+                                    <a href="<?php echo e(route('plan_asignatura/buscar_asignatura')); ?>" class="waves-effect"style="font-size:14px;">Plan de asignatura</a>
+                                </li>
+                                <li>
+                                    <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar')); ?>" class="waves-effect"style="font-size:14px;">Plan desarrollo asignatura</a>
                                 </li>
                                 <li class="">
                                     <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
@@ -444,7 +482,7 @@
 
                                 <li>
 
-                        <a class="has-arrow " href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
+                        <a class="has-arrow " style="display: flex !important;" href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
                             <?php
                             
                         $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
@@ -469,7 +507,7 @@
                         </li>
                        
                         <li class="">
-                            <a class="has-arrow" href="#" aria-expanded="false"><i class="fa fa-cog m-r-10"></i><span class="hide-menu">Ajuste de fechas</span></a>
+                            <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i> Ajuste de fechas</a>
                             <ul aria-expanded="false" class="collapse">
                                 <li><a href="<?php echo e(route('fechas/plazo_extra_por_docente')); ?>">Plazo por docente</a></li>
                                 <li><a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>">Fechas Generales</a></li>
@@ -588,7 +626,9 @@
     <!--<script src="assets/plugins/jquery/jquery.min.js"></script>-->
     <!-- Bootstrap tether Core JavaScript -->
    
-   
+   <script>
+      feather.replace()
+    </script>
     <script src=" <?php echo e(asset('assets/plugins/bootstrap/js/tether.min.js')); ?> "></script>
     <script src="<?php echo e(asset('assets/plugins/bootstrap/js/bootstrap.min.js')); ?>"></script>
     <!-- slimscrollbar scrollbar JavaScript -->

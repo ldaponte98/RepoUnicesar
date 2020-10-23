@@ -830,14 +830,25 @@
                actualizar_tabla_unidades()
                actualizar_tablas()
             }
+            
 
             function exportar_google_site(){
-              let url = '{{ route('plan_asignatura/obtener_vista', $plan_asignatura->id_plan_asignatura) }}'
-              $.get(url, (response) => {
-                copiar(response)
-              }).fail((error) => {
-                toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
-              })
+              let url = '@php
+                if ($plan_asignatura->id_plan_asignatura)
+                  echo route('plan_asignatura/obtener_vista', $plan_asignatura->id_plan_asignatura);
+                else
+                  echo "";
+                @endphp'
+                if(url.trim()==""){
+                    toastr.error('Este plan de asignatura no se ha realizado para poder exportarlo', 'Error', {timeOut: 5000})
+                }else{
+                  $.get(url, (response) => {
+                    copiar(response)
+                  }).fail((error) => {
+                    toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
+                  })
+                }
+              
             }
 
             function copiar(value){
@@ -848,7 +859,7 @@
               document.execCommand("copy");
               document.body.removeChild(aux);
               toastr.options.newestOnTop = false;
-              toastr.info('Pagina copiada para Google Site.', 'Copiada', {timeOut: 5000})
+              toastr.info('Plan de asignatura copiado para Google Site.', 'Copiada', {timeOut: 5000})
             }
 
             function cargar_plan_existente() {
@@ -858,7 +869,7 @@
                 return false
               }
 
-              confirmacion = confirm("¿Seguro que desea cargar la misma información de esta asignatura con respecto al periodo academico seleccionado?");
+              confirmacion = confirm("¿Seguro que desea cargar la misma información de este plan de asignatura con respecto al periodo academico seleccionado?");
 
               if(confirmacion){
                 $("#modal_cargar_existente").modal("hide")
