@@ -34,13 +34,13 @@
                                     <td><center>{{ $plan_desarrollo->periodo }}</center></td>
 		                            <td><center>Sin enviar</center></td>
 		                            <td><center>{{ $plan_desarrollo->retraso }}</center></td>
-		                               
+		                            <td>   
 		                            @if($plan_desarrollo->retraso != "Fechas sin definir" and $plan_desarrollo->retraso != "En espera")
-                                    <td>
-
                                         <center>
-                                        <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetraso({{ $plan_desarrollo->id_periodo }},'{{ $plan_desarrollo->periodo }}',{{ $plan_desarrollo->id_asignatura }},'{{ $plan_desarrollo->asignatura }}','{{ $plan_desarrollo->retraso }}')">Notificar retraso</a>
-                                    </center></td>
+                                            <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetraso({{ $plan_desarrollo->id_periodo }},'{{ $plan_desarrollo->periodo }}',{{ $plan_desarrollo->id_asignatura }},'{{ $plan_desarrollo->asignatura }}','{{ $plan_desarrollo->retraso }}')">Notificar retraso</a>
+                                        </center>
+                                    @endif
+                                    </td>
                                     <td>
                                     @if ($plan_desarrollo->retraso != "Tiene plazo-extra")
                                         
@@ -49,7 +49,7 @@
                                         </center>
                                     @endif
                                     </td>  
-                                    @endif
+                                    
 		                        </tr> 
                             @php 
                                 $cont++; 
@@ -213,16 +213,16 @@
                 'fechas_plazo' : fechas_plazo,
             }
             $.blockUI({
-                        message: '<h1>Registrando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
-                        css: {
-                            border: 'none',
-                            padding: '15px',
-                            backgroundColor: '#000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .8,
-                            color: '#fff'
-                        }});
+                message: '<h1>Registrando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                css: {
+                    border: 'none',
+                    padding: '15px',
+                    backgroundColor: '#000',
+                    '-webkit-border-radius': '10px',
+                    '-moz-border-radius': '10px',
+                    opacity: .8,
+                    color: '#fff'
+                }});
             $.post(url, data, (response)=>{
                 $.unblockUI();
                 if(response.error==false){
