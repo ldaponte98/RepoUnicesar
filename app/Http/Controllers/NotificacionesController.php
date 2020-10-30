@@ -194,6 +194,9 @@ class NotificacionesController extends Controller
                         if($notificacion->id_dominio_tipo_formato == config('global.plan_trabajo')) {
                             return redirect()->route('plan_trabajo/view');
                         }
+                        if($notificacion->id_dominio_tipo_formato == config('global.desarrollo_asignatura')) {
+                            return redirect()->route('plan_desarrollo_asignatura/consultar_desde_docente');
+                        }
                     case 9: //retraso
                         if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
                             return redirect()->route('seguimiento/consultar');

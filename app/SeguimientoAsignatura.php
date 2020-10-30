@@ -195,6 +195,7 @@ class SeguimientoAsignatura extends Model
                                        ->where('estado', 1)
                                        ->first();
             if ($plazo_extra) {
+                return "Tiene plazo-extra";
                 $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
                 $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
                 if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {

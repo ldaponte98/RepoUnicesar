@@ -147,6 +147,14 @@ class Tercero extends Model
                     $plan['id_plan_trabajo'] = null;
                     $plan['estado'] = 'Pendiente';
                     $plan['retraso'] = PlanTrabajo::retraso($this->id_tercero, $periodo_academico->id_periodo_academico);
+                    if ($plan['retraso'] == "Tiene plazo-extra") {
+                    	$plazo = PlazoDocente::where('id_tercero', $this->id_tercero)
+				                   ->where('id_periodo_academico', $periodo_academico->id_periodo_academico)
+				                   ->where('id_dominio_tipo_formato', config('global.plan_trabajo'))
+				                   ->where('estado', 1)
+				                   ->first();
+				        $plan['id_plazo'] = $plazo->id_plazo_docente;
+                    }
                 }
 
                 $plan_trabajo_progreso = PlanTrabajo::find($plan['id_plan_trabajo']);
@@ -214,6 +222,16 @@ class Tercero extends Model
                         $plan['id_plan_desarrollo_asignatura'] = null;
                         $plan['estado'] = 'Pendiente';
                         $plan['retraso'] = PlanDesarrolloAsignatura::retraso($this->id_tercero, $periodo_academico->id_periodo_academico, $asignatura->id_asignatura);
+                        if ($plan['retraso'] == "Tiene plazo-extra") {
+                        	$plazo = PlazoDocente::where('id_tercero', $this->id_tercero)
+					                   ->where('id_periodo_academico', $id_periodo_academico)
+					                   ->where('id_asignatura', $id_asignatura)
+					                   ->where('id_dominio_tipo_formato', config('global.desarrollo_asignatura'))
+					                   ->where('estado', 1)
+					                   ->first();
+					        $plan['id_plazo'] = $plazo->id_plazo_docente;
+
+                        }
                         
                     }
 

@@ -2,7 +2,7 @@
     $usuario = \App\Usuario::find(session('id_usuario'));
 @endphp
 <br>
-<input type="search" class="form-control" id="txtfiltropendientes" placeholder="Consulta por cualquier campo">
+<input type="search" class="form-control" id="seguimientotxtfiltropendientes" placeholder="Consulta por cualquier campo">
 <br>
 <div class="table-responsive">
                 <table class="table">
@@ -21,7 +21,7 @@
                     		color: black !important;
                     	}
                     </style>
-                    <tbody id="bodytable">
+                    <tbody id="seguimientobodytable">
 
                     	@foreach ($docente->seguimientos_asignatura as $seguimiento)
 						        @if ($seguimiento->estado == 'Pendiente')
@@ -37,19 +37,29 @@
                                     
 
                                     <td>
-                                        @if ($seguimiento->retraso() != "En espera")
+                                        @if ($seguimiento->retraso() != "Fechas sin definir" and $seguimiento->retraso() != "En espera")
                                         <center>
-                                            <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetraso({{ $seguimiento->id_seguimiento }},'{{ $usuario->tercero->getNameFull() }}','{{ $seguimiento->retraso() }}','{{ $seguimiento->asignatura->nombre }}', '{{ $seguimiento->grupo->codigo }}',{{ $seguimiento->corte }}, '{{ $seguimiento->grupo->periodo_academico->periodo }}')">Notificar retraso</a>
+                                            <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetrasoSeguimiento({{ $seguimiento->id_seguimiento }},'{{ $usuario->tercero->getNameFull() }}','{{ $seguimiento->retraso() }}','{{ $seguimiento->asignatura->nombre }}', '{{ $seguimiento->grupo->codigo }}',{{ $seguimiento->corte }}, '{{ $seguimiento->grupo->periodo_academico->periodo }}')">Notificar retraso</a>
                                         </center>
                                         @endif
                                     </td>
                                     <td>
-                                        @if ($seguimiento->retraso() != "Tiene plazo-extra" and $seguimiento->retraso() != "En espera")
+                                        @if ($seguimiento->retraso() != "Fechas sin definir" and $seguimiento->retraso() != "En espera")
                                         
                                         <center>
-
-                                        <a style="color: blue; cursor: pointer;" onclick="OpenModalExtraPlazo({{ $seguimiento->id_seguimiento }})">Extra plazo</a>
-                                    </center>
+                                            @if($seguimiento->retraso() != "Tiene plazo-extra")
+                                                <a style="color: blue; cursor: pointer;" onclick="OpenModalExtraPlazoSeguimiento({{ $seguimiento->id_seguimiento }})">Extra plazo</a>
+                                            @else
+                                                @php
+                                                    $plazo_extra = \App\PlazoDocente::where('id_tercero', $seguimiento->id_tercero)
+                                                                   ->where('id_formato', $seguimiento->id_seguimiento)
+                                                                   ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
+                                                                   ->where('estado', 1)
+                                                                   ->first();
+                                                @endphp
+                                                <a style="color: blue; cursor: pointer;" onclick="OpenModalVerExtraPlazoSeguimiento({{ $plazo_extra->id_plazo_docente }})">Ver extra plazo</a>
+                                            @endif
+                                        </center>
                                     @endif
                                     </td> 
 
@@ -60,11 +70,11 @@
                 </table>
             </div>
 
-            <div class="modal fade" id="modalNotificacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="seguimientomodalNotificacion" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Notificar Retraso</h5>
+                    <h5 class="modal-title" id="seguimientoexampleModalLongTitle">Notificar Retraso</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -73,22 +83,22 @@
                     <!--Material textarea-->
                     <div class="md-form">
                       <label for="msg_notificacion">Mensaje de notificacion</label>
-                      <textarea id="msg_notificacion" class="md-textarea form-control" rows="6"></textarea>
+                      <textarea id="seguimientomsg_notificacion" class="md-textarea form-control" rows="6"></textarea>
                     </div>
 
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="NotificarRetraso()">Enviar</button>
+                    <button type="button" class="btn btn-primary" onclick="NotificarRetrasoSeguimiento()">Enviar</button>
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="modal fade" id="modalExtraPlazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal fade" id="seguimientomodalExtraPlazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
               <div class="modal-dialog modal-dialog-centered" role="document">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Plazo extra</h5>
+                    <h5 class="modal-title" id="seguimientoexampleModalLongTitle">Plazo extra</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                       <span aria-hidden="true">&times;</span>
                     </button>
@@ -96,14 +106,41 @@
                   <div class="modal-body">
                     <!--Material textarea-->
                     <div class="md-form">
-                      <input id="id_seguimiento_para_plazo" type="hidden" name="">
+                      <input id="seguimientoid_seguimiento_para_plazo" type="hidden" name="">
                       <label >Lapso de fecha</label>
-                      <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="lapso_de_plazo_extra" type="text" autocomplete="off">
+                      <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="seguimientolapso_de_plazo_extra" type="text" autocomplete="off">
                     </div>
 
                   </div>
                   <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="DarExtraPlazo()">Dar extra plazo</button>
+                    <button type="button" class="btn btn-primary" onclick="DarExtraPlazoSeguimiento()">Dar extra plazo</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="seguimientomodalVerExtraPlazo" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="seguimientoexampleModalLongTitle">Plazo extra</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <!--Material textarea-->
+                    <div class="md-form">
+                      <input id="seguimientoid_plazo_escojido" type="hidden" name="">
+                      <label >Usuario que otorga</label>
+                      <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="seguimientoplazo_tercero_otorga" type="text" autocomplete="off">
+                      <br><br><label >Lapso de fecha</label>
+                      <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="seguimientoplazo_fechas" type="text" autocomplete="off">
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-info" onclick="ActualizarPlazoExtraSeguimiento()">Actualizar</button>
+                    <button type="button" class="btn btn-warning" onclick="CancelarPlazoExtraSeguimiento()">Cancelar plazo</button>
                   </div>
                 </div>
               </div>
@@ -114,7 +151,7 @@
 
     <script>
         $(document).ready(function(){
-            $('#lapso_de_plazo_extra').daterangepicker({
+            $('#seguimientolapso_de_plazo_extra').daterangepicker({
                       autoApply: true,
                       autoUpdateInput: true,
                       locale: {
@@ -122,30 +159,129 @@
                         cancelLabel: 'Clear'
                       }
             });
-            $('#txtfiltropendientes').keyup(function () {
+            $('#seguimientoplazo_fechas').daterangepicker({
+                      autoApply: true,
+                      autoUpdateInput: true,
+                      locale: {
+                        format: 'DD/MM/YYYY',
+                        cancelLabel: 'Clear'
+                      }
+            });
+            $('#seguimientotxtfiltropendientes').keyup(function () {
               var rex = new RegExp($(this).val(), 'i');
-                $('#bodytable tr').hide();
-                $('#bodytable tr').filter(function () {
+                $('#seguimientobodytable tr').hide();
+                $('#seguimientobodytable tr').filter(function () {
                     return rex.test($(this).text());
                 }).show();
             })
         })
        
         var id_seguimiento_escojido = 0
-        function OpenModalNotificarRetraso(id_seguimiento,name_tercero_envia, retraso, asignatura, grupo,corte, periodo_academico) {
+        function OpenModalNotificarRetrasoSeguimiento(id_seguimiento,name_tercero_envia, retraso, asignatura, grupo,corte, periodo_academico) {
             var mensaje = "El administrador "+name_tercero_envia+" te notifica retraso de "+retraso+" en el seguimiento de asignatura con codigo "+id_seguimiento+ " con relacion a la asignatura "+asignatura+" para el grupo "+grupo+" perteneciente al "+corte+" corte del periodo academico "+periodo_academico+".";
             id_seguimiento_escojido = id_seguimiento
-            $("#msg_notificacion").val(mensaje)
-            $('#modalNotificacion').modal('show')
+            $("#seguimientomsg_notificacion").val(mensaje)
+            $('#seguimientomodalNotificacion').modal('show')
         }
-        function OpenModalExtraPlazo(id_seguimiento) {
-            $("#id_seguimiento_para_plazo").val(id_seguimiento)
-            $('#modalExtraPlazo').modal('show')
+        function OpenModalExtraPlazoSeguimiento(id_seguimiento) {
+            $("#seguimientoid_seguimiento_para_plazo").val(id_seguimiento)
+            $('#seguimientomodalExtraPlazo').modal('show')
         }
 
-        function NotificarRetraso() {
-            $('#modalNotificacion').modal('hide')
-            var mensaje = $("#msg_notificacion").val()
+        function OpenModalVerExtraPlazoSeguimiento(id_plazo) {
+            let url = '/plazo_docente/buscar/'+id_plazo
+            $("#seguimientoid_plazo_escojido").val(id_plazo)
+            $.get(url, (response)=>{
+                if(response.error==false){
+                    $("#seguimientoplazo_tercero_otorga").val(response.data.tercero_otorga)
+                    $('#seguimientoplazo_fechas').data('daterangepicker').setStartDate(response.data.fecha_inicio)
+                    $('#seguimientoplazo_fechas').data('daterangepicker').setEndDate(response.data.fecha_fin)
+                    $('#seguimientomodalVerExtraPlazo').modal('show')
+                }else{
+                    toastr.error(response.message, 'Error', {timeOut: 3000})
+                }
+            }).fail((error)=>{
+               toastr.error('Ocurrio un error al consultar la información del plazo extra', 'Error', {timeOut: 3000})
+            })
+           
+        }
+
+        function ActualizarPlazoExtraSeguimiento() {
+            r = confirm("¿Seguro que desea modificar la fecha de este plazo extra?")
+            if(r == true){
+                let id_plazo = $("#seguimientoid_plazo_escojido").val()
+                $('#seguimientomodalVerExtraPlazo').modal('hide')
+                var data_form = $("#_form").serialize()
+                var url = '{{ route('plazo_docente/actualizar') }}'
+                var fechas_plazo = $("#seguimientoplazo_fechas").val();
+                var token = data_form.split("&")[0].split("=")[1];
+                var data = {
+                    '_token' : token,
+                    'id_plazo' : id_plazo,
+                    'fechas_plazo' : fechas_plazo,
+                }
+                $.blockUI({
+                            message: '<h1>Actualizando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#seguimiento000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .8,
+                                color: '#seguimientofff'
+                            }});
+                $.post(url, data, (response)=>{
+                    $.unblockUI();
+                    if(response.error==false){
+                        toastr.success(response.mensaje, 'Proceso exitoso', {timeOut: 3000})
+                        location.reload();
+                    }else{
+                    toastr.error(response.mensaje, 'Error', {timeOut: 3000})
+                    }
+                }).fail((error)=>{
+                    toastr.error("Ocurrio un error en el servidor", 'Error', {timeOut: 3000})
+                     $.unblockUI();
+                });
+            }
+        }
+
+        function CancelarPlazoExtraSeguimiento() {
+            r = confirm("¿Seguro que desea cancelar este plazo extra?")
+            if(r == true){
+                $('#seguimientomodalVerExtraPlazo').modal('hide')
+                let id_plazo = $("#seguimientoid_plazo_escojido").val()
+                let url = '/plazo_docente/cancelar/'+id_plazo
+                $.blockUI({
+                    message: '<h1>Cancelando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#seguimiento000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .8,
+                        color: '#seguimientofff'
+                    }});
+                $.get(url, (response)=>{
+                    $.unblockUI();
+                    if(response.error==false){
+                        toastr.success(response.mensaje, 'Proceso exitoso', {timeOut: 3000})
+                        location.reload();
+                    }else{
+                        toastr.error(response.mensaje, 'Error', {timeOut: 3000})
+                    }
+                }).fail((error)=>{
+                    $.unblockUI();
+                   toastr.error('Ocurrio un error al cancelar del plazo extra', 'Error', {timeOut: 3000})
+                })
+            }
+           
+        }
+
+        function NotificarRetrasoSeguimiento() {
+            $('#seguimientomodalNotificacion').modal('hide')
+            var mensaje = $("#seguimientomsg_notificacion").val()
 
             if (mensaje.lenght == 0) {
                 alert("Debe llenar el campo requerido")
@@ -175,12 +311,12 @@
             });
         }
 
-        function DarExtraPlazo() {
-            $('#modalExtraPlazo').modal('hide')
-            var data_form = $("#_form").serialize()
+        function DarExtraPlazoSeguimiento() {
+            $('#seguimientomodalExtraPlazo').modal('hide')
+            var data_form = $("#seguimiento_form").serialize()
             var url = '{{ route('plazo_docente/registrar') }}'
-            var id_seguimiento = $("#id_seguimiento_para_plazo").val();
-            var fechas_plazo = $("#lapso_de_plazo_extra").val();
+            var id_seguimiento = $("#seguimientoid_seguimiento_para_plazo").val();
+            var fechas_plazo = $("#seguimientolapso_de_plazo_extra").val();
             var token = data_form.split("&")[0].split("=")[1];
             var data = {
                 '_token' : token,
@@ -194,11 +330,11 @@
                         css: {
                             border: 'none',
                             padding: '15px',
-                            backgroundColor: '#000',
+                            backgroundColor: '#seguimiento000',
                             '-webkit-border-radius': '10px',
                             '-moz-border-radius': '10px',
                             opacity: .8,
-                            color: '#fff'
+                            color: '#seguimientofff'
                         }});
             $.post(url, data, (response)=>{
                 $.unblockUI();

@@ -90,6 +90,9 @@ Route::any('fechas/plazo_extra_por_docente','FechasEntregaController@plazo_extra
 
 //RUTAS PLAZO_DOCENTE
 Route::post('plazo_docente/registrar','PlazoDocenteController@registrar')->name('plazo_docente/registrar');
+Route::post('plazo_docente/actualizar','PlazoDocenteController@actualizar')->name('plazo_docente/actualizar');
+Route::get('plazo_docente/buscar/{id_plazo}','PlazoDocenteController@buscar')->name('plazo_docente/buscar');
+Route::get('plazo_docente/cancelar/{id_plazo}','PlazoDocenteController@cancelar')->name('plazo_docente/cancelar');
 
 
 //RUTAS PLAN DE TRABAJO
