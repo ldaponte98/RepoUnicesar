@@ -1,4 +1,6 @@
 <br>
+<input type="search" class="form-control" id="txtfiltrorecibidos" placeholder="Consulta por cualquier campo">
+<br>
 <div class="table-responsive">
                 <table class="table">
                     <thead>
@@ -40,4 +42,17 @@
                     </tbody>
                 </table>
             </div>
+
+<script>
+    $(document).ready(()=>{
+        $('#txtfiltrorecibidos').keyup(function () {
+          var rex = new RegExp($(this).val(), 'i');
+            $('#bodytable tr').hide();
+            $('#bodytable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        })
+    })
+    
+</script>
     

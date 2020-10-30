@@ -20,27 +20,6 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class SeguimientoAsignaturaController extends Controller
 {
-    public function marcarComoLeido(Request $request)
-    {
-    	$post = $request->all();
-
-        if ($post) {
-        	$post = (object) $post;
-        	$seguimientos = $post->seguimientos;
-        	foreach ($seguimientos as $key => $id_seguimiento) {
-        		$seguimiento = SeguimientoAsignatura::find($id_seguimiento);
-        		$seguimiento->estado = "Recibido";
-                $seguimiento->save();
-        	}
-        	return response()->json(array(
-		        'error' => false
-		    )); 
-        }
-        return response()->json(array(
-		        'error' => true
-		    ));
-    }
-
     public function view($id_seguimiento)
     {
     	$seguimiento = SeguimientoAsignatura::find($id_seguimiento);
@@ -64,8 +43,10 @@ class SeguimientoAsignaturaController extends Controller
             $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->where('id_periodo_academico', $seguimiento->grupo->id_periodo_academico)->first();
     		return view('seguimiento_asignatura.view',compact('seguimiento'),compact('fechas'));
     	}
-
-    	echo "Este archivo no existe";
+        $titulo = "Este archivo no existe";
+        $mensaje = "";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
+    	//echo "Este archivo no existe";
     }
 
     public function viewInformeFinal($id_seguimiento)
@@ -91,8 +72,10 @@ class SeguimientoAsignaturaController extends Controller
 
             return view('seguimiento_asignatura.view_informe_final',compact('seguimientos'),compact('fechas'));
         }
-
-        echo "Este archivo no existe";
+        $titulo = "Este archivo no existe";
+        $mensaje = "";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
+        //echo "Este archivo no existe";
     }
 
     public function listar()
@@ -369,12 +352,28 @@ class SeguimientoAsignaturaController extends Controller
                 ]);
         }
         $seguimiento = SeguimientoAsignatura::find($id);
+        if($seguimiento){
+            if (session('is_docente')==true and $seguimiento->tiene_permiso_de_editar()){
+                if($seguimiento->plan_asignatura()){
+                    return view('seguimiento_asignatura.editar_desde_docente',compact(['seguimiento']));
+                }else{
+                    $titulo = "No se encuentra plan de asignatura registrado";
+                    $mensaje = "No puede realizar este plan de seguimiento asignatura debido a que no hay un plan de asignatura registrado para el periodo academico escojido con relacion a la asignatura.";
+                    return view('sitio.error',compact(['titulo', 'mensaje']));
+                }
+                
+            }else{
+                $titulo = "No tiene permisos para editar este formato";
+                $mensaje = "";
+                return view('sitio.error',compact(['titulo', 'mensaje']));
+                //echo "No tiene permisos para editar este formato";
+            } 
+        }
 
-        if (session('is_docente')==true and $seguimiento->tiene_permiso_de_editar()){
-            return view('seguimiento_asignatura.editar_desde_docente',compact(['seguimiento']));
-        }else{
-            echo "No tiene permisos para editar este formato";
-        } 
+        $titulo = "Seguimiento de asignatura invalido.";
+        $mensaje = "";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
+        
 
     }
 
@@ -433,7 +432,10 @@ class SeguimientoAsignaturaController extends Controller
         ]));
         return $pdf->stream('Informe final seguimiento de asignatura.pdf');
         }
-        echo "No se pudo realizar el archivo"; die();
+        $titulo = "No se pudo realizar el archivo";
+        $mensaje = "";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
+        //echo "No se pudo realizar el archivo"; die();
     }
 
     public function imprimir_informe_final_prueba($id_seguimiento)

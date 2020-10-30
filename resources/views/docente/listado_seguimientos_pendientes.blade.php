@@ -1,8 +1,8 @@
 @php
-    {{
-        $usuario = \App\Usuario::find(session('id_usuario'));
-    }}
+    $usuario = \App\Usuario::find(session('id_usuario'));
 @endphp
+<br>
+<input type="search" class="form-control" id="txtfiltropendientes" placeholder="Consulta por cualquier campo">
 <br>
 <div class="table-responsive">
                 <table class="table">
@@ -34,20 +34,25 @@
 		                            <td><center>
 		                            	{{ $seguimiento->grupo->periodo_academico->periodo }}
 		                            </center></td>
-                                    <td>
+                                    
 
-                                        <center>
-                                        <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetraso({{ $seguimiento->id_seguimiento }},'{{ $usuario->tercero->getNameFull() }}','{{ $seguimiento->retraso() }}','{{ $seguimiento->asignatura->nombre }}', '{{ $seguimiento->grupo->codigo }}',{{ $seguimiento->corte }}, '{{ $seguimiento->grupo->periodo_academico->periodo }}')">Notificar retraso</a>
-                                    </center></td>
                                     <td>
-                                        @if ($seguimiento->retraso() != "Tiene plazo-extra")
+                                        @if ($seguimiento->retraso() != "En espera")
+                                        <center>
+                                            <a style="color: blue; cursor: pointer;" onclick="OpenModalNotificarRetraso({{ $seguimiento->id_seguimiento }},'{{ $usuario->tercero->getNameFull() }}','{{ $seguimiento->retraso() }}','{{ $seguimiento->asignatura->nombre }}', '{{ $seguimiento->grupo->codigo }}',{{ $seguimiento->corte }}, '{{ $seguimiento->grupo->periodo_academico->periodo }}')">Notificar retraso</a>
+                                        </center>
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($seguimiento->retraso() != "Tiene plazo-extra" and $seguimiento->retraso() != "En espera")
                                         
                                         <center>
 
                                         <a style="color: blue; cursor: pointer;" onclick="OpenModalExtraPlazo({{ $seguimiento->id_seguimiento }})">Extra plazo</a>
                                     </center>
                                     @endif
-                                    </td>  
+                                    </td> 
+
 		                            </tr> 
 						        @endif
 						@endforeach
@@ -116,9 +121,16 @@
                         format: 'DD/MM/YYYY',
                         cancelLabel: 'Clear'
                       }
-          });
+            });
+            $('#txtfiltropendientes').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+                $('#bodytable tr').hide();
+                $('#bodytable tr').filter(function () {
+                    return rex.test($(this).text());
+                }).show();
+            })
         })
-
+       
         var id_seguimiento_escojido = 0
         function OpenModalNotificarRetraso(id_seguimiento,name_tercero_envia, retraso, asignatura, grupo,corte, periodo_academico) {
             var mensaje = "El administrador "+name_tercero_envia+" te notifica retraso de "+retraso+" en el seguimiento de asignatura con codigo "+id_seguimiento+ " con relacion a la asignatura "+asignatura+" para el grupo "+grupo+" perteneciente al "+corte+" corte del periodo academico "+periodo_academico+".";

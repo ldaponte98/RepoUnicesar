@@ -83,8 +83,7 @@
             </div>
 
             <div class="col-sm-2">
-                <br>
-                <button type="submit" class="btn btn-info">Consultar</button>
+                <button type="submit" style="margin-top:35px;" class="btn btn-info">Consultar</button>
             </div>
 
                     
@@ -124,13 +123,13 @@
                         </li>
 
                         <li class="nav-item">
-                          <a class="nav-link tab_header" id="des_pendientes-tab" data-toggle="tab" href="#des_pendientes" role="tab" aria-controls="des_pendientes"
-                            aria-selected="true"><b>Plan de desarrollo asignatura</b></a>
+                          <a class="nav-link tab_header" id="tra_pendientes-tab" data-toggle="tab" href="#tra_pendientes" role="tab" aria-controls="tra_pendientes"
+                            aria-selected="true"><b>Plan de trabajo</b></a>
                         </li>
 
                         <li class="nav-item">
-                          <a class="nav-link tab_header" id="tra_pendientes-tab" data-toggle="tab" href="#tra_pendientes" role="tab" aria-controls="tra_pendientes"
-                            aria-selected="true"><b>Plan de trabajo</b></a>
+                          <a class="nav-link tab_header" id="des_pendientes-tab" data-toggle="tab" href="#des_pendientes" role="tab" aria-controls="des_pendientes"
+                            aria-selected="true"><b>Plan de desarrollo asignatura</b></a>
                         </li>
 
                         <li class="nav-item">
@@ -138,34 +137,23 @@
                             aria-selected="true"><b>Actividades complementarias</b></a>
                         </li>
 
-                         <li class="nav-item">
-                          <a class="nav-link tab_header" id="acc_pendientes-tab" data-toggle="tab" href="#acc_pendientes" role="tab" aria-controls="acc_pendientes"
-                            aria-selected="true"><b>Plan de accion</b></a>
-                        </li>
+                        
                         
                     </ul>
-
-
+   
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="seg_pendientes" role="tabpanel" aria-labelledby="seg_pendientes-tab">
                         {{ view('docente.listado_seguimientos_pendientes',compact('docente')) }}
                         </div>
-                      </div>
-
-                      <div class="tab-content" id="myTabContent">
+                      
+                        <div class="tab-pane fade" id="tra_pendientes" role="tabpanel" aria-labelledby="tra_pendientes-tab">
+                            {{ view('docente.listado_plan_trabajo_pendientes',compact('docente')) }}
+                        </div>
+                      
                         <div class="tab-pane fade" id="des_pendientes" role="tabpanel" aria-labelledby="des_pendientes-tab">
                         </div>
-                      </div>
-                      <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade" id="tra_pendientes" role="tabpanel" aria-labelledby="tra_pendientes-tab">
-                        </div>
-                      </div>
-                      <div class="tab-content" id="myTabContent">
+                      
                         <div class="tab-pane fade" id="act_pendientes" role="tabpanel" aria-labelledby="act_pendientes-tab">
-                        </div>
-                      </div>
-                      <div class="tab-content" id="myTabContent">
-                        <div class="tab-pane fade" id="acc_pendientes" role="tabpanel" aria-labelledby="acc_pendientes-tab">
                         </div>
                       </div>
                 </div>

@@ -1,10 +1,15 @@
 <?php
         $usuario = \App\Usuario::find(session('id_usuario'));
 ?>
-<?php if(session('is_admin') == false): ?>
-    <h1>Usted no tiene permisos para ingresar a esta pagina</h1>
+<?php if(session('is_admin') == false): ?>    
   <?php
-       die();
+    $titulo = "Usted no tiene permisos para ingresar a esta pagina";
+    $mensaje = "<a href='".route('index')."'>Iniciar sesion</a>";
+  ?>
+    <?php echo e(view('sitio.error',compact(['titulo', 'mensaje']))); ?>
+
+  <?php
+    die();
   ?>
 <?php endif; ?>
 
@@ -30,6 +35,7 @@
     <link href="<?php echo e(asset("assets/css/colors/blue.css")); ?>" id="theme" rel="stylesheet">
 
         <link href="<?php echo e(asset("css/estilos_card.css")); ?>" rel="stylesheet">
+        <link href="<?php echo e(asset("css/menu_flotante.css")); ?>" rel="stylesheet">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -81,8 +87,8 @@
             height: 40;
             background-color: rgba(160, 191, 76, 1);
             position: absolute;
-            right: 65;
-            top: 200;
+            right: 75;
+            top: 180;
 
         }
         div#iconedit a{
@@ -139,37 +145,116 @@
         .blockMsg h1{
             color: #ffffff !important;
         }
+
+        .select2-selection--single{
+            padding-bottom: 35px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 6px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            margin-top: 3px !important;
+            font-size: 16px !important;
+        }
+
+        .ul-filter{
+            padding-top: 10px;
+            padding-bottom: 10px;
+            cursor: pointer;
+        }
+        .ul-filter:hover{
+            background-color: #a0bf4c47;
+        }
+    </style>
+
+    <style type="text/css">
+        .btn_tintilante{
+            margin-right: 10px;
+            border-radius: 20px; 
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            background-color: #83a538;
+            color: black !important;
+            animation: animate 3s linear infinite;
+        }
+        @keyframes  animate{
+            0%{
+                box-shadow: 0 0 0 0 rgba(255, 79, 112, .5), 0 0 0 0 rgba(255, 79, 112, .5);
+            }
+            40%{
+                box-shadow: 0 0 0 10px rgba(255, 79, 112, 0), 0 0 0 0 rgba(255, 79, 112, .5);
+            }
+            80%{
+                box-shadow: 0 0 0 10px rgba(255, 79, 112, 0), 0 0 0 10px rgba(255, 79, 112, 0);
+            }
+            100%{
+                box-shadow: 0 0 0 0 rgba(255, 79, 112, 0), 0 0 0 10px rgba(255, 79, 112, 0);
+            }
+        }
     </style>
     <script type="text/javascript">
     $(document).ready(function () {
-    $('#txtfiltro').keyup(function () {
-      var rex = new RegExp($(this).val(), 'i');
-        $('#bodytable tr').hide();
-        $('#bodytable tr').filter(function () {
-            return rex.test($(this).text());
-        }).show();
+        $('#txtfiltro').keyup(function () {
+          var rex = new RegExp($(this).val(), 'i');
+            $('#bodytable tr').hide();
+            $('#bodytable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
 
         })
 
 
-      $(document).on('change', 'input[type=file]', function(e) {
-       
-        var TmpPath = URL.createObjectURL(e.target.files[0]);
-        var nombre =  e.target.files[0].name;
-        var size =  e.target.files[0].size;
-        var dosmb = 1024 * 1024 * 2;
-        console.log("Tamaño de la imagen: "+size)
-        console.log("2MB: "+dosmb)
-        if (size > dosmb) {
-            alert("La imagen es muy pesada, tamaño maximo 2MB")
-            return false;
-        }
-        $("#labelfile").html(nombre);
-        $('#imagen_update').attr('src', TmpPath);
-      });
-
-});
+          $(document).on('change', 'input[type=file]', function(e) {
+           
+            var TmpPath = URL.createObjectURL(e.target.files[0]);
+            var nombre =  e.target.files[0].name;
+            var size =  e.target.files[0].size;
+            var dosmb = 1024 * 1024 * 2;
+            console.log("Tamaño de la imagen: "+size)
+            console.log("2MB: "+dosmb)
+            if (size > dosmb) {
+                alert("La imagen es muy pesada, tamaño maximo 2MB")
+                return false;
+            }
+            $("#labelfile").html(nombre);
+            $('#imagen_update').attr('src', TmpPath);
+          });
+    });
 </script>
+
+<script>
+        function buscar(caracteres) {
+            //console.log(caracteres)
+            if (caracteres.length > 3) {
+                let url = "/docente/filtrar/"+caracteres
+                $.get(url, (response) =>{
+                    console.log(response)
+                    var resultados = ""
+                    if(response.length > 0){
+                        response.forEach((tercero)=>{
+                            resultados +='<div class="ul-filter" onclick="location.href=\'/docente/view/'+tercero.id_tercero+'\'"><a class="link_search" href="/docente/view/'+tercero.id_tercero+'">'+tercero.nombre.toUpperCase()+" "+tercero.apellido.toUpperCase()+" - "+tercero.cedula+'</a></div>'
+                        })
+                        if (resultados != "") {
+                            $("#cuadro_busqueta").html(resultados)
+                            $("#cuadro_busqueta").fadeIn()
+                        }else{
+                            $("#cuadro_busqueta").html("")
+                            $("#cuadro_busqueta").fadeOut()
+                        }
+                    }else{
+                        $("#cuadro_busqueta").html("")
+                        $("#cuadro_busqueta").fadeOut()
+                    }
+                })
+            }
+            else{
+                $("#cuadro_busqueta").html("")
+                $("#cuadro_busqueta").fadeOut()
+            }
+        }
+    </script>
 
      
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -180,7 +265,7 @@
 <![endif]-->
 </head>
 
-<body class="fix-header fix-sidebar card-no-border mini-sidebar">
+<body onclick="$('#cuadro_busqueta').fadeOut(); $('#txt_busqueda').val('')" class="fix-header fix-sidebar card-no-border mini-sidebar">
 
     <!-- ============================================================== -->
     <!-- Preloader - style you can find in spinners.css -->
@@ -307,11 +392,12 @@
                             }
 
                             .link_search:hover{
-                                color: #9bbf4c;
-                                cursor: pointer;
+                                color: #54667a;
                             }
+
                             .link_search{
                                 color: #54667a;
+                                cursor: pointer;
                             }
                             .topbar .top-navbar .app-search .srh-btn {
                                 position: absolute;
@@ -343,16 +429,31 @@
                                 #icon_message{
                                     padding-top: 16px !important;
                                 }
+
+                                .blockMsg h1{
+                                    font-size: 16px !important;
+                                }
+                            }
+
+                            .topbar .top-navbar .app-search input {
+                                width: 400px;
+                                border-radius: 5px;
+                                font-size: 14px;
+                                transition: 0.5s ease-in;
+                            }
+
+                            .topbar .top-navbar .app-search input:focus {
+                                width: 400px !important;
                             }
                             
 
                         </style>
                         <li class="nav-item hidden-sm-down">
-                            <form class="app-search p-l-20">
-                                <input type="text" class="form-control" placeholder="Buscar aqui..."> <a class="srh-btn"><i class="ti-search mt-3"></i></a>
-                                <div class="cuadro_busqueta" id="ul_listado" style="display: none;">
-                                    <div class="ul-filter"><a class="link_search" href="ww.com">LUIS DANIEL APONTE DAZA </a></div><hr>
-                                    <div class="ul-filter"><a class="link_search" href="ww.com">ALFREDO JOSE MAESTRE BALENZUELA</a></div>
+                            <form class="app-search p-l-5">
+                                <input type="text" autocomplete="off" class="form-control" id="txt_busqueda" placeholder="Buscar docente, por cualquier campo" onkeyup="buscar(this.value)"> <a class="srh-btn"><i class="ti-search mt-3"></i></a>
+                                <div class="cuadro_busqueta" id="cuadro_busqueta" style="display: none;">
+                                    
+                                    <!--<div class="ul-filter"><a class="link_search" href="ww.com">ALFREDO JOSE MAESTRE BALENZUELA - 1065843703</a></div>-->
                                 </div>
                             </form>
                         </li>
@@ -427,7 +528,7 @@
                             <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
                         </li>
                         <li>
-                            <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="user" class="m-r-10" aria-hidden="true"></i></i>Mi perfil</a>
+                            <!--<a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="user" class="m-r-10" aria-hidden="true"></i></i>Mi perfil</a>-->
                         </li>
                         <li>
 
@@ -449,18 +550,45 @@
                                             ->where('estado', 'Enviado')
                                             ->where('id_licencia', session('id_licencia'))
                                             ->count();
+
+                            $total_plan_trabajo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_trabajo')
+                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_trabajo.id_tercero')
+                                            ->where('plan_trabajo.estado', 'Enviado')
+                                            ->where('terceros.id_licencia', session('id_licencia'))
+                                            ->count();
+
+                            $total_plan_desarrollo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_desarrollo_asignatura')
+                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_desarrollo_asignatura.id_tercero')
+                                            ->where('plan_desarrollo_asignatura.estado', 'Enviado')
+                                            ->where('terceros.id_licencia', session('id_licencia'))
+                                            ->count();
                         ?> 
                         <li class="">
                             <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Gestion docencia</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li>
-                                    <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect" style="font-size:14px;">Plan de trabajo</a>
+                                    <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect" style="font-size:14px;">Plan de trabajo  <?php if($total_plan_trabajo_sin_leer > 0): ?>
+                                <span class="label label-rounded label-warning" title="<?php echo e($total_plan_trabajo_sin_leer); ?> sin revisar "><?php echo e($total_plan_trabajo_sin_leer); ?>
+
+                                </span>
+                             <?php endif; ?></a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo e(route('plan_asignatura/buscar_asignatura')); ?>" class="waves-effect"style="font-size:14px;">Plan de asignatura</a>
+                                    <a href="<?php echo e(route('plan_asignatura/buscar_asignatura')); ?>" class="waves-effect" style="font-size:14px;">Plan de asignatura</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar')); ?>" class="waves-effect"style="font-size:14px;">Plan desarrollo asignatura</a>
+                                    <a  class="has-arrow " href="#" aria-expanded="false" style="font-size:14px;">Plan desarrollo asignatura 
+                                    <?php if($total_plan_desarrollo_sin_leer > 0): ?>
+                                        <span class="label label-rounded label-warning" title="<?php echo e($total_plan_desarrollo_sin_leer); ?> sin revisar "><?php echo e($total_plan_desarrollo_sin_leer); ?>
+
+                                        </span>
+                                    <?php endif; ?></a>
+                                    <ul aria-expanded="false" class="collapse">
+                                        <li>
+                                            <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar')); ?>" style="font-size: 14px;">Busqueda individual</a>
+                                            <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar_general')); ?>"  style="font-size: 14px;">Informe general</a>
+                                        </li>
+                                    </ul>
                                 </li>
                                 <li class="">
                                     <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
@@ -557,6 +685,8 @@
            
             -->
         </aside>
+
+        <?php echo $__env->yieldContent('menu',''); ?>
 
         <!-- ============================================================== -->
         <!-- End Left Sidebar - style you can find in sidebar.scss  -->

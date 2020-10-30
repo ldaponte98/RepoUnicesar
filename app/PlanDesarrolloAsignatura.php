@@ -156,4 +156,43 @@ class PlanDesarrolloAsignatura extends Model
         }
         return true;
     }
+
+    public static function retraso($id_tercero, $id_periodo_academico,$id_asignatura)
+    {
+        $fecha_actual = date('Y-m-d H:i:s');
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$id_periodo_academico)
+                ->where('id_dominio_tipo_formato',config('global.desarrollo_asignatura'))
+                ->first();
+
+        $plazo_extra = PlazoDocente::where('id_tercero', $id_tercero)
+                   ->where('id_periodo_academico', $id_periodo_academico)
+                   ->where('id_asignatura', $id_asignatura)
+                   ->where('id_dominio_tipo_formato', config('global.desarrollo_asignatura'))
+                   ->where('estado', 1)
+                   ->first();
+        if ($plazo_extra) {
+            return "Tiene plazo-extra";
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
+            if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {
+               return "Tiene plazo-extra";
+            }            
+        }
+
+        if($fechas_de_entrega){
+            if ($fecha_actual <= $fechas_de_entrega->fechafinal1){
+                return "En espera";
+            }else{
+                $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
+                $fecha_actual = date_create($fecha_actual);
+                $fechacierre = date_create($fechacierre);
+                $diferencia = date_diff($fecha_actual,$fechacierre);
+                $dias = $diferencia->days;
+                $horas = $diferencia->h;
+                return "Retrasado $dias dias y $horas horas";
+            }
+        }else{
+            return "Fechas sin definir";
+        }
+    }
 }

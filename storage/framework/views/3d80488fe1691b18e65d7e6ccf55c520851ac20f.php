@@ -1,6 +1,7 @@
 <br>
 <div class="row">
-    <div class="col-lg-9"></div>
+    <div class="col-lg-9"><input type="search" class="form-control" id="txtfiltroenviados" placeholder="Consulta por cualquier campo">
+</div>
     <div class="col-lg-3"><button onclick="MarcarLeidos()" class="btn btn-info pull-right">Marcar como leidos</button></div>
 </div>
 <br>
@@ -64,25 +65,26 @@
                 })
 
                 function MarcarLeidos(){
+                    var seguimientos = new Array()
+                    var x = document.getElementsByName("check_marcar");
+                    for (var i = 0; i < x.length; i++) {
+                      if (x[i].type == "checkbox" && x[i].checked == true) {
+                         seguimientos.push(x[i].value);
+                      }
+                    }
+                    if (seguimientos.length == 0) {
+                        alert("Por favor seleccione por lo menos un seguimiento para marcar como leido")
+                        return false
+                    }
+
                     var r = confirm("¿Seguro que desea marcar los archivos seleccionados como leidos?");
                     if (r == true) {
-            
-                        var seguimientos = new Array()
-                        var x = document.getElementsByName("check_marcar");
-                        for (var i = 0; i < x.length; i++) {
-                          if (x[i].type == "checkbox" && x[i].checked == true) {
-                             seguimientos.push(x[i].value);
-                          }
-                        }
-                        if (seguimientos.length == 0) {
-                            alert("Por favor seleccione por lo menos un seguimiento para marcar como leido")
-                            return false
-                        }
                         var data = {
-                            seguimientos : seguimientos,
+                            formatos : seguimientos,
+                            tipo_formato : <?php echo e(config('global.seguimiento_asignatura')); ?>,
                             _token : document.getElementsByName('_token')[0].value
                         };
-                        $.post("<?php echo e(route('seguimiento/marcarComoLeido')); ?>",data, function(response){
+                        $.post("<?php echo e(route('tercero/marcarFormatosComoLeido')); ?>",data, function(response){
                            if (!response.error) {alert("¡Operacion exitosa!"); location.reload();}
                            if (response.error) alert("Ocurrio un error al realizar la operacion")
                         });
@@ -90,5 +92,15 @@
 
                         }
                 }
+
+                $(document).ready(function () {
+                    $('#txtfiltroenviados').keyup(function () {
+                          var rex = new RegExp($(this).val(), 'i');
+                            $('#bodytable tr').hide();
+                            $('#bodytable tr').filter(function () {
+                                return rex.test($(this).text());
+                            }).show();
+                        })
+                });
             </script>
     <?php /**PATH C:\xampp\htdocs\RepoUnicesar\resources\views/docente/listado_seguimientos_enviados.blade.php ENDPATH**/ ?>

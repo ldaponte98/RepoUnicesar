@@ -69,7 +69,7 @@
                 </div><br>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
+                        <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
                         <td width="25%"><b>Programa académico </b></td>
                         <td colspan="9" width="75%">{{ $asignatura->licencia->nombre }}</td>

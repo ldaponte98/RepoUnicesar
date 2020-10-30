@@ -108,7 +108,7 @@
                 <div class="row">
                   
                     <div class="col-sm-12">
-                        <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
+                        <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
                         <td width="25%" style="background-color: #C7E6A4;"><b>APELLIDOS Y NOMBRES DEL DOCENTE</b></td>
                         <td colspan="9" width="75%">{{ $tercero->getNameFull() }}</td>
@@ -165,7 +165,7 @@
                         <td colspan="2"><b>FECHA DE TERMINACION: </b>{{ $fecha_fin }}</td>
                       </tr>
                     </table> 
-                    <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
+                    <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <thead>
                       <tr>
                         <td width="10%" style="background-color: #C7E6A4;"><center><b>SEMANA</center></b></td>

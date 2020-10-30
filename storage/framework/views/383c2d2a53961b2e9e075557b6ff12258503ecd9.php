@@ -38,6 +38,47 @@
                     
     </div>
 <?php $__env->stopSection(); ?>
+
+<?php $__env->startSection('menu'); ?>
+    <div class="fab-container">
+        <div class="fab fab-icon-holder">
+            <i class="fa fa-bars"></i>
+        </div>
+        <ul class="fab-options">
+            <li onclick="location.href='<?php echo e(route('docente/horario', $docente->id_tercero)); ?>'">
+                <span class="fab-label">Horario</span>
+                <div class="fab-icon-holder">
+                    <i class="ti-calendar"></i>
+                </div>
+            </li>
+            <li onclick="location.href='/docente/view_formato/<?php echo e(config('global.plan_trabajo')); ?>/<?php echo e($docente->id_tercero); ?>'">
+                <span class="fab-label">Planes de trabajo</span>
+                <div class="fab-icon-holder">
+                    <i class="ti-file"></i>
+                </div>
+            </li>
+            <li onclick="location.href='/docente/view_formato/<?php echo e(config('global.desarrollo_asignatura')); ?>/<?php echo e($docente->id_tercero); ?>'">
+                <span class="fab-label">Planes de desarrollo asignatura</span>
+                <div class="fab-icon-holder">
+                    <i class="ti-cup"></i>
+                </div>
+            </li>
+            <li onclick="location.href='/docente/view_formato/<?php echo e(config('global.actividades_complementarias')); ?>/<?php echo e($docente->id_tercero); ?>'">
+                <span class="fab-label">Actividades complementarias</span>
+                <div class="fab-icon-holder">
+                    <i class="ti-layers-alt"></i>
+                </div>
+            </li>
+            <li onclick="location.href='/docente/view_formato/<?php echo e(config('global.seguimiento_asignatura')); ?>/<?php echo e($docente->id_tercero); ?>'">
+                <span class="fab-label">Seguimientos de asignatura</span>
+                <div class="fab-icon-holder">
+                    <i class="ti-truck"></i>
+                </div>
+            </li>
+        </ul>
+    </div>
+<?php $__env->stopSection(); ?>
+
 <?php $__env->startSection('content'); ?>
  <div class="row">
                     <!-- Column -->
@@ -54,7 +95,7 @@
                                     $imagen = 'assets/images/users/sin_foto.jpg';
                                     if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
                                     ?>
-                                 <a> <img id="fotico" target="Ver imagen" src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="200" height="200" /></a> 
+                                 <a> <img id="fotico" target="Ver imagen" src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="180" height="180" /></a> 
                                     
                                     
                                     <h4 class="card-title m-t-10"><?php echo e($docente->tipo->dominio); ?></h4>
@@ -103,15 +144,15 @@
                                     <div class="row">
                                         <div class="col-sm-6">
                                              <div class="form-group">
-                                                <label><b>Tipo de vinculacion</b></label>
+                                                <label><b>Tipo de servicio</b></label>
                                                 <input disabled="" id="ema"  value="<?php echo e($docente->servicio); ?>" type="email" class="form-control form-control-line " >
                                             </div>  
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="form-group">
-                                                <br>
-                                                 <a style="color: white;" class="btn btn-success" href="<?php echo e(route('docente/horario', $docente->id_tercero)); ?>" target="_blank"><i class="fa fa-calendar"></i> Ver Horario</a>
-                                            </div>
+                                                <label><b>Tipo de vinculación</b></label>
+                                                <input disabled="" id="ema"  value="<?php echo e($docente->vinculacion); ?>" type="email" class="form-control form-control-line " >
+                                            </div> 
                                         </div>
                                     </div>
                                 </form>
@@ -124,41 +165,19 @@
                             <div class="card-block">
                               <div class="table-responsive">
                                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                                    <li class="nav-item">
-                                      <a class="nav-link tab_header active" id="seg_pendientes-tab" data-toggle="tab" href="#seg_pendientes" role="tab" aria-controls="seg_pendientes"
-                                        aria-selected="true"><b>Pendientes</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link tab_header" id="seg_enviados-tab" data-toggle="tab" href="#seg_enviados" role="tab" aria-controls="seg_enviados"
-                                        aria-selected="false"><b>Enviados (No leidos)</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link tab_header" id="seg_recibidos-tab" data-toggle="tab" href="#seg_recibidos" role="tab" aria-controls="seg_recibidos"
-                                        aria-selected="false"><b>Recibidos (Leidos)</b></a>
-                                    </li>
-                                    <li class="nav-item">
-                                      <a class="nav-link tab_header" id="asignaturas-tab" data-toggle="tab" href="#asignaturas_tab" role="tab" aria-controls="asignaturas_tab"
+                                    
+                                    <li class="nav-item ">
+                                      <a class="nav-link tab_header active" id="asignaturas-tab" data-toggle="tab" href="#asignaturas_tab" role="tab" aria-controls="asignaturas_tab"
                                         aria-selected="false"><b>Asignaturas y grupos</b></a>
                                     </li>
                                     
                                   </ul>
                                   <div class="tab-content" id="myTabContent">
-                                    <div class="tab-pane fade show active" id="seg_pendientes" role="tabpanel" aria-labelledby="seg_pendientes-tab">
-                                    <?php echo e(view('docente.listado_seguimientos_pendientes',compact('docente'))); ?>     
-                                                      
+                                    <div class="tab-pane fade show active" id="asignaturas_tab" role="tabpanel" aria-labelledby="asignaturas-tab">
+                                        <?php echo e(view('docente.listado_asignaturas',compact('docente'))); ?>     
                                     </div>
-                                    <div class="tab-pane fade" id="seg_enviados" role="tabpanel" aria-labelledby="seg_enviados-tab">
-                                    <?php echo e(view('docente.listado_seguimientos_enviados',compact('docente'))); ?>     
-                                    </div>
-                                    <div class="tab-pane fade" id="seg_recibidos" role="tabpanel" aria-labelledby="seg_recibidos-tab">
-                                    <?php echo e(view('docente.listado_seguimientos_recibidos',compact('docente'))); ?>     
-                                    </div>
-                                    <div class="tab-pane fade" id="asignaturas_tab" role="tabpanel" aria-labelledby="asignaturas-tab">
-                                    <?php echo e(view('docente.listado_asignaturas',compact('docente'))); ?>     
-                                    </div>
-                                    
                                   </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>

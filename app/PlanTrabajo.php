@@ -70,10 +70,10 @@ class PlanTrabajo extends Model
 		}else{
 			if($id_plan_trabajo != null){
 				 $plazo_extra = PlazoDocente::where('id_tercero', $id_tercero)
-                                       ->where('id_formato', $id_plan_trabajo)
-                                       ->where('id_dominio_tipo_formato', config('global.plan_trabajo'))
-                                       ->where('estado', 1)
-                                       ->first();
+			                   ->where('id_periodo_academico', $id_periodo_academico)
+			                   ->where('id_dominio_tipo_formato', config('global.plan_trabajo'))
+			                   ->where('estado', 1)
+			                   ->first();
 
                 if ($plazo_extra) {
 	                $fecha_inicio_plazo = date('Y-m-d', strtotime($plazo_extra->fecha_inicio));
@@ -140,5 +140,42 @@ class PlanTrabajo extends Model
 			if($actividad->id_dominio_tipo == $tipo_actividad and $actividad->requiere_actividad_complementaria == 1) array_push($actividades, $actividad);
 		}
 	  return $actividades;
+	}
+
+	public static function retraso($id_tercero, $id_periodo_academico)
+	{
+		$fecha_actual = date('Y-m-d H:i:s');
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$id_periodo_academico)
+                ->where('id_dominio_tipo_formato',config('global.plan_trabajo'))
+                ->first();
+
+        $plazo_extra = PlazoDocente::where('id_tercero', $id_tercero)
+                   ->where('id_periodo_academico', $id_periodo_academico)
+                   ->where('id_dominio_tipo_formato', config('global.plan_trabajo'))
+                   ->where('estado', 1)
+                   ->first();
+        if ($plazo_extra) {
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
+            if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {
+               return "Tiene plazo-extra";
+            }            
+        }
+
+        if($fechas_de_entrega){
+            if ($fecha_actual <= $fechas_de_entrega->fechafinal1){
+                return "En espera";
+            }else{
+                $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
+                $fecha_actual = date_create($fecha_actual);
+                $fechacierre = date_create($fechacierre);
+                $diferencia = date_diff($fecha_actual,$fechacierre);
+                $dias = $diferencia->days;
+                $horas = $diferencia->h;
+                return "Retrasado $dias dias y $horas horas";
+            }
+        }else{
+            return "Fechas sin definir";
+        }
 	}
 }

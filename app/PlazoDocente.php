@@ -18,4 +18,14 @@ class PlazoDocente extends Model
 	{
 	    return $this->belongsTo(Tercero::class, 'id_tercero');
 	}
+
+	public function asignatura()
+	{
+	    return $this->belongsTo(Asignatura::class, 'id_asignatura');
+	}
+
+	public function periodo_academico()
+	{
+		return $this->belongsTo(PeriodoAcademico::class, 'id_periodo_academico');
+	}
 }

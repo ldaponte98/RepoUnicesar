@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 use App\Tercero;
 use App\Horario;
 use App\SeguimientoAsignatura;
+use App\PlanTrabajo;
+use App\PlanDesarrolloAsignatura;
+use App\ActividadesComplementarias;
 use App\Grupo;
 
 
@@ -115,6 +118,101 @@ class TerceroController extends Controller
         }
         return view('docente.update_image',compact('docente'));
        
+    }
+
+    public function filtrar($caracteres)
+    {
+        if (strlen($caracteres) > 3) {
+            $sql = "select * from terceros where id_licencia = ".session('id_licencia')." and (id_tercero = '".$caracteres."'".
+                    " or UPPER(nombre) like '%".strtoupper($caracteres)."%'".
+                    " or UPPER(apellido) like '%".strtoupper($caracteres)."%'".
+                    " or UPPER(email) like '%".strtoupper($caracteres)."%'".
+                    " or UPPER(cedula) like '%".strtoupper($caracteres)."%')".
+                    " limit 10";
+            $response = DB::select($sql);
+            return response()->json($response);
+        }
+    }
+
+    public function view_formato($tipo_formato, $id_tercero)
+    {
+        $docente = Tercero::where('id_tercero', $id_tercero)->where('id_licencia', session('id_licencia'))->first();
+        if ($docente) {
+            switch ($tipo_formato) {
+                case config('global.seguimiento_asignatura'):
+                    return view('docente.view_seguimientos_asignatura', compact('docente'));
+
+                case config('global.plan_trabajo'):
+                    return view('docente.view_plan_trabajo', compact('docente'));
+                
+                case config('global.desarrollo_asignatura'):
+                    return view('docente.view_plan_desarrollo', compact('docente'));
+
+                case config('global.actividades_complementarias'):
+                    return view('docente.view_actividades_complementarias', compact('docente'));
+                
+                default:
+                    $titulo = "Formato invalido";
+                    $mensaje = "";
+                    return view('sitio.error',compact(['titulo', 'mensaje']));
+                    
+            }
+        }else{
+            $titulo = "Este docente no existe";
+            $mensaje = "";
+            return view('sitio.error',compact(['titulo', 'mensaje']));
+        }
+        
+    }
+
+    public function marcarFormatosComoLeido(Request $request)
+    {
+        $post = $request->all();
+
+        if ($post) {
+            $post = (object) $post;
+            $formatos = $post->formatos;
+            $tipo_formato = $post->tipo_formato;
+
+            foreach ($formatos as $id_formato) {
+
+                switch ($tipo_formato) {
+                    case config('global.seguimiento_asignatura'):
+                        $formato = SeguimientoAsignatura::find($id_formato);
+                        $formato->estado = "Recibido";
+                        $formato->save();
+                        break;
+
+                    case config('global.plan_trabajo'):
+                        $formato = PlanTrabajo::find($id_formato);
+                        $formato->estado = "Recibido";
+                        $formato->save();
+                        break;
+                    
+                    case config('global.desarrollo_asignatura'):
+                        $formato = PlanDesarrolloAsignatura::find($id_formato);
+                        $formato->estado = "Recibido";
+                        $formato->save();
+                        break;
+
+                    case config('global.actividades_complementarias'):
+                        $formato = ActividadesComplementarias::find($id_formato);
+                        $formato->estado = "Recibido";
+                        $formato->save();
+                        break;
+                    
+                    default:
+                        echo "<b>Formato invalido<b>";
+                        break;
+                }                
+            }
+            return response()->json(array(
+                'error' => false
+            )); 
+        }
+        return response()->json(array(
+            'error' => true
+        ));
     }
 
 }

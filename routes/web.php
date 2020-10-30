@@ -32,6 +32,11 @@ Route::get('docente/view/{id}','TerceroController@viewDocente')->name('docente/v
 Route::any('docente/horario/{id}','TerceroController@viewHorario')->name('docente/horario');
 Route::any('docente/update_image/{id_tercero}','TerceroController@updateImageDocente')->name('docente/update_image');
 Route::get('docente/buscar_asignaturas/{id_periodo_academico}/{id_tercero}','TerceroController@buscarAsignaturas')->name('docente/buscar_asignaturas');
+Route::get('docente/filtrar/{caracteres}','TerceroController@filtrar')->name('docente/filtrar');
+Route::get('docente/view_formato/{tipo_formato}/{id_tercero}','TerceroController@view_formato')->name('docente/view_formato');
+
+
+Route::post('tercero/marcarFormatosComoLeido','TerceroController@marcarFormatosComoLeido')->name('tercero/marcarFormatosComoLeido');
 
 
 
@@ -129,6 +134,8 @@ Route::post('plan_desarrollo_asignatura/editar','PlanDesarrolloAsignaturaControl
 Route::get('plan_desarrollo_asignatura/imprimir/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@imprimir')->name('plan_desarrollo_asignatura/imprimir');
 Route::post('plan_desarrollo_asignatura/cargar_plan_existente','PlanDesarrolloAsignaturaController@cargar_plan_existente')->name('plan_desarrollo_asignatura/cargar_plan_existente');
 Route::get('plan_desarrollo_asignatura/obtener_vista/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@obtener_vista')->name('plan_desarrollo_asignatura/obtener_vista');
+Route::get('plan_desarrollo_asignatura/consultar_general','PlanDesarrolloAsignaturaController@consultar_general')->name('plan_desarrollo_asignatura/consultar_general');
+Route::post('plan_desarrollo_asignatura/getReporte','PlanDesarrolloAsignaturaController@getReporte')->name('plan_desarrollo_asignatura/getReporte');
 
 
 

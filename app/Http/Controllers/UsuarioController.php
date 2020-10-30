@@ -18,7 +18,7 @@ class UsuarioController extends Controller
         
     	if ($post) {
     		$usuario = Usuario::where('usuario','=',$post->usuario)
-    					->where('clave','=',$post->clave)
+    					->where('clave','=',md5($post->clave))
     					->first();
     		$mensaje = "Credenciales invalidas";
     		if ($usuario) {

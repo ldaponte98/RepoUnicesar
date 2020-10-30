@@ -27,7 +27,7 @@
                             <a href="<?php echo e(route('plan_asignatura/view',[
                             'id_periodo_academico' => $periodo_academico->id_periodo_academico,
                             'id_asignatura' => $asignatura->id_asignatura
-                            ])); ?>" class="btn btn-info">Plan de asignatura</a>
+                            ])); ?>" class="btn btn-info">Plan de asignatura actual</a>
                         </div>
                     </div>           
                 </form>
@@ -48,13 +48,9 @@
           <a class="nav-link tab_header" id="programas-tab" data-toggle="tab" href="#programas" role="tab" aria-controls="programas"
             aria-selected="false"><b>Programas academicos</b></a>
         </li>
-
-        <li class="nav-item">
-          <a class="nav-link tab_header" id="unidades-tab" data-toggle="tab" href="#unidades" role="tab" aria-controls="unidades"
-            aria-selected="false"><b>Unidades</b></a>
-        </li>
-        
       </ul>
+
+
       <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="grupos" role="tabpanel" aria-labelledby="grupos-tab">
             <?php echo e(view('asignatura.listado_grupos',compact('asignatura'))); ?>     

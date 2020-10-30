@@ -62,7 +62,7 @@
 <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 
 <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
-
+<script src="https://unpkg.com/feather-icons"></script>
 
      <style type="text/css">
 
@@ -151,6 +151,34 @@
     
 
 </style>
+<style type="text/css">
+        .btn_tintilante{
+            margin-right: 10px;
+            border-radius: 20px; 
+            border-color: transparent;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-top: 7px;
+            padding-bottom: 7px;
+            background-color: #83a538;
+            color: white !important;
+            animation: animate 3s linear infinite;
+        }
+        @keyframes animate{
+            0%{
+                box-shadow: 0 0 0 0 rgba(115, 142, 57, .5), 0 0 0 0 rgba(115, 142, 57, .5);
+            }
+            40%{
+                box-shadow: 0 0 0 10px rgba(115, 142, 57, 0), 0 0 0 0 rgba(115, 142, 57, .5);
+            }
+            80%{
+                box-shadow: 0 0 0 10px rgba(115, 142, 57, 0), 0 0 0 10px rgba(115, 142, 57, 0);
+            }
+            100%{
+                box-shadow: 0 0 0 0 rgba(115, 142, 57, 0), 0 0 0 10px rgba(115, 142, 57, 0);
+            }
+        }
+    </style>
     <script type="text/javascript">
     $(document).ready(function () {
     $('#txtfiltro').keyup(function () {
@@ -412,6 +440,10 @@
                                     padding-top: 16px !important;
                                 }
                             }
+
+                            .hide-menu{
+                                position: absolute;
+                            }
                             
 
                         </style>
@@ -447,32 +479,31 @@
                 <ul id="sidebarnav" class="in">
                     <li class="nav-small-cap">Personal</li>
                         <li>
-                            <a class="waves-effect"><i class="fa fa-window-restore m-r-10" aria-hidden="true"></i>Tablero</a>
+                            <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
                         </li>
                         <li>
-                            <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>
+                            <!--<a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>-->
                         </li>
                         <li>
-                            <a href="{{ route('docente/horario', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-calendar m-r-10" aria-hidden="true"></i>Horario</a>
+                            <a href="{{ route('docente/horario', $usuario->tercero->id_tercero) }}" style="display: flex !important;" class="waves-effect"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i>Horario</a>
                         </li>
                         <li class="nav-devider"></li>
                         <li class="nav-small-cap">Formatos</li>
                         <li>
-                            <a href="{{ route('plan_trabajo/view') }}" class="waves-effect"><i class="fa fa-briefcase m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
+                            <a href="{{ route('plan_trabajo/view') }}" class="waves-effect"  style="display: flex !important;" ><i data-feather="file-text" class="m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
                         </li>
                         <li>
-                            <a href="{{ route('plan_asignatura/consultar_desde_docente') }}" class="waves-effect"><i class="fa fa-book m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
+                            <a href="{{ route('plan_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;" ><i data-feather="book" class="m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
                         </li>
                         <li>
-                            <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect">
-                                <i class="fa fa-trophy m-r-10" aria-hidden="true"></i>
-                                <span class="hide-menu">Plan desarrollo asignatura </span> 
+                            <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
+                                <i data-feather="trello" class="m-r-10" aria-hidden="true"></i> Plan desarrollo asignatura
                             </a>
                         </li>
 
                         <li>
 
-                             <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-tasks m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
+                             <a class="has-arrow waves-effect" href="#" aria-expanded="false"><i data-feather="truck" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
                             @php
                             $total_seguimientos_pendientes = \App\SeguimientoAsignatura::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
@@ -495,7 +526,7 @@
 
                          <li>
 
-                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-th-list m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
+                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i data-feather="layers" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
                             @php
                             $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
                                                     ->where('id_tercero', $usuario->tercero->id_tercero)
@@ -517,7 +548,7 @@
                         </li>
 
                         <li class="">
-                            <a class="has-arrow " href="#" aria-expanded="false"><i class="fa fa-clipboard m-r-10"></i><span class="hide-menu">Reportes</span></a>
+                            <a class="has-arrow " href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Reportes</span></a>
                             <ul aria-expanded="false" class="collapse">
                                 <li class="">
                                     <a href="fgdfgdf">.</a>
@@ -614,7 +645,7 @@
     <!--<script src="assets/plugins/jquery/jquery.min.js"></script>-->
     <!-- Bootstrap tether Core JavaScript -->
    
-   
+   <script> feather.replace()</script>
     <script src=" {{ asset('assets/plugins/bootstrap/js/tether.min.js') }} "></script>
     <script src="{{ asset('assets/plugins/bootstrap/js/bootstrap.min.js') }}"></script>
     <!-- slimscrollbar scrollbar JavaScript -->

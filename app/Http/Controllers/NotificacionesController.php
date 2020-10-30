@@ -27,6 +27,8 @@ class NotificacionesController extends Controller
         	$notificacion->id_tercero_recibe = $post->id_tercero_recibe;
             $notificacion->id_dominio_tipo = $post->id_dominio_tipo;
             if(isset($post->id_formato))$notificacion->id_formato = $post->id_formato;
+            if(isset($post->id_periodo_academico))$notificacion->id_periodo_academico = $post->id_periodo_academico;
+            if(isset($post->id_asignatura))$notificacion->id_asignatura = $post->id_asignatura;
             $notificacion->id_dominio_tipo_formato = $post->id_dominio_tipo_formato;
             $vista_email = "";
         	if ($notificacion->save()) {
@@ -103,8 +105,9 @@ class NotificacionesController extends Controller
 	                        }
 	                        break;
 	                    default:
-	                        echo "Accion invalida";
-	                        break;
+                            $titulo = "Accion invalida";
+                            $mensaje = "";
+                            return view('sitio.error',compact(['titulo', 'mensaje']));
 	                }
             	}
 
@@ -202,8 +205,9 @@ class NotificacionesController extends Controller
                             return redirect()->route('actividades_complementarias/consultar');
                         }
                     default:
-                        echo "Accion invalida";
-                        break;
+                        $titulo = "Accion invalida";
+                        $mensaje = "";
+                        return view('sitio.error',compact(['titulo', 'mensaje']));
                 }
             }
 
@@ -221,8 +225,9 @@ class NotificacionesController extends Controller
                             ]);
                                    
                     default:
-                        echo "Accion invalida";
-                        break;
+                        $titulo = "Accion invalida";
+                        $mensaje = "";
+                        return view('sitio.error',compact(['titulo', 'mensaje']));
                 }
             }
         }

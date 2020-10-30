@@ -419,7 +419,8 @@ class ComunicationController extends Controller
     	 	}
     	 	if($tercero->id_dominio_tipo_ter == 3) $usuario->id_perfil = 2;
     	 	if($tercero->id_dominio_tipo_ter == 2) $usuario->id_perfil = 1;
-    	 	$usuario->usuario = strtolower(explode(' ', $tercero->nombre)[0]);
+            $usuario->usuario = $tercero->email;
+            $usuario->clave = md5($tercero->cedula);
     	 	$usuario->save();
 
     	 	//si es docente debemos modificar la carga academica
