@@ -42,8 +42,7 @@
                                     @endif
                                     </td>
                                     <td>
-                                    @if ($plan_desarrollo->retraso != "Tiene plazo-extra")
-                                        
+                                    @if ($plan_desarrollo->retraso != "Fechas sin definir" and $plan_desarrollo->retraso != "Tiene plazo-extra")
                                         <center>
                                             <a style="color: blue; cursor: pointer;" onclick="OpenModalExtraPlazo({{ $plan_desarrollo->id_periodo }}, {{ $plan_desarrollo->id_asignatura }})">Extra plazo</a>
                                         </center>
