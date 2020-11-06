@@ -465,7 +465,7 @@
                     <div class="profile-img"> <img width="50" height="50"  src="{{ asset($imagen) }}" alt="usuario"> </div>
                     <!-- User profile text-->
                     <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">@php
-                        {{ echo $usuario->tercero->getNameFull();}}
+                         echo $usuario->tercero->getNameFull();
                     @endphp</font></font><span class="caret"></span></a>
                         <div class="dropdown-menu animated flipInY">
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>

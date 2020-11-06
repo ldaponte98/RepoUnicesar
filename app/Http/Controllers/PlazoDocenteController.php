@@ -25,7 +25,7 @@ class PlazoDocenteController extends Controller
         $plazo_docente->id_dominio_tipo_formato = $post->id_dominio_tipo_formato;
         $plazo_docente->fecha_inicio = $fecha_inicio;
         $plazo_docente->fecha_fin = $fecha_fin. " 23:59:59";
-        $plazo_docente->id_tercero_otorga = session('id_tercero_otorga');
+        $plazo_docente->id_tercero_otorga = session('id_tercero_usuario');
 
         $mensaje_notificacion = "";
 
@@ -34,18 +34,19 @@ class PlazoDocenteController extends Controller
 
             switch ($post->id_dominio_tipo_formato) {
                 case config('global.seguimiento_asignatura'):
-                    $mensaje_notificacion = "Se ah generado un nuevo plazo-extra para el seguimiento con codigo ".$post->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se ha generado un nuevo plazo-extra para el seguimiento con codigo ".$post->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
 
                 case config('global.plan_trabajo'):
-                    $mensaje_notificacion = "Se ah generado un nuevo plazo-extra para el plan de trabajo del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se ha generado un nuevo plazo-extra para el plan de trabajo del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
                 
                 case config('global.desarrollo_asignatura'):
-                    $mensaje_notificacion = "Se ah generado un nuevo plazo-extra para el plan de desarrollo de la asignatura ".$plazo_docente->asignatura->nombre." (".$plazo_docente->asignatura->codigo.")"." del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se ha generado un nuevo plazo-extra para el plan de desarrollo de la asignatura ".$plazo_docente->asignatura->nombre." (".$plazo_docente->asignatura->codigo.")"." del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
 
                 case config('global.actividades_complementarias'):
+                    $mensaje_notificacion = "Se ha generado un nuevo plazo-extra para la actividad complementaria numero ".$plazo_docente->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
                 
                 default:
@@ -126,18 +127,19 @@ class PlazoDocenteController extends Controller
 
             switch ($plazo_docente->id_dominio_tipo_formato) {
                 case config('global.seguimiento_asignatura'):
-                    $mensaje_notificacion = "Se han actualizado las fechas de el plazo-extra para el seguimiento con codigo ".$plazo_docente->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se han actualizado las fechas del plazo-extra para el seguimiento con codigo ".$plazo_docente->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
 
                 case config('global.plan_trabajo'):
-                    $mensaje_notificacion = "Se han actualizado las fechas de el plazo-extra para el plan de trabajo del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se han actualizado las fechas del plazo-extra para el plan de trabajo del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
                 
                 case config('global.desarrollo_asignatura'):
-                    $mensaje_notificacion = "Se han actualizado las fechas de el plazo-extra para el plan de desarrollo de la asignatura ".$plazo_docente->asignatura->nombre." (".$plazo_docente->asignatura->codigo.")"." del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
+                    $mensaje_notificacion = "Se han actualizado las fechas del plazo-extra para el plan de desarrollo de la asignatura ".$plazo_docente->asignatura->nombre." (".$plazo_docente->asignatura->codigo.")"." del ".$plazo_docente->periodo_academico->periodo." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
 
                 case config('global.actividades_complementarias'):
+                     $mensaje_notificacion = "Se han actualizado las fechas del plazo-extra para la actividad complementaria numero ".$plazo_docente->id_formato." con un nuevo lapso de tiempo desde ".$fecha_inicio." hasta ".$fecha_fin;
                     break;
                 
                 default:

@@ -76,18 +76,34 @@
 
                     var r = confirm("¿Seguro que desea marcar los archivos seleccionados como leidos?");
                     if (r == true) {
+
                         var data = {
                             formatos : seguimientos,
                             tipo_formato : {{ config('global.seguimiento_asignatura') }},
                             _token : document.getElementsByName('_token')[0].value
                         };
+                         $.blockUI({
+                            message: '<h1>Marcando y notificando a los docentes</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                            css: {
+                                border: 'none',
+                                padding: '15px',
+                                backgroundColor: '#000',
+                                '-webkit-border-radius': '10px',
+                                '-moz-border-radius': '10px',
+                                opacity: .8,
+                                color: '#fff'
+                            }});
+
                         $.post("{{ route('tercero/marcarFormatosComoLeido') }}",data, function(response){
-                           if (!response.error) {alert("¡Operacion exitosa!"); location.reload();}
-                           if (response.error) alert("Ocurrio un error al realizar la operacion")
+                            $.unblockUI();
+                           if (!response.error) {toastr.success('Se marcaron como leidos exitosamente', 'Proceso exitoso', {timeOut: 3000}); location.reload();}
+                           if (response.error) toastr.success('Ocurrio un error al realizar la operacion', 'Error', {timeOut: 3000})
+                        }).fail((error)=>{
+                            console.log(error)
+                            $.unblockUI();
+                            toastr.success('Ocurrio un error en el servidor', 'Error', {timeOut: 3000})
                         });
-
-
-                        }
+                    }
                 }
 
                 $(document).ready(function () {

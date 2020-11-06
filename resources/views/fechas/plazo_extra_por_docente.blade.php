@@ -151,6 +151,7 @@
                         </div>
                       
                         <div class="tab-pane fade" id="des_pendientes" role="tabpanel" aria-labelledby="des_pendientes-tab">
+                            {{ view('docente.listado_plan_desarrollo_pendientes',compact('docente')) }}
                         </div>
                       
                         <div class="tab-pane fade" id="act_pendientes" role="tabpanel" aria-labelledby="act_pendientes-tab">

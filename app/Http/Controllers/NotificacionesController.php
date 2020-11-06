@@ -59,6 +59,18 @@ class NotificacionesController extends Controller
 	                            );
 	                        }
 	                        break;
+                            if($notificacion->id_dominio_tipo_formato == config('global.desarrollo_asignatura')) {
+                                $vista_email = "email.email_formato_revisado";
+                                $subject = "Revisión de Plan de desarrollo asignatura";
+                                $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
+                                $data_email = array(
+                                    "formato" => "Plan de desarrollo asignatura",
+                                    "periodo_academico" => $notificacion->periodo_academico->periodo,
+                                    "asignatura" => $notificacion->asignatura->nombre." (".$notificacion->asignatura->codigo.")",
+                                    "nombre_tercero" => $notificacion->tercero_recibe->nombre
+                                );
+                            }
+                            break;
 	                    case 8: //extra-plazo
 	                        if($notificacion->id_dominio_tipo_formato == config('global.seguimiento_asignatura')) {
 	                          
@@ -87,7 +99,7 @@ class NotificacionesController extends Controller
 	                            $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
 	                            $data_email = array(
 	                                "formato" => "Plan de trabajo",
-	                                "periodo_academico" => $post->periodo_academico,
+	                                "periodo_academico" => $notificacion->periodo_academico->periodo,
 	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
 	                            );
 	                        }
@@ -103,6 +115,18 @@ class NotificacionesController extends Controller
 	                                "nombre_tercero" => $notificacion->tercero_recibe->nombre
 	                            );
 	                        }
+
+                            if($notificacion->id_dominio_tipo_formato == config('global.desarrollo_asignatura')) {
+                                $subject = "Aviso de retraso en Plan de desarrollo asignatura";
+                                $vista_email = "email.email_retraso";
+                                $plan_trabajo = PlanTrabajo::find($notificacion->id_formato);
+                                $data_email = array(
+                                    "formato" => "Plan de desarrollo asignatura",
+                                    "periodo_academico" => $notificacion->periodo_academico->periodo,
+                                    "asignatura" => "(". $notificacion->asignatura->codigo.") ".$notificacion->asignatura->nombre,
+                                    "nombre_tercero" => $notificacion->tercero_recibe->nombre
+                                );
+                            }
 	                        break;
 	                    default:
                             $titulo = "Accion invalida";
@@ -205,7 +229,7 @@ class NotificacionesController extends Controller
                             return redirect()->route('plan_trabajo/view');
                         }
                         if($notificacion->id_dominio_tipo_formato == config('global.actividades_complementarias')) {
-                            return redirect()->route('actividades_complementarias/consultar');
+                            return redirect()->route('actividades_complementarias/editar', ['id' => $notificacion->id_formato]);
                         }
                     default:
                         $titulo = "Accion invalida";

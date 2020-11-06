@@ -96,7 +96,7 @@ class ActividadesComplementariasController extends Controller
       if ($actividad_complementaria->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
                 $notificacion = new Notificaciones;
                 //$notificacion->notificacion = 'El administrador te ah revisado las actividades complementarias del enfasis de '.$tipo_de_actividad->dominio.' perteneciente al '.$actividad_complementaria->corte.' corte del periodo '.$actividad_complementaria->plan_trabajo->periodo_academico->periodo;
-                $notificacion->notificacion = 'El administrador te ah revisado las actividades complementarias perteneciente al '.$actividad_complementaria->corte.' corte del periodo '.$actividad_complementaria->plan_trabajo->periodo_academico->periodo;
+                $notificacion->notificacion = 'El jefe de departamento te ha revisado las actividades complementarias perteneciente al '.$actividad_complementaria->corte.' corte del periodo '.$actividad_complementaria->plan_trabajo->periodo_academico->periodo;
                 $notificacion->id_tercero_envia = session('id_tercero_usuario');
                 $notificacion->id_tercero_recibe = $actividad_complementaria->id_tercero;
                 $notificacion->id_dominio_tipo = 6;
@@ -116,7 +116,7 @@ class ActividadesComplementariasController extends Controller
                             );
                     $for = $notificacion->tercero_recibe->email;
                     Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
-                        $msj->from("repounicesar@gmail.com","Universidad Popular Del Cesar");
+                        $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
                         $msj->subject($subject);
                         $msj->to($for);
                     });

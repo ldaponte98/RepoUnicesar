@@ -15,7 +15,12 @@ Route::get('/', function () {
     return view('login.index');
 })->name('index');
 
-Route::post('index','UsuarioController@login')->name('usuario/login');
+
+
+
+Route::any('index','UsuarioController@login')->name('usuario/login');
+Route::get('registro','UsuarioController@registro')->name('registro');
+Route::post('validar_registro','UsuarioController@validar_registro')->name('validar_registro');
 Route::get('usuario/logout','UsuarioController@logout')->name('logout');
 
 Route::get('email/email_retraso',function () {
@@ -38,6 +43,7 @@ Route::get('docente/view_formato/{tipo_formato}/{id_tercero}','TerceroController
 
 Route::post('tercero/marcarFormatosComoLeido','TerceroController@marcarFormatosComoLeido')->name('tercero/marcarFormatosComoLeido');
 
+Route::any('alumno/panel','TerceroController@panel')->name('alumno/panel');
 
 
 //RUTAS ASIGNATURA

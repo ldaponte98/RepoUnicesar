@@ -102,14 +102,14 @@
                       </ul>
                       <div class="tab-content" id="myTabContent">
                         <div class="tab-pane fade show active" id="seg_pendientes" role="tabpanel" aria-labelledby="seg_pendientes-tab">
-                        {{ view('docente.listado_seguimientos_pendientes',compact('docente')) }}     
+                        {{ view('docente.listado_actividades_complementarias_pendientes',compact('docente')) }}     
                                           
                         </div>
                         <div class="tab-pane fade" id="seg_enviados" role="tabpanel" aria-labelledby="seg_enviados-tab">
-                        {{ view('docente.listado_seguimientos_enviados',compact('docente')) }}     
+                        {{ view('docente.listado_actividades_complementarias_enviados',compact('docente')) }}     
                         </div>
                         <div class="tab-pane fade" id="seg_recibidos" role="tabpanel" aria-labelledby="seg_recibidos-tab">
-                        {{ view('docente.listado_seguimientos_recibidos',compact('docente')) }}     
+                        {{ view('docente.listado_actividades_complementarias_recibidos',compact('docente')) }}     
                         </div>
                         
                       </div>

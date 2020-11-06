@@ -252,12 +252,6 @@
                         if(actividad.progreso > 60 && actividad.progreso <= 80) $color_progreso = "secundary"
                         if(actividad.progreso > 80 && actividad.progreso < 100) $color_progreso = "info"
                         if(actividad.progreso == 100) $color_progreso = "success"
-
-                            tabla += "<td>"+
-                                     "<span class='text-"+$color_progreso+"'>"+actividad.progreso+"%</span>"+
-                                            "<div class='progress'>"+
-                                                "<div class='progress-bar bg-"+$color_progreso+"' role='progressbar' style='width: "+actividad.progreso+"%; height: 6px;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div>"+
-                                            "</div></td>"
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(actividad.estado =='Pendiente'){
                                 tabla += "<td>"+actividad.retraso+"</td>"
@@ -278,6 +272,12 @@
                                 tabla += "<td>Sin retraso</td>"
                                 acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;' target='_blank' href = 'editar/"+actividad.id_actividad_complementaria+"'>Revisar</a></center></td>"
                             }
+                            tabla += "<td>"+
+                                     "<span class='text-"+$color_progreso+"'>"+actividad.progreso+"%</span>"+
+                                            "<div class='progress'>"+
+                                                "<div class='progress-bar bg-"+$color_progreso+"' role='progressbar' style='width: "+actividad.progreso+"%; height: 6px;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div>"+
+                                            "</div></td>"
+                            
 
                             tabla += acciones
                             $.unblockUI(); //

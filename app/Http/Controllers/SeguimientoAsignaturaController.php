@@ -31,7 +31,7 @@ class SeguimientoAsignaturaController extends Controller
                 $tercero_envia = Tercero::find(session('id_tercero_usuario'));
                 $notificacion = new Notificaciones;
                 $tipo_tercero_envia = $tercero_envia->tipo->dominio; 
-                $notificacion->notificacion = "El $tipo_tercero_envia ah revisado el seguimiento de asignatura numero $id_seguimiento.";
+                $notificacion->notificacion = "El jefe de departamento ha revisado el seguimiento de asignatura numero $id_seguimiento.";
                 $notificacion->id_tercero_envia = $tercero_envia->id_tercero;
                 $notificacion->id_tercero_recibe = $seguimiento->tercero->id_tercero;
                 $notificacion->id_dominio_tipo = 6;//revision

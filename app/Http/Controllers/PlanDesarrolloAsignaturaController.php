@@ -17,6 +17,8 @@ use App\Tercero;
 use App\Grupo;
 use App\FechasEntrega;
 use App\Notificaciones;
+use App\CodigoAcceso;
+use App\PlazoDocente;
 use Mail;
 
 class PlanDesarrolloAsignaturaController extends Controller
@@ -32,6 +34,7 @@ class PlanDesarrolloAsignaturaController extends Controller
         $plan_asignatura = PlanAsignatura::where('id_asignatura', $id_asignatura)
                                          ->where('id_periodo_academico',$id_periodo_academico)
                                          ->first();
+
 		$tercero = Tercero::find($id_tercero);
     	if(!$plan_desarrollo_asignatura){
     		$plan_desarrollo_asignatura = new PlanDesarrolloAsignatura;
@@ -40,10 +43,29 @@ class PlanDesarrolloAsignaturaController extends Controller
             $plan_desarrollo_asignatura->id_tercero = $id_tercero;
             $plan_desarrollo_asignatura->estado = "Pendiente";
     	}
-        if(session('is_admin') == true and $plan_desarrollo_asignatura->estado == "Enviado"){
-            $this->marcar_revision($plan_desarrollo_asignatura);
+        $codigos_acceso = CodigoAcceso::all()->where('id_plan_desarrollo_asignatura', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)
+                                             ->where('estado', 1);
+
+        $tiene_carga_academica = Grupo::where('id_tercero', $tercero->id_tercero)
+                                        ->where('id_periodo_academico',  $periodo_academico->id_periodo_academico)
+                                        ->where('id_asignatura',  $asignatura->id_asignatura)
+                                        ->first();
+        if ($tiene_carga_academica) {
+            if($plan_asignatura){
+                if(session('is_admin') == true and $plan_desarrollo_asignatura->estado == "Enviado"){
+                    $this->marcar_revision($plan_desarrollo_asignatura);
+                }
+                return view('plan_desarrollo_asignatura.view', compact(['plan_desarrollo_asignatura','tercero', 'asignatura', 'periodo_academico', 'plan_asignatura','codigos_acceso']));
+            }else{
+                $titulo = "No exite un plan de asignatura registrado para esta asignatura en el periodo academico ".$periodo_academico->periodo.".";
+                $mensaje = "Favor verificar si tiene carga academica para este periodo academico.";
+                return view('sitio.error',compact(['titulo', 'mensaje']));
+            }
+        }else{
+            $titulo = "No tiene carga academica registrada en este periodo.";
+            $mensaje = "Favor verificar si tiene carga academica para este periodo academico.";
+            return view('sitio.error',compact(['titulo', 'mensaje']));
         }
-    	return view('plan_desarrollo_asignatura.view', compact(['plan_desarrollo_asignatura','tercero', 'asignatura', 'periodo_academico', 'plan_asignatura']));
     }
 
     public function marcar_revision($plan_desarrollo_asignatura)
@@ -186,6 +208,30 @@ class PlanDesarrolloAsignaturaController extends Controller
                 $plazo->estado = 0;
                 $plazo->save();
             } 
+
+            //ahora verificamos si han cambiado la carga academica del tercero para los codigos de acceso a las clases
+            $query_update = DB::statement('update codigo_acceso set estado = 0 where id_plan_desarrollo_asignatura = '.$plan_desarrollo->id_plan_desarrollo_asignatura);
+
+            $carga_academica = Grupo::where('id_tercero', $plan_desarrollo->id_tercero)
+                                    ->where('id_periodo_academico',  $plan_desarrollo->id_periodo_academico)
+                                    ->where('id_asignatura',  $plan_desarrollo->id_asignatura)
+                                    ->get();
+
+            foreach ($carga_academica as $grupo) {
+                $codigo_acceso = CodigoAcceso::where('id_plan_desarrollo_asignatura', $plan_desarrollo->id_plan_desarrollo_asignatura)
+                                             ->where('id_grupo', $grupo->id_grupo)
+                                             ->first();
+                if($codigo_acceso){
+                    $codigo_acceso->estado = 1;
+                }else{
+                    $codigo_acceso = new CodigoAcceso;
+                    $codigo_acceso->token = md5($plan_desarrollo->id_plan_desarrollo_asignatura.'-'.$plan_desarrollo->id_asignatura.'-'.$plan_desarrollo->id_grupo.'-'.date('Y-m-d-H-i-s'));
+                    $codigo_acceso->id_plan_desarrollo_asignatura = $plan_desarrollo->id_plan_desarrollo_asignatura;
+                    $codigo_acceso->id_asignatura = $plan_desarrollo->id_asignatura;
+                    $codigo_acceso->id_grupo = $grupo->id_grupo;                    
+                }                             
+                $codigo_acceso->save();
+            }
 
             //aca ya registro bien todos los detalles
             $error = false;

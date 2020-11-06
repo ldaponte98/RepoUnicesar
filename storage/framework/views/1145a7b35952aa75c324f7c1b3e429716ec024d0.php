@@ -24,15 +24,20 @@
 
 <script>
 	$(document).ready(()=>{
-		 <?php
+		<?php
                 $plazos_extra = \App\PlazoDocente::where('id_tercero', session('id_tercero_usuario'))
                                                  ->where('estado', 1)
                                                  ->first();
+
         ?>
 
         <?php if($plazos_extra): ?>
             $("#modal_plazos").modal('show')
         <?php endif; ?>
+
+        var p = <?php echo e($plazos_extra->estado); ?>
+
+        console.log("estado del plazo: "+p)
 	})
 </script>
 <?php $__env->stopSection(); ?>

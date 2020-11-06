@@ -8,7 +8,7 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th><center><b>#plantrabajo</b></center></th>
+                            <th><center><b>#</b></center></th>
                             <th><center><b>Periodo academico</b></center></th>
                             <th><center><b>Fecha de registro</b></center></th>
                             <th><center><b>Retraso</b></center></th>
@@ -238,11 +238,11 @@
                             css: {
                                 border: 'none',
                                 padding: '15px',
-                                backgroundColor: '#plantrabajo000',
+                                backgroundColor: '#000',
                                 '-webkit-border-radius': '10px',
                                 '-moz-border-radius': '10px',
                                 opacity: .8,
-                                color: '#plantrabajofff'
+                                color: '#fff'
                             }});
                 $.post(url, data, (response)=>{
                     $.unblockUI();
@@ -270,11 +270,11 @@
                     css: {
                         border: 'none',
                         padding: '15px',
-                        backgroundColor: '#plantrabajo000',
+                        backgroundColor: '#000',
                         '-webkit-border-radius': '10px',
                         '-moz-border-radius': '10px',
                         opacity: .8,
-                        color: '#plantrabajofff'
+                        color: '#fff'
                     }});
                 $.get(url, (response)=>{
                     $.unblockUI();
@@ -323,26 +323,27 @@
             $.blockUI({
                         message: '<h1>Notificando...</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
                         css: {
-                            border: 'none',
-                            padding: '15px',
-                            backgroundColor: '#plantrabajo000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .8,
-                            color: '#plantrabajofff'
-                        }});
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .8,
+                        color: '#fff'
+                    }});
             $.post("{{ route('notificacion/crear') }}",data, function(response){
                 $.unblockUI();
                if (!response.error) toastr.success('Notificacion enviada exitosamente', 'Mensaje enviado', {timeOut: 3000}) 
                if (response.error) toastr.error('Ocurrio un error al enviar la notificacion', 'Mensaje no enviado', {timeOut: 3000})
             }).fail((error)=>{
+                toastr.error('Ocurrio un error en el servidor', 'Mensaje no enviado', {timeOut: 3000})
                  $.unblockUI();
             });
         }
 
         function DarExtraPlazoPlanTrabajo() {
             $('#plantrabajomodalExtraPlazo').modal('hide')
-            var data_form = $("#plantrabajo_form").serialize()
+            var data_form = $("#_form").serialize()
             var url = '{{ route('plazo_docente/registrar') }}'
             var id_periodo = $("#plantrabajoid_periodo_para_plazo").val();
             var fechas_plazo = $("#plantrabajolapso_de_plazo_extra").val();
@@ -357,14 +358,14 @@
             $.blockUI({
                         message: '<h1>Registrando plazo </h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
                         css: {
-                            border: 'none',
-                            padding: '15px',
-                            backgroundColor: '#plantrabajo000',
-                            '-webkit-border-radius': '10px',
-                            '-moz-border-radius': '10px',
-                            opacity: .8,
-                            color: '#plantrabajofff'
-                        }});
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .8,
+                        color: '#fff'
+                    }});
             $.post(url, data, (response)=>{
                 $.unblockUI();
                 if(response.error==false){

@@ -26,10 +26,11 @@
 
 <script>
 	$(document).ready(()=>{
-		 @php
+		@php
                 $plazos_extra = \App\PlazoDocente::where('id_tercero', session('id_tercero_usuario'))
                                                  ->where('estado', 1)
                                                  ->first();
+
         @endphp
 
         @if($plazos_extra)

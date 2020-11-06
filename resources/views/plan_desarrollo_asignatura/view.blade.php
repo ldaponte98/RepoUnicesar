@@ -200,7 +200,42 @@
                 
                 </div>
 
-                <div class="modal fade"  data-focus="false" id="modal_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                
+
+
+            </div>
+        </div>
+</div>
+@if(count($codigos_acceso) > 0)
+<div class="row">
+  <div class="col-lg-12 col-xlg-12 col-md-12">
+      <div class="card">
+        <div class="card-block">
+           <h3><b>Codigos de acceso para estudiantes.</b></h3>
+           @foreach($codigos_acceso as $codigo_acceso)
+              <div class="alert alert-info" style="padding-top: 20px;">
+                <div class="row">
+                  <div class="col-sm-6">
+                    <strong>Grupo {{ $codigo_acceso->grupo->codigo }} :</strong> {{ $codigo_acceso->token }}
+                  </div>
+                   <div class="col-sm-6" style="text-align: right;">
+                     <a href="javascript:void(0)" onclick="copiar('{{ $codigo_acceso->token }}'); toastr.options.positionClass= 'toast-bottom-right'; toastr.info('Codigo de acceso copiado.', 'Copiado', {timeOut: 5000})" title="Copiar codigo de acceso"><i data-feather="clipboard" aria-hidden="true"></i></a>&nbsp;
+                     <a href="javascript:void(0)" onclick="copiar('{{ route('registro').'?token='.$codigo_acceso->token }}');  toastr.options.positionClass= 'toast-bottom-right'; toastr.info('Link de registro copiado.', 'Copiado', {timeOut: 5000})" title="Copiar link de registro directo"><i data-feather="link" aria-hidden="true"></i></a>&nbsp;
+                     <a href="" title="Configuraciones de acceso"><i data-feather="settings" aria-hidden="true"></i></a>
+                  </div>
+                </div>
+                  
+              </div>
+            @endforeach
+        </div>
+      </div>
+  </div>
+</div>
+   
+  
+@endif
+
+<div class="modal fade"  data-focus="false" id="modal_detalle" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -296,46 +331,42 @@
   </div>
 </div>
 
-
-            </div>
+<div class="modal fade" id="modal_cargar_existente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Carga de plan de desarrollo asignatura existente</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+              <div class="form-group" >
+                <input type="hidden" id="tipo_detalle">
+                <label for="recipient-name" class="col-form-label">Escoje el periodo academico del plan de desarrollo asignatura que desea cargar.</label>
+                  @php
+                    $periodos_academicos = \App\PeriodoAcademico::all();
+                  @endphp
+                  <select id="id_periodo_academico_carga_existente" class="custom-select" style="width: 100%" >
+                       <option value="">Seleccione...</option>
+                        @foreach ($periodos_academicos as $d)
+                        @if($d->id_periodo_academico != $periodo_academico->id_periodo_academico)  
+                        <option value="{{ $d->id_periodo_academico }}"  > Periodo {{ $d->periodo }}</option>
+                        @endif
+                        @endforeach
+                  </select>
+              </div>
+              
+          </div>
+          <div class="modal-footer">
+            <button type="button" onclick="if($('#id_periodo_academico_carga_existente').val()){ window.open('/plan_desarrollo_asignatura/view/{{ $tercero->id_tercero }}/{{ $asignatura->id_asignatura }}/'+$('#id_periodo_academico_carga_existente').val(), '_blank')} else{ alert('Es necesario que seleccione el periodo academico.')}" class="btn btn-warning">Vista previa</button>
+            <button type="button" onclick="cargar_plan_existente()" class="btn btn-info">Cargar</button>
+          </div>
         </div>
+      </div>
 </div>
 
 
-<div class="modal fade" id="modal_cargar_existente" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-              <div class="modal-dialog modal-dialog-centered" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title">Carga de plan de desarrollo asignatura existente</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                      <div class="form-group" >
-                        <input type="hidden" id="tipo_detalle">
-                        <label for="recipient-name" class="col-form-label">Escoje el periodo academico del plan de desarrollo asignatura que desea cargar.</label>
-                          @php
-                            $periodos_academicos = \App\PeriodoAcademico::all();
-                          @endphp
-                          <select id="id_periodo_academico_carga_existente" class="custom-select" style="width: 100%" >
-                               <option value="">Seleccione...</option>
-                                @foreach ($periodos_academicos as $d)
-                                @if($d->id_periodo_academico != $periodo_academico->id_periodo_academico)  
-                                <option value="{{ $d->id_periodo_academico }}"  > Periodo {{ $d->periodo }}</option>
-                                @endif
-                                @endforeach
-                          </select>
-                      </div>
-                      
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" onclick="if($('#id_periodo_academico_carga_existente').val()){ window.open('/plan_desarrollo_asignatura/view/{{ $tercero->id_tercero }}/{{ $asignatura->id_asignatura }}/'+$('#id_periodo_academico_carga_existente').val(), '_blank')} else{ alert('Es necesario que seleccione el periodo academico.')}" class="btn btn-warning">Vista previa</button>
-                    <button type="button" onclick="cargar_plan_existente()" class="btn btn-info">Cargar</button>
-                  </div>
-                </div>
-              </div>
-        </div>
 <style type="text/css">
   .custom-control-label{
     font-size: 13px !important;
@@ -758,7 +789,7 @@
           opacity: .8,
           color: '#ffffff'
       }});
-
+    toastr.options.positionClass= 'toast-top-right';
     $.post(url, request, (response) => {
       $.unblockUI();
       if(response.error == false){
@@ -1025,6 +1056,8 @@
           }else{
             $.get(url, (response) => {
               copiar(response)
+              toastr.options.newestOnTop = false;
+              toastr.info('Plan de desarrollo asignatura copiado para Google Site.', 'Copiada', {timeOut: 5000})
             }).fail((error) => {
               toastr.error('Ocurrio un error al exportar la pagina para google site', 'Error', {timeOut: 5000})
             })
@@ -1039,8 +1072,7 @@
         aux.select();
         document.execCommand("copy");
         document.body.removeChild(aux);
-        toastr.options.newestOnTop = false;
-        toastr.info('Plan de desarrollo asignatura copiado para Google Site.', 'Copiada', {timeOut: 5000})
+        
       }
   
 </script>

@@ -285,7 +285,7 @@ class PlanTrabajoController extends Controller
         if($plan_trabajo){
             if ($plan_trabajo->estado == 'Enviado' and session('is_admin')==true) {
                 $notificacion = new Notificaciones;
-                $notificacion->notificacion = 'El administrador te ah revisado el plan de trabajo del periodo '.$plan_trabajo->periodo_academico->periodo;
+                $notificacion->notificacion = 'El jefe de departamento te ha revisado el plan de trabajo del periodo '.$plan_trabajo->periodo_academico->periodo;
                 $notificacion->id_tercero_envia = session('id_tercero_usuario');
                 $notificacion->id_tercero_recibe = $plan_trabajo->id_tercero;
                 $notificacion->id_dominio_tipo = 6;

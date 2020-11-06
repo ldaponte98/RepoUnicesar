@@ -12,6 +12,9 @@ use App\PlanTrabajo;
 use App\PlanDesarrolloAsignatura;
 use App\ActividadesComplementarias;
 use App\Grupo;
+use App\Notificaciones;
+use App\PlanAsignatura;
+use Mail;
 
 
 class TerceroController extends Controller
@@ -174,37 +177,114 @@ class TerceroController extends Controller
             $formatos = $post->formatos;
             $tipo_formato = $post->tipo_formato;
 
+
+            //datos para la notificacion
+            $mensaje = "";
+            $id_tercero_recibe = null;
+            $id_periodo_academico = null;
+            $id_asignatura = null;
+
+            //datos para el email
+            $vista_email = "email.email_formato_revisado";
+            $subject = "";
+            $data_email = "";
+            $email_tercero = "";
             foreach ($formatos as $id_formato) {
 
                 switch ($tipo_formato) {
-                    case config('global.seguimiento_asignatura'):
+
+                        case config('global.seguimiento_asignatura'):
                         $formato = SeguimientoAsignatura::find($id_formato);
                         $formato->estado = "Recibido";
                         $formato->save();
+                        $id_tercero_recibe = $formato->id_tercero;
+                        $mensaje = "El jefe de departamento ha revisado el seguimiento de asignatura numero $id_formato.";
+                        $subject = "Revisión de Seguimiento de asignatura";
+                        $data_email = array(
+                            "formato" => "Seguimiento de Asignatura",
+                            "asignatura" => "(". $formato->asignatura->codigo.") ".$formato->asignatura->nombre,
+                            "grupo" => $formato->grupo->codigo,
+                            "corte" => $formato->corte,
+                            "periodo_academico" => $formato->grupo->periodo_academico->periodo,
+                            "nombre_tercero" => $formato->tercero->nombre
+                        );
+                        $id_periodo_academico = $formato->grupo->periodo_academico->id_periodo_academico;
+                        $id_asignatura = $formato->id_asignatura;
                         break;
 
                     case config('global.plan_trabajo'):
                         $formato = PlanTrabajo::find($id_formato);
                         $formato->estado = "Recibido";
                         $formato->save();
+                        $id_tercero_recibe = $formato->id_tercero;
+                        $mensaje = "El jefe de departamento te ha revisado el plan de trabajo del periodo ".$formato->periodo_academico->periodo;
+                        $subject = "Revisión de Plan de trabajo";
+                        $data_email = array(
+                            "formato" => "Plan de trabajo",
+                            "periodo_academico" => $formato->periodo_academico->periodo,
+                            "nombre_tercero" => $formato->tercero->nombre
+                        );
+                        $id_periodo_academico = $formato->id_periodo_academico;
                         break;
                     
                     case config('global.desarrollo_asignatura'):
                         $formato = PlanDesarrolloAsignatura::find($id_formato);
                         $formato->estado = "Recibido";
                         $formato->save();
+                        $id_tercero_recibe = $formato->id_tercero;
+                        $mensaje = 'El jefe de departamento ha revisado el plan de desarrollo de la asignatura '.$formato->asignatura->nombre." - ".$formato->asignatura->codigo." correspondiente al P.Academico ".$formato->periodo_academico->nombre; 
+                        $subject = "Revisión de Plan de desarrollo asignatura";
+                        $data_email = array(
+                            "formato" => "Plan de desarrollo asignatura",
+                            "periodo_academico" => $formato->periodo_academico->periodo,
+                            "asignatura" => $formato->asignatura->nombre." - ".$formato->asignatura->codigo,
+                            "nombre_tercero" => $formato->tercero->nombre
+                        );
+                        $id_periodo_academico = $formato->id_periodo_academico;
+                        $id_asignatura = $formato->id_asignatura;
                         break;
 
                     case config('global.actividades_complementarias'):
                         $formato = ActividadesComplementarias::find($id_formato);
                         $formato->estado = "Recibido";
                         $formato->save();
+                        $id_tercero_recibe = $formato->plan_trabajo->id_tercero;
+                        $mensaje = 'El jefe de departamento te ha revisado las actividades complementarias perteneciente al '.$formato->corte.' corte del periodo '.$formato->plan_trabajo->periodo_academico->periodo;
+                        $subject = "Revisión de Actividad complementaria";
+                        $data_email = array(
+                            "formato" => "Actividades complementarias",
+                            "periodo_academico" => $formato->plan_trabajo->periodo_academico->periodo,
+                            "corte" => $formato->corte,
+                            "nombre_tercero" => $formato->plan_trabajo->tercero->nombre,
+                        );
                         break;
                     
                     default:
                         echo "<b>Formato invalido<b>";
+                        return response()->json(array(
+                            'error' => false
+                        )); 
                         break;
-                }                
+                }    
+
+                $notificacion = new Notificaciones;
+                $notificacion->notificacion = $mensaje;
+                $notificacion->id_tercero_envia = session('id_tercero_usuario');
+                $notificacion->id_tercero_recibe = $id_tercero_recibe;
+                $notificacion->id_dominio_tipo = 6; //revision
+                if($id_formato) $notificacion->id_formato = $id_formato;
+                if($id_periodo_academico)$notificacion->id_periodo_academico = $id_periodo_academico;
+                if($id_asignatura) $notificacion->id_asignatura = $id_asignatura;
+                $notificacion->id_dominio_tipo_formato = $tipo_formato;
+                if ($notificacion->save()) {
+                    $for = $notificacion->tercero_recibe->email;
+                    Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
+                        $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
+                        $msj->subject($subject);
+                        $msj->to($for);
+                    });
+                }
+                
             }
             return response()->json(array(
                 'error' => false
@@ -214,5 +294,12 @@ class TerceroController extends Controller
             'error' => true
         ));
     }
+
+    public function panel()
+    {
+        return view('sitio.index3');
+    }
+
+   
 
 }

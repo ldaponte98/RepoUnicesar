@@ -43,6 +43,10 @@
             position: absolute;
             
         }
+        .container-login100{
+        	background: url('<?php echo e(asset('Imagenes/fondo.jpg')); ?>');
+        	background-size: cover;
+        }
         .errores2{
             -webkit-boxshadow: 0 0 10px rgba(0, 0, 0, 0.3);
             -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -71,7 +75,10 @@
 		<div class="container-login100">
 			<div class="wrap-login100">
 				<?php if($errors->first('mensaje') != ""): ?>
-						<div class="alert alert-danger"><strong><?= $errors->first('mensaje')?></strong></div>
+						<div id="msg" class="alert alert-danger"><strong><?= $errors->first('mensaje')?></strong></div>
+						<script>
+							setTimeout(()=>{$("#msg").fadeOut()}, 5000)
+						</script>
 					<?php endif; ?>
 				<div id="mensajeprincipal" class="errores2">Esta cuenta no existe</div>
 			<form id="form-login" method="POST" action="<?php echo e(route('usuario/login')); ?>">
@@ -81,12 +88,12 @@
 						Bienvenido
 					</span>
 					<span class="login100-form-title p-b-28">
-						<i><img src="Imagenes/iconoupc.png"></i>
+						<i><img width="auto" height="150" src="Imagenes/iconoupc.png"></i>
 					</span>
 
 					<div id="hola" class="wrap-input100 validate-input" data-validate= "Campo vacio">
 						<input class="input100" type="text" id="usuario" name="usuario" >
-						<span class="focus-input100" data-placeholder="Usuario"></span>
+						<span class="focus-input100" data-placeholder="Correo electrónico"></span>
 					</div>
 
 					<div class="wrap-input100 validate-input" data-validate ="Campo vacio">
@@ -102,13 +109,10 @@
 							<div  class="login100-form-bgbtn"></div>
 							<button type="submit" style="cursor: pointer;" class="login100-form-btn" >
 								<b>Iniciar Sesion</b> 
-							</a>
-						</button>
-					</div>
-					<br><br>
-					
-					
-
+							</button>	
+						</div>
+					</div><br>
+					<center><a style="color: blue;" href="<?php echo e(route('registro')); ?>">Crear cuenta</a></center>
 				</form>
 			</div>
 		</div>
@@ -120,9 +124,6 @@
 	</script>
 
 	<script src="js/Login.js"></script>
-<!--===============================================================================================-->
-	
-<!--===============================================================================================-->
 	<script src="Login/js/main.js"></script>
 
 </body>

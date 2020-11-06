@@ -106,10 +106,10 @@
                                           
                         </div>
                         <div class="tab-pane fade" id="seg_enviados" role="tabpanel" aria-labelledby="seg_enviados-tab">
-                        {{ view('docente.listado_seguimientos_enviados',compact('docente')) }}     
+                        {{ view('docente.listado_plan_desarrollo_enviados',compact('docente')) }}     
                         </div>
                         <div class="tab-pane fade" id="seg_recibidos" role="tabpanel" aria-labelledby="seg_recibidos-tab">
-                        {{ view('docente.listado_seguimientos_recibidos',compact('docente')) }}     
+                        {{ view('docente.listado_plan_desarrollo_recibidos',compact('docente')) }}     
                         </div>
                         
                       </div>

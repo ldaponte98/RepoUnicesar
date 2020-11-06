@@ -225,11 +225,11 @@
                             css: {
                                 border: 'none',
                                 padding: '15px',
-                                backgroundColor: '#seguimiento000',
+                                backgroundColor: '#000',
                                 '-webkit-border-radius': '10px',
                                 '-moz-border-radius': '10px',
                                 opacity: .8,
-                                color: '#seguimientofff'
+                                color: '#fff'
                             }});
                 $.post(url, data, (response)=>{
                     $.unblockUI();
@@ -257,11 +257,11 @@
                     css: {
                         border: 'none',
                         padding: '15px',
-                        backgroundColor: '#seguimiento000',
+                        backgroundColor: '#000',
                         '-webkit-border-radius': '10px',
                         '-moz-border-radius': '10px',
                         opacity: .8,
-                        color: '#seguimientofff'
+                        color: '#fff'
                     }});
                 $.get(url, (response)=>{
                     $.unblockUI();
@@ -330,11 +330,11 @@
                         css: {
                             border: 'none',
                             padding: '15px',
-                            backgroundColor: '#seguimiento000',
+                            backgroundColor: '#000',
                             '-webkit-border-radius': '10px',
                             '-moz-border-radius': '10px',
                             opacity: .8,
-                            color: '#seguimientofff'
+                            color: '#fff'
                         }});
             $.post(url, data, (response)=>{
                 $.unblockUI();
