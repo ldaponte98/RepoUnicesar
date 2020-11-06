@@ -659,6 +659,7 @@
 
 <script>
     function validarCodigoAcceso() {
+
         console.log($("#codigo_acceso_modal").css("border-color"))
         var codigo = $("#codigo_acceso_modal").val()
         if(codigo.trim() == ""){
@@ -673,7 +674,9 @@
         var url = '/tercero/crear_clase/'+codigo
         $.get(url, (response) => {
             if(response.error == false){
+
                 location.reload() 
+
             }else{
                 $("#codigo_acceso_modal").css("border-color", "#f62d51");
                 $("#msg_error_validar_codigo").html(response.message)
@@ -687,7 +690,8 @@
         })
     }
 
-    function normalizar_input() {
+    function normalizar_input() { 
+        //colocar el input como estaba
         $("#codigo_acceso_modal").css("border-color", "#00000026");
         $("#msg_error_validar_codigo").html("");
     }
