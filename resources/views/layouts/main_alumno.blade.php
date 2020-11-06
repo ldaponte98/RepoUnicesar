@@ -667,13 +667,13 @@
             return false
         }
 
-        $("#btn_validar_codigo_acceso").html("Validando...");
+        $("#btn_validar_codigo_acceso").html("Validando..."); 
         $("#btn_validar_codigo_acceso").prop("disabled", true);
 
         var url = '/tercero/crear_clase/'+codigo
         $.get(url, (response) => {
             if(response.error == false){
-                location.reload()
+                location.reload() 
             }else{
                 $("#codigo_acceso_modal").css("border-color", "#f62d51");
                 $("#msg_error_validar_codigo").html(response.message)
