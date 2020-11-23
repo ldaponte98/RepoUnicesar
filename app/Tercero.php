@@ -326,6 +326,7 @@ class Tercero extends Model
                         if($tercero_grupo_aux->grupo->id_asignatura == $asignatura['id_asignatura']){
                             $grupo['id_grupo'] = $tercero_grupo_aux->grupo->id_grupo;
                             $grupo['codigo'] = $tercero_grupo_aux->grupo->codigo;
+                            $grupo['acceso'] = $tercero_grupo_aux->estado;
                             $grupo['id_periodo_academico'] = $tercero_grupo_aux->grupo->id_periodo_academico;
 
                             array_push($asignatura['grupos'], (object) $grupo);

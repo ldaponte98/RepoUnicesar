@@ -109,7 +109,7 @@
 
 <script type="text/javascript">
     function buscar_carga_academica(id_periodo){
-        let url = "/docente/buscar_asignaturas/"+id_periodo+"/{{ $usuario->id_tercero }}"
+        let url = "{{ config('global.url_base') }}/docente/buscar_asignaturas/"+id_periodo+"/{{ $usuario->id_tercero }}"
         $.get(url, (response) => {
             var asignaturas = "<option value='' disabled selected>Consultar por nombre o codigo</option>";
             response.asignaturas.forEach((asignatura) => {

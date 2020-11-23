@@ -17,6 +17,8 @@ return [
     'notificacion_retraso' => 9,
 
 
-    'email_general' => 'repounicesar@gmail.com'
+    'email_general' => 'repounicesar@gmail.com',
+
+    'url_base' => ''
 ]
 ?>

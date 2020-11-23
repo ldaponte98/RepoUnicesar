@@ -404,6 +404,11 @@
                                 width: 400px;
                             }
 
+                            .page-wrapper {
+                                margin-left: 290px;
+                                transition: 0.2s ease-in;
+                            }
+
                             .link_search:hover{
                                 color: #9bbf4c;
                                 cursor: pointer;
@@ -504,7 +509,7 @@
                         }
                 </style>
                 <ul id="sidebarnav" class="in">
-                    <li class="nav-small-cap">Asignaturas</li>
+                    <li class="nav-small-cap">Clases</li>
 
                         @php
                             $menu_asignaturas = $usuario->tercero->menu_asignaturas();
@@ -517,7 +522,7 @@
                             <ul aria-expanded="false" class="collapse">
                                 @foreach($menu_asignatura->grupos as $grupo)
                                 <li class="">
-                                    <a href="{{ $grupo->id_grupo }}">Grupo {{ $grupo->codigo }}</a>
+                                    <a @if($grupo->acceso == 2) href="javascript:void(0)" @else href="{{ route('clases/panel',$grupo->id_grupo) }}" @endif>Grupo {{ $grupo->codigo }} @if($grupo->acceso == 2) <span class="label label-rounded label-warning" title="El docente debe aprobar su solicitud de ingreso a la clase, en cuanto sea aceptado podra ingresar a la clase y obtener acceso a su contenido programatico.">Aprobación pendiente</span> @endif</a>
                                 </li>
                                 @endforeach
                             </ul>
@@ -671,7 +676,7 @@
         $("#btn_validar_codigo_acceso").html("Validando..."); 
         $("#btn_validar_codigo_acceso").prop("disabled", true);
 
-        var url = '/tercero/crear_clase/'+codigo
+        var url = '/alumno/agregar_clase/'+codigo
         $.get(url, (response) => {
             if(response.error == false){
 

@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<title>Repositorio-Login</title>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" sizes="30x30" href="Imagenes/iconoupc.png">
@@ -81,8 +81,8 @@
 						</script>
 					<?php endif; ?>
 				<div id="mensajeprincipal" class="errores2">Esta cuenta no existe</div>
-			<form id="form-login" method="POST" action="<?php echo e(route('usuario/login')); ?>">
-					<?php echo csrf_field(); ?>
+				<?php echo e(Form::open(array('method' => 'post', 'route' => 'usuario/login'))); ?>
+
 					<input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>"></input>
 					<span class="login100-form-title p-b-26">
 						Bienvenido
@@ -113,7 +113,8 @@
 						</div>
 					</div><br>
 					<center><a style="color: blue;" href="<?php echo e(route('registro')); ?>">Crear cuenta</a></center>
-				</form>
+				<?php echo e(Form::close()); ?>
+
 			</div>
 		</div>
 	</div>

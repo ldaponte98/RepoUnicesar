@@ -41,13 +41,19 @@ class UsuarioController extends Controller
                 ];
     			session($session);
 
-                if ($usuario->id_perfil == 1) return view('sitio.index',compact('usuario'));
-                if ($usuario->id_perfil == 2) return view('sitio.index2',compact('usuario'));
-                if ($usuario->id_perfil == 3) return view('sitio.index3',compact('usuario'));
+                return redirect()->route("panel");
     			
     		}	
     	}	
     	return back()->withErrors(['mensaje'=>$mensaje]);
+    }
+
+    public function panel()
+    {
+        
+        if (session('is_admin')) return view('sitio.index',compact('usuario'));
+        if (session('is_docente')) return view('sitio.index2',compact('usuario'));
+        if (session('is_alumno')) return view('sitio.index3',compact('usuario'));
     }
 
     public function logout(Request $request)

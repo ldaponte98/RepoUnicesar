@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
 	<title>Repositorio-Login</title>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->	
 	<link rel="icon" type="image/png" sizes="30x30" href="Imagenes/iconoupc.png">
@@ -81,8 +81,7 @@
 						</script>
 					@endif
 				<div id="mensajeprincipal" class="errores2">Esta cuenta no existe</div>
-			<form id="form-login" method="POST" action="{{route('usuario/login')}}">
-					@csrf
+				{{ Form::open(array('method' => 'post', 'route' => 'usuario/login')) }}
 					<input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
 					<span class="login100-form-title p-b-26">
 						Bienvenido
@@ -113,7 +112,7 @@
 						</div>
 					</div><br>
 					<center><a style="color: blue;" href="{{ route('registro') }}">Crear cuenta</a></center>
-				</form>
+				{{ Form::close() }}
 			</div>
 		</div>
 	</div>

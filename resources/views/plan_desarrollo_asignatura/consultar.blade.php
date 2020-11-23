@@ -119,7 +119,7 @@
             
             </div>
             <center>
-                <button type="submit" onclick="if($('#id_asignatura').val() != null && $('#id_periodo_academico').val() != null){ location.href = '/plan_desarrollo_asignatura/view/'+$('#id_tercero').val()+'/'+$('#id_asignatura').val()+'/'+$('#id_periodo_academico').val() }else{alert('Es necesario que escoja la asignatura y el periodo academico.')}" class="btn btn-info">Consultar</button>
+                <button type="submit" onclick="if($('#id_asignatura').val() != null && $('#id_periodo_academico').val() != null){ location.href = '{{ config('global.url_base') }}/plan_desarrollo_asignatura/view/'+$('#id_tercero').val()+'/'+$('#id_asignatura').val()+'/'+$('#id_periodo_academico').val() }else{alert('Es necesario que escoja la asignatura y el periodo academico.')}" class="btn btn-info">Consultar</button>
             </center>
           </div>
       </div>
@@ -137,7 +137,7 @@
         let id_periodo = $("#id_periodo_academico").val()
         let id_tercero = $("#id_tercero").val()
         if(id_tercero && id_periodo){
-            let url = "/docente/buscar_asignaturas/"+id_periodo+"/"+id_tercero
+            let url = "{{ config('global.url_base') }}/docente/buscar_asignaturas/"+id_periodo+"/"+id_tercero
             $.get(url, (response) => {
                 var asignaturas = "<option value='' disabled selected>Consultar por nombre o codigo</option>";
                 response.asignaturas.forEach((asignatura) => {

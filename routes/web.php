@@ -22,7 +22,7 @@ Route::any('index','UsuarioController@login')->name('usuario/login');
 Route::get('registro','UsuarioController@registro')->name('registro');
 Route::post('validar_registro','UsuarioController@validar_registro')->name('validar_registro');
 Route::get('usuario/logout','UsuarioController@logout')->name('logout');
-
+Route::get('panel','UsuarioController@panel')->name('panel');
 Route::get('email/email_retraso',function () {
     return view('email.email_retraso');
 })->name('email/email_retraso');
@@ -44,6 +44,11 @@ Route::get('docente/view_formato/{tipo_formato}/{id_tercero}','TerceroController
 Route::post('tercero/marcarFormatosComoLeido','TerceroController@marcarFormatosComoLeido')->name('tercero/marcarFormatosComoLeido');
 
 Route::any('alumno/panel','TerceroController@panel')->name('alumno/panel');
+Route::any('alumno/agregar_clase/{codigo_acceso}','TerceroController@agregar_clase')->name('alumno/agregar_clase');
+
+Route::any('clases/panel/{id_grupo}','ClaseController@panel')->name('clases/panel');
+Route::any('clases/mis_clases','ClaseController@clases_docente')->name('clases/mis_clases');
+Route::post('clases/buscar_clases','ClaseController@buscar_clases')->name('clases/buscar_clases');
 
 
 //RUTAS ASIGNATURA

@@ -34,10 +34,6 @@
         <?php if($plazos_extra): ?>
             $("#modal_plazos").modal('show')
         <?php endif; ?>
-
-        var p = <?php echo e($plazos_extra->estado); ?>
-
-        console.log("estado del plazo: "+p)
 	})
 </script>
 <?php $__env->stopSection(); ?>

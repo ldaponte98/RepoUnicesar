@@ -1,6 +1,5 @@
 <?php
-        $usuario = \App\Usuario::find(session('id_usuario'));
-
+    $usuario = \App\Usuario::find(session('id_usuario'));
 ?>
 <?php if($usuario == null): ?>
     <script>
@@ -63,6 +62,12 @@
 
 <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
 <script src="https://unpkg.com/feather-icons"></script>
+<script src="<?php echo e(asset('js/paginacion.js')); ?>"></script>
+
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+ 
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 
      <style type="text/css">
 
@@ -148,6 +153,14 @@
     .blockMsg h1{
         color: #ffffff !important;
     }
+
+    .page-item{
+        cursor: pointer !important;
+    }
+    .font-small{
+        font-size: 12px;
+    }
+</style>
     
 
 </style>
@@ -555,7 +568,20 @@
                                 </li>
                             </ul>
                         </li>
-               
+
+                        <li class="nav-devider"></li>
+                        <li class="nav-small-cap">Clases</li>
+                        <li>
+                            <a href="<?php echo e(route('clases/mis_clases')); ?>" class="waves-effect" style="display: flex !important;">
+                                <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo e(route('plan_desarrollo_asignatura/consultar_desde_docente')); ?>" class="waves-effect" style="display: flex !important;">
+                                <i data-feather="check-circle" class="m-r-10" aria-hidden="true"></i> Registrar asistencia
+                            </a>
+                        </li>
+
                     </ul>
                     </ul>
                     

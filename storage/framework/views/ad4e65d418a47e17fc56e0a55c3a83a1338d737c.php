@@ -546,7 +546,7 @@
                          <?php
                             $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
                                             ->leftJoin('asignatura', 'asignatura.id_asignatura', '=', 'seguimiento_asignatura.id_asignatura')
-                                            ->where('estado', 'Enviado')
+                                            ->where('seguimiento_asignatura.estado', 'Enviado')
                                             ->where('id_licencia', session('id_licencia'))
                                             ->count();
 
@@ -614,7 +614,7 @@
                             
                         $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
                                             ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
-                                            ->where('estado', 'Enviado')
+                                            ->where('actividades_complementarias.estado', 'Enviado')
                                             ->where('id_licencia', session('id_licencia'))
                                             ->count();
                             ?>

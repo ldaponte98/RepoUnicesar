@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Tercero;
+use App\TerceroGrupo;
 use App\Horario;
 use App\SeguimientoAsignatura;
 use App\PlanTrabajo;
@@ -14,6 +15,7 @@ use App\ActividadesComplementarias;
 use App\Grupo;
 use App\Notificaciones;
 use App\PlanAsignatura;
+use App\CodigoAcceso;
 use Mail;
 
 
@@ -298,6 +300,47 @@ class TerceroController extends Controller
     public function panel()
     {
         return view('sitio.index3');
+    }
+
+    public function agregar_clase($codigo_acceso)
+    {
+        $error = true;
+        $message = "";
+
+        $codigo_acceso = CodigoAcceso::where('token', $codigo_acceso)
+                                       ->where('estado', 1)
+                                       ->first();
+        if($codigo_acceso){
+            $tercero_grupo = TerceroGrupo::where('id_tercero', session('id_tercero_usuario'))
+                                         ->where('id_grupo', $codigo_acceso->grupo->id_grupo)
+                                         ->where('estado', '<>', 0)
+                                         ->first();
+            if(!$tercero_grupo){
+                //asignamos estudiante a grupo
+                $tercero_grupo = new TerceroGrupo;
+                $tercero_grupo->id_tercero = session('id_tercero_usuario');
+                $tercero_grupo->id_grupo = $codigo_acceso->grupo->id_grupo;
+                $tercero_grupo->estado = 1;
+                if($codigo_acceso->requiere_autorizacion == 1){
+                    $tercero_grupo->estado = 2;
+                }
+                if($tercero_grupo->save()){
+                    $error = false;
+                    $message = "Registro de clase exitoso";
+                }else{
+                    $message = "Ocurrio un error al agregar la clase.";
+                }
+            }else{
+                $message = "Ya se encuentra inscrito en la clase correspondiente a este codigo de acceso.";
+            }
+        }else{
+            $message = "Codigo de clase no valido.";
+        }
+
+        return response()->json(array(
+            'error' => $error,
+            'message' => $message,
+        )); 
     }
 
    
