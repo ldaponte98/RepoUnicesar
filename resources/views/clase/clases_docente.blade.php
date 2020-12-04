@@ -173,7 +173,7 @@
         })
         $("#bodytable").html(tabla_html)
         $("#paginador").html("")
-        $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:1});
+        $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:10});
     }
 
     function opciones_clase(permiso_asistencia) {
