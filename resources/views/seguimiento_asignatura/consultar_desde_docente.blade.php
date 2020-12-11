@@ -32,8 +32,11 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+<script src="http://malsup.github.io/jquery.blockUI.js"></script>
 
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 <div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
                         <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
@@ -60,22 +63,52 @@
                             <div class="form-group">
                                   <label style="color: black;"><b>Estado</b></label>
                                            <select id="estado" name="estado" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
+                                                <option value="">Todos</option>
                                                 <option value="Recibido">Recibidos (Leidos)</option>
                                                 <option value="Enviado">Enviados (No leidos)</option>
                                                 <option value="Pendiente">Pendientes</option>
                                             </select>
+                        <script type="text/javascript">
+                            $(document).ready(function() {
+                                $("#estado").select2({
+                                    width : '100%',
+                                })
+                            });
+                        </script>
                             </div>
                         </div>  
-                              <div class="col-sm-3">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Periodo academico</b></label>
+                                           <select onchange="buscar_carga_academica(this.value)" id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
+                                                <option value="">Todos</option>
+                                                @foreach ($periodos_academicos as $periodo)
+                                                <option value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
+                                                @endforeach
+                                            </select>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#periodo_academico").select2({
+                                        width : '100%',
+                                    })
+                                });
+                            </script>
+                            </div>
+                        </div>
+                        <div class="col-sm-3">
                             <div class="form-group">
                                   <label style="color: black;"><b>Asignatura</b></label>
-                                        <select id="asignatura" name="asignatura" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                @foreach ($asignaturas as $asignatura)
-                                                <option value="{{ $asignatura->id_asignatura }}">{{ $asignatura->nombre }}</option>
-                                                @endforeach
+                                        <select onchange="buscar_grupos(this.value)" id="asignatura" name="asignatura" class="form-control form-control-line"  >
+                                                <option value="">Todos</option>
+                                               
                                         </select>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $("#asignatura").select2({
+                                            width : '100%',
+                                        })
+                                    });
+                                </script>
                             </div>
                         </div> 
 
@@ -83,22 +116,18 @@
                             <div class="form-group">
                                   <label style="color: black;"><b>Grupo</b></label>
                                            <select id="grupo" name="grupo" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                
+                                                <option value="">Todos</option>
                                             </select>
+                                    <script type="text/javascript">
+                                        $(document).ready(function() {
+                                            $("#grupo").select2({
+                                                width : '100%',
+                                            })
+                                        });
+                                    </script>
                             </div>
                         </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Periodo academico</b></label>
-                                           <select id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                @foreach ($periodos_academicos as $periodo)
-                                                <option value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
-                                                @endforeach
-                                            </select>
-                            </div>
-                        </div>
+                        
                         
                       
                     
@@ -110,7 +139,7 @@
                             <div class="form-group">
                                   <label style="color: black;"><b>Corte</b></label>
                                            <select id="cor" name="corte" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
+                                                <option value="">Todos</option>
                                                 <option value="1">Primer Corte</option>
                                                 <option value="2">Segundo Corte</option>
                                                 <option value="3">Tercer Corte</option>
@@ -120,7 +149,7 @@
                               <div class="col-sm-6">
                             <div class="form-group">
                                   <label style="color: black;"><b>Fecha de envio</b></label>
-                                  <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="fecha" type="text" name="fecha" autocomplete="off" value="" placeholder ="Seleccione...">
+                                  <input class="form-control hasDatepicker form-control-line" readonly="readonly" id="fecha" type="text" name="fecha" autocomplete="off" value="" placeholder ="Todos">
 
                                                 
                             </div>
@@ -217,9 +246,6 @@
 
                 <script>
                     $(document).ready(function() {
-                        $("#asignatura").on('change', function(){
-                           cargargrupos()
-                        })
                          $('#fecha').click(function(){
                             if($('#fecha').val()==""){
                                     $('#fecha').daterangepicker({
@@ -233,6 +259,33 @@
                              }
                          });
                     })
+
+                    function buscar_carga_academica(id_periodo){
+                        let url = "{{ config('global.url_base') }}/docente/buscar_asignaturas/"+id_periodo+"/{{ $usuario->id_tercero }}"
+                        $.get(url, (response) => {
+                            var asignaturas = "<option value=''>Todos</option>";
+                            response.asignaturas.forEach((asignatura) => {
+                                asignaturas += "<option value = '"+asignatura.id_asignatura+"' >"+asignatura.nombre+"</option>"
+                            })
+                            $("#asignatura").html(asignaturas)
+                            var grupos = "<option value=''>Todos</option>"
+                            $("#grupo").html(grupos)
+                        })
+                    }
+
+                    function buscar_grupos(id_asignatura) {
+                        let id_periodo = $("#periodo_academico").val()
+                        if(id_periodo == "" || id_periodo == null){ alert("Es necesario establecer el periodo academico para el filtrado."); return false }
+                        
+                        var ruta = "{{ config('global.url_base') }}/asignatura/buscar_grupos_docente/"+id_asignatura+"/{{ $usuario->id_tercero }}/"+id_periodo
+                        var grupos = "<option value=''>Todos</option>"
+                        $.get(ruta, function(response) {
+                            response.forEach(function(grupo){
+                                grupos += '<option value="'+grupo.id_grupo+'">'+grupo.codigo+'</option>'
+                            })
+                            $("#grupo").html(grupos)
+                        })
+                    }
 
                    /*
                     $('#fecha_envio').datepicker({
@@ -262,17 +315,7 @@
                     }
                 }
 
-                function cargargrupos() {
-                    var id_asignatura = $("#asignatura").val()
-                    var ruta = "../asignatura/buscar_grupos/"+id_asignatura
-                    var grupos = "<option value='0'>Seleccione...</option>"
-                    $.get(ruta, function(response) {
-                        response.forEach(function(grupo){
-                            grupos += '<option value="'+grupo.id_grupo+'">'+grupo.codigo+'</option>'
-                        })
-                        $("#grupo").html(grupos)
-                    })
-                }
+                
 
                 function consultar(){
                     var data = $("#form_fltros").serialize();

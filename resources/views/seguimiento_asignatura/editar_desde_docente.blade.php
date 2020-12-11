@@ -458,7 +458,7 @@
        		$("#ejes_tematicos").html("Cargando...")
        		var html_unidad = $("#unidad_"+id_unidad)
 	       	 if(html_unidad.prop('checked')){
-	       	 	var url = "../getEjesTematicos/"+id_unidad+"/"+{{ $seguimiento->id_seguimiento }}
+	       	 	var url = "{{ config('global.url_base') }}/seguimiento/getEjesTematicos/"+id_unidad+"/"+{{ $seguimiento->id_seguimiento }}
 	       	 	$.ajax({ type: "GET", url : url, dataType:  "JSON"})
 		         .done(function(response){
 		        	unidades_seleccionadas.push(response)

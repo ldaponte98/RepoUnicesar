@@ -5,6 +5,7 @@ use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Asignatura;
+use App\Grupo;
 use App\UnidadAsignatura;
 use App\EjeTematico;
 use App\EjeTematicoSeguimiento;
@@ -33,6 +34,15 @@ class AsignaturaController extends Controller
     {
         $asignatura = Asignatura::find($id);
         return response()->json($asignatura->grupos);
+    }
+
+    public function buscar_grupos_docente($id_asignatura, $id_tercero,$id_periodo_academico)
+    {
+        $grupos_tercero = Grupo::where('id_tercero', $id_tercero)
+                                ->where('id_periodo_academico',  $id_periodo_academico)
+                                ->where('id_asignatura',  $id_asignatura)
+                                ->get();
+        return response()->json($grupos_tercero);
     }
 
     public function agregarUnidad(Request $request)

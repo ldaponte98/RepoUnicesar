@@ -410,4 +410,30 @@ class PlanDesarrolloAsignaturaController extends Controller
         }
         return response()->json("Error de data enviada");
     }
+
+
+    public function obtener_temas(Request $request)
+    {
+        $post = $request->all();
+        $temas = [];
+        if($post){
+            $post = (object) $post;
+            $id_periodo_academico = $post->id_periodo_academico;
+            $id_asignatura = $post->id_asignatura;
+            $id_tercero = $post->id_tercero;
+
+            $plan_desarrollo = PlanDesarrolloAsignatura::where('id_periodo_academico', $id_periodo_academico)
+                                                       ->where('id_asignatura', $id_asignatura)
+                                                       ->where('id_tercero', $id_tercero)
+                                                       ->first();
+            if($plan_desarrollo){
+                foreach ($plan_desarrollo->ejes as $eje_plan_desarrollo) {
+                    $temas[] = $eje_plan_desarrollo->eje->nombre;
+                }
+            }
+        }
+        return response()->json([
+            'temas' => $temas
+        ]);
+    }
 }

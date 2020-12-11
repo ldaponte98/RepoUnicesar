@@ -30,7 +30,10 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+<script src="http://malsup.github.io/jquery.blockUI.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
 
 <div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
@@ -66,32 +69,11 @@
                                             </select>
                             </div>
                         </div>  
-                              <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Asignatura</b></label>
-                                        <select id="asignatura" name="asignatura" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                <?php $__currentLoopData = $asignaturas; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $asignatura): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                                <option value="<?php echo e($asignatura->id_asignatura); ?>"><?php echo e($asignatura->nombre); ?></option>
-                                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                                        </select>
-                            </div>
-                        </div> 
-
-                         <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Grupo</b></label>
-                                   <select id="grupo" name="grupo" class="form-control form-control-line"  >
-                                        <option value="">Seleccione...</option>
-                                        
-                                    </select>
-                            </div>
-                        </div>
                         <div class="col-sm-3">
                             <div class="form-group">
                                   <label style="color: black;"><b>Periodo academico</b></label>
-                                           <select id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
+                                           <select onchange="buscar_carga_academica(this.value)" id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
+                                                <option value="">Todos</option>
                                                 <?php
                                                     $cont = 0;
                                                 ?>
@@ -107,11 +89,47 @@
                                                 
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </select>
+                            <script type="text/javascript">
+                                $(document).ready(function() {
+                                    $("#periodo_academico").select2({
+                                        width : '100%',
+                                    })
+                                });
+                            </script>
                             </div>
                         </div>
-                        
-                      
-                    
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Asignatura</b></label>
+                                        <select onchange="buscar_grupos(this.value)" id="asignatura" name="asignatura" class="form-control form-control-line"  >
+                                                <option value="">Todos</option>
+                                               
+                                        </select>
+                                <script type="text/javascript">
+                                    $(document).ready(function() {
+                                        $("#asignatura").select2({
+                                            width : '100%',
+                                        })
+                                    });
+                                </script>
+                            </div>
+                        </div> 
+
+                         <div class="col-sm-3">
+                            <div class="form-group">
+                                  <label style="color: black;"><b>Grupo</b></label>
+                                           <select id="grupo" name="grupo" class="form-control form-control-line"  >
+                                                <option value="">Todos</option>
+                                            </select>
+                                    <script type="text/javascript">
+                                        $(document).ready(function() {
+                                            $("#grupo").select2({
+                                                width : '100%',
+                                            })
+                                        });
+                                    </script>
+                            </div>
+                        </div>
                  </div>
                  <div id="segundofil">
                  <div class="row" > 
@@ -163,7 +181,6 @@
                                                 <td><b>Estado</b></td>
                                                 <td><b>Periodo</b></td>
                                                 <td><center><b>Acciones</b></center></td>
-                                                
                                             </tr>
                                         </thead>
                                         <tbody id="bodytablemiseguimiento">
@@ -179,9 +196,6 @@
 
                 <script>
                     $(document).ready(function() {
-                        $("#asignatura").on('change', function(){
-                           cargargrupos()
-                        })
                          $('#fecha').click(function(){
                             if($('#fecha').val()==""){
                                     $('#fecha').daterangepicker({
@@ -211,11 +225,25 @@
                     }
                 }
 
-                function cargargrupos() {
-                    $("#grupo").html("<option value='0'>Cargando...</option>")
-                    var id_asignatura = $("#asignatura").val()
-                    var ruta = "../asignatura/buscar_grupos/"+id_asignatura
-                    var grupos = "<option value='0'>Seleccione...</option>"
+                function buscar_carga_academica(id_periodo){
+                    let url = "<?php echo e(config('global.url_base')); ?>/docente/buscar_asignaturas/"+id_periodo+"/<?php echo e($usuario->id_tercero); ?>"
+                    $.get(url, (response) => {
+                        var asignaturas = "<option value=''>Todos</option>";
+                        response.asignaturas.forEach((asignatura) => {
+                            asignaturas += "<option value = '"+asignatura.id_asignatura+"' >"+asignatura.nombre+"</option>"
+                        })
+                        $("#asignatura").html(asignaturas)
+                        var grupos = "<option value=''>Todos</option>"
+                        $("#grupo").html(grupos)
+                    })
+                }
+
+                function buscar_grupos(id_asignatura) {
+                    let id_periodo = $("#periodo_academico").val()
+                    if(id_periodo == "" || id_periodo == null){ alert("Es necesario establecer el periodo academico para el filtrado."); return false }
+                    
+                    var ruta = "<?php echo e(config('global.url_base')); ?>/asignatura/buscar_grupos_docente/"+id_asignatura+"/<?php echo e($usuario->id_tercero); ?>/"+id_periodo
+                    var grupos = "<option value=''>Todos</option>"
                     $.get(ruta, function(response) {
                         response.forEach(function(grupo){
                             grupos += '<option value="'+grupo.id_grupo+'">'+grupo.codigo+'</option>'
@@ -261,7 +289,7 @@
 
                                 acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;'"+
                                  "onclick=\"OpenModalNotificarRetraso("+seguimiento.id_seguimiento+","+seguimiento.id_tercero+",\'"+seguimiento.docente+"\',\'"+seguimiento.retraso+"\',\'"+seguimiento.asignatura+"\',\'"+seguimiento.grupo+"\',"+seguimiento.corte+", \'"+seguimiento.periodo_academico+"\')\">Notificar retraso</a></center></td>"
-                                 if(seguimiento.retraso == 'En espera' || seguimiento.retraso == 'Tiene plazo-extra') acciones = ""
+                                 if(seguimiento.retraso == 'En espera' || seguimiento.retraso == 'Tiene plazo-extra') acciones = "<td></td>"
                             }
                             if(seguimiento.estado=='Recibido'){
                                 acciones = "<td><center><a style='color: blue; cursor: pointer; font-size: 14px;' target='_blank' href = 'view_informe_final/"+seguimiento.id_seguimiento+"'>Ver</a></center></td>"
@@ -283,7 +311,7 @@
 
                 function exportar_excel() {
                     var tabla_aux = $("#tabla_seguimientos").html()
-                    borrarColumna("tabla_seguimientos",9)
+                    borrarColumna("tabla_seguimientos",7)
                     tableToExcel('tabla_seguimientos', 'Reporte_seguimiento')
                     $("#tabla_seguimientos").html(tabla_aux)
                 }

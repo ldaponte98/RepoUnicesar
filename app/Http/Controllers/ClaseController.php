@@ -1,12 +1,16 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use App\Clase;
 use App\ClaseDetalle;
 use App\TerceroGrupo;
 use App\PlanDesarrolloAsignatura;
+use App\PeriodoAcademico;
+use App\Asignatura;
+use App\Grupo;
+
 class ClaseController extends Controller
 {
     public function panel($id_grupo)
@@ -35,6 +39,8 @@ class ClaseController extends Controller
     {
         return view('clase.clases_docente');
     }
+
+
 
     public function buscar_clases(Request $request)
     {
@@ -75,5 +81,23 @@ class ClaseController extends Controller
             'message' => $message,
             'data' => $data
         ]);
+    }
+
+    public function crear(Request $request)
+    {
+        $post = $request->all();
+        $escenario = "crear";
+        $periodo_academico = DB::table('periodo_academico')
+                               ->orderBy('id_periodo_academico','desc')
+                               ->first();
+        $asignatura = new Asignatura;
+        $periodo_academico = new PeriodoAcademico;
+        $grupo = new Grupo;
+        if($post){
+            $post = (object) $post;
+            $asignatura = Asignatura::find($id_asignatura);
+            $periodo_academico = PeriodoAcademico::find($id_periodo_academico);
+        }
+        return view('clase.form', compact(['escenario','asignatura','periodo_academico','grupo']));
     }
 }

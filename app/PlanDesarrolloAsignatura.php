@@ -14,6 +14,15 @@ class PlanDesarrolloAsignatura extends Model
     {
     	return $this->hasMany(PlanDesarrolloAsignaturaDetalle::class, 'id_plan_desarrollo_asignatura');
     }
+
+    public function unidades()
+    {
+        return $this->hasMany(PlanDesarrolloAsignaturaUnidad::class, 'id_plan_desarrollo_asignatura');
+    }
+    public function ejes()
+    {
+        return $this->hasMany(PlanDesarrolloAsignaturaEjeTematico::class, 'id_plan_desarrollo_asignatura');
+    }
     public function asignatura()
 	{
 		return $this->belongsTo(Asignatura::class, 'id_asignatura');
