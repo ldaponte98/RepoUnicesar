@@ -51,9 +51,9 @@ class UsuarioController extends Controller
     public function panel()
     {
         
-        if (session('is_admin')) return view('sitio.index',compact('usuario'));
-        if (session('is_docente')) return view('sitio.index2',compact('usuario'));
-        if (session('is_alumno')) return view('sitio.index3',compact('usuario'));
+        if (session('is_admin')) return view('sitio.index');
+        if (session('is_docente')) return view('sitio.index2');
+        if (session('is_alumno')) return view('sitio.index3');
     }
 
     public function logout(Request $request)
