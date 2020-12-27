@@ -146,11 +146,25 @@
         #mobile_agregar_clase{
             display: block !important;
         }
+        .blockMsg h1{
+            font-size:  13px !important;
+        }
     }
 
     .blockMsg h1{
         color: #ffffff !important;
     }
+
+    .select2-selection--single{
+            padding-bottom: 35px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 6px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            margin-top: 3px !important;
+            font-size: 16px !important;
+        }
     
 
 </style>

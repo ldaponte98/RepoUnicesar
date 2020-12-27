@@ -109,11 +109,6 @@
                 </div>
             </div>                
 </div>
-<style type="text/css">
-    .select2-selection--single{
-        padding-bottom: 35px !important;
-    }
-</style>
                  
 {{ Form::close() }}
 

@@ -138,6 +138,9 @@
             .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
                 left: -280px;
             }   
+            .blockMsg h1{
+                font-size:  13px !important;
+            }
         }
 
         .blockMsg h1{
@@ -154,6 +157,7 @@
             margin-top: 3px !important;
             font-size: 16px !important;
         }
+
 
         .ul-filter{
             padding-top: 10px;

@@ -148,6 +148,10 @@
         .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
             left: -280px;
         }   
+
+        .blockMsg h1{
+            font-size:  13px !important;
+        }
     }
 
     .blockMsg h1{
@@ -159,6 +163,17 @@
     }
     .font-small{
         font-size: 12px;
+    }
+
+    .select2-selection--single{
+        padding-bottom: 35px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__arrow {
+        top: 6px !important;
+    }
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        margin-top: 3px !important;
+        font-size: 16px !important;
     }
 </style>
     
@@ -571,6 +586,12 @@
 
                         <li class="nav-devider"></li>
                         <li class="nav-small-cap">Clases</li>
+                        <li>
+                            <a href="{{ route('clases/crear') }}" class="waves-effect" style="display: flex !important;">
+                                <i data-feather="clock" class="m-r-10" aria-hidden="true"></i> Nueva clase
+                            </a>
+                        </li>
+                        
                         <li>
                             <a href="{{ route('clases/mis_clases') }}" class="waves-effect" style="display: flex !important;">
                                 <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial

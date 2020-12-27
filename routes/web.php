@@ -49,12 +49,14 @@ Route::any('alumno/agregar_clase/{codigo_acceso}','TerceroController@agregar_cla
 Route::any('clases/panel/{id_grupo}','ClaseController@panel')->name('clases/panel');
 Route::any('clases/mis_clases','ClaseController@clases_docente')->name('clases/mis_clases');
 Route::post('clases/buscar_clases','ClaseController@buscar_clases')->name('clases/buscar_clases');
+Route::any('clases/crear','ClaseController@crear')->name('clases/crear');
 
 
 //RUTAS ASIGNATURA
 Route::get('asignatura/listado_asignaturas','AsignaturaController@getAsignaturas')->name('asignatura/listado_asignaturas');
 Route::get('asignatura/view/{id}','AsignaturaController@viewAsignatura')->name('asignatura/view');
 Route::get('asignatura/buscar_grupos/{id}','AsignaturaController@buscarGrupos')->name('asignatura/buscar_grupos');
+Route::get('asignatura/buscar_grupos_docente/{id_asignatura}/{id_tercero}/{id_periodo_academico}','AsignaturaController@buscar_grupos_docente')->name('asignatura/buscar_grupos_docente');
 Route::post('asignatura/agregar_unidad','AsignaturaController@agregarUnidad')->name('asignatura/agregar_unidad');
 Route::post('asignatura/agregar_eje','AsignaturaController@agregarEje')->name('asignatura/agregar_eje');
 Route::get('asignatura/get_unidades/{id}','AsignaturaController@getUnidades')->name('asignatura/get_unidades');
@@ -150,6 +152,7 @@ Route::post('plan_desarrollo_asignatura/cargar_plan_existente','PlanDesarrolloAs
 Route::get('plan_desarrollo_asignatura/obtener_vista/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@obtener_vista')->name('plan_desarrollo_asignatura/obtener_vista');
 Route::get('plan_desarrollo_asignatura/consultar_general','PlanDesarrolloAsignaturaController@consultar_general')->name('plan_desarrollo_asignatura/consultar_general');
 Route::post('plan_desarrollo_asignatura/getReporte','PlanDesarrolloAsignaturaController@getReporte')->name('plan_desarrollo_asignatura/getReporte');
+Route::post('plan_desarrollo_asignatura/obtener_temas','PlanDesarrolloAsignaturaController@obtener_temas')->name('plan_desarrollo_asignatura/obtener_temas');
 
 
 
