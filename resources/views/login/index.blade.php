@@ -119,7 +119,7 @@
 	
 	<script>
 		$("#usuario").focus()
-		console.log("Bienvenido a RepoUnicesar")
+		console.log("Bienvenido a RepoUnicesar SOFT")
 	</script>
 
 	<script src="js/Login.js"></script>
