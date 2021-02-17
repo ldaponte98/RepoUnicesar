@@ -81,6 +81,7 @@
                         </script>
                     </div>
                 </div>
+
                 <div class="col-sm-3">
                     <div class="form-group">
                         <label style="color: black;"><b>Fecha clase</b></label>
@@ -129,39 +130,26 @@
                     </div>
                 </div>
             </div>
-             <br>
-                    <button type="submit" onclick="buscar_clases()" class="btn btn-info">Consultar</button>
-                    <button type="submit" class="btn btn-success">Exportar Excel</button>
-            <h4 class="card-title">Clases</h4>
-            <div class="table-responsive">
-                <table class="table" id="tabla">
-                    <thead>
-                        <tr>
-                            <th><center><b>#</b></center></th>
-                            <th><b>Clase</b></th>
-                            <th><b>Fecha de creación</b></th>
-                            <th><b>Hora de creación</b></th>
-                            <th><b>Asistentes</b></th>
-                            <th><b>Faltantes</b></th>
-                            <th><b>Opciones</b></th>
-                        </tr>
-                    </thead>
-                    <style type="text/css"> 
-                        .fil td{
-                            color: black !important;
-                        }
-                    </style>
-                    <tbody id="bodytable">
-                       
-                    </tbody>
-                </table>
-                <ul class="pagination" id="paginador"></ul>
-            </div>
+                <br>
+                <h4 class="card-title"><b>Asistencia</b></h4>
+                <div class="w3-card-8 w3-dark-grey">
+
+                <div class="w3-container w3-center">
+                  <h3>Friend request</h3>
+                  <img src="img_avatar3.png" alt="Avatar" style="width:80%">
+                  <h5>John Doe</h5>
+
+                  <button class="w3-btn w3-green">Accept</button>
+                  <button class="w3-btn w3-red">Decline</button>
+                </div>
+
+                </div>
         </div>
     </div>
 </div>
 </div>
 
+                
 @csrf
 <script type="text/javascript">
     var tabla = null;
