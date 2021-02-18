@@ -132,26 +132,149 @@
             </div>
                 <br>
                 <h4 class="card-title"><b>Asistencia</b></h4>
-                <div class="w3-card-8 w3-dark-grey">
-
-                <div class="w3-container w3-center">
-                  <h3>Friend request</h3>
-                  <img src="img_avatar3.png" alt="Avatar" style="width:80%">
-                  <h5>John Doe</h5>
-
-                  <button class="w3-btn w3-green">Accept</button>
-                  <button class="w3-btn w3-red">Decline</button>
-                </div>
-
-                </div>
+                
         </div>
     </div>
 </div>
 </div>
 
+<div class="row">
+    <div class="col-sm-6">
+        <div class="_card" >
+            <div class="container-img">
+                <img src="{{ asset('assets/images/users/sin_foto.jpg') }}">
+            </div>
+            <div class="content-event">
+                <div class="name-event">
+                    <h2>Este es el nombre del evento</h2>
+                </div>
+                <div class="options-buttons">
+                    <button class="button-1">Option 1</button>
+                    <button class="button-2">Option 2</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="_card" >
+            gdghdfghdfg
+        </div>
+    </div>
+</div>
+
+<style type="text/css">
+
+
+    @media only screen and (min-width: 250px) and (max-width: 450px){
+        
+        .container-img img{
+            width: 30% !important;
+            border-radius: 50%;
+            
+        }
+
+        ._card{
+            display: block !important;
+         
+        }
+        .container-img{
+            padding: 0px 30px 0px 30px;
+            width: 100% !important;
+            display: flex  !important;
+            justify-content: center !important;
+            align-items: center !important;
+        }
+        
+    }
+
+
+
+    ._card{
+        background: #fff;
+        padding: 0px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: wrap;
+    }
+    .content-event{
+        width: 80%;
+        display: block;
+        padding: 15px;
+    }
+
+    .options-buttons{
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .options-buttons button{
+        border-radius: 8px;
+        padding: 8px 12px 8px 12px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 15px; 
+        cursor: pointer;
+    }
+
+    .options-buttons .button-1{
+        border: 2px solid #97BB49;
+        background: #fff;
+        color: #97BB49;
+    }
+
+    .options-buttons .button-2{
+        border: 2px solid #F62D51;
+        background: #fff;
+        color: #F62D51;
+    }
+
+    .button-success{
+        border: 2px solid #97BB49;
+        background-color: #97BB49;
+        color: #fff;
+    }
+
+    .button-danger{
+        border: 2px solid #F62D51;
+        background-color: #F62D51;
+        color:#fff;
+    }
+
+    .container-img{
+        width: 20%;
+    }
+    .container-img img{
+        width: 100%;
+        height: auto;
+    }
+
+    ._card:hover{
+        box-shadow: 0px 19px 20px 0px rgba(212,212,212,1);
+        transform: scale(1.03);
+        transition: all .4s;
+    }
+</style>
+
                 
 @csrf
 <script type="text/javascript">
+
+    $('.button-1').click(function(){
+        $('.button-1').addClass("button-success");
+        $('.button-1').removeClass("button-1");
+        $('.button-danger').addClass("button-2");
+        $('.button-2').removeClass("button-danger");
+        
+    })
+
+    $('.button-2').click(function(){
+        $('.button-2').addClass("button-danger");
+        $('.button-2').removeClass("button-2");
+        $('.button-success').addClass("button-1");
+        $('.button-1').removeClass("button-success");
+    })
+
     var tabla = null;
     $(document).ready(()=>{
         this.buscar_carga_academica({{ $periodo_academico->id_periodo_academico }})
