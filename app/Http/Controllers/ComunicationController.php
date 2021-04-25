@@ -71,9 +71,6 @@ class ComunicationController extends Controller
         }
     }
 
-
-
-
     public function updateFacultades(Request $request)
     {
 
