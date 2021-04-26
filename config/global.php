@@ -19,6 +19,6 @@ return [
 
     'email_general' => 'repounicesar@gmail.com',
 
-    'url_base' => ''
+    'url_base' => ENV('APP_URL')
 ]
 ?>

@@ -49,7 +49,9 @@ Route::any('alumno/agregar_clase/{codigo_acceso}','TerceroController@agregar_cla
 Route::any('clases/panel/{id_grupo}','ClaseController@panel')->name('clases/panel');
 Route::any('clases/mis_clases','ClaseController@clases_docente')->name('clases/mis_clases');
 Route::post('clases/buscar_clases','ClaseController@buscar_clases')->name('clases/buscar_clases');
-Route::any('clases/crear','ClaseController@crear')->name('clases/crear');
+Route::any('clases/gestion','ClaseController@gestion')->name('clases/gestion');
+Route::any('clases/view/{id_clase}','ClaseController@view')->name('clases/view');
+Route::any('clases/gestionar_asistencia/{id_clase}','ClaseController@gestionar_asistencia')->name('clases/gestionar_asistencia');
 
 
 //RUTAS ASIGNATURA

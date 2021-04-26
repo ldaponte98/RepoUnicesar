@@ -167,7 +167,7 @@
                         '<td>'+asistencia.hora_creacion+'</td>'+
                         '<td>'+asistencia.asistentes+'</td>'+
                         '<td>'+asistencia.inasistentes+'</td>'+
-                        '<td>'+this.opciones_clase(asistencia.permiso_asistencia)+'</td>'+
+                        '<td>'+this.opciones_clase(asistencia)+'</td>'+
                      '</tr>'
             cont++
         })
@@ -176,12 +176,12 @@
         $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:10});
     }
 
-    function opciones_clase(permiso_asistencia) {
+    function opciones_clase(asistencia) {
         let opciones = ""
-        if(permiso_asistencia == 0){
+        if(asistencia.permiso_asistencia == 0){
             opciones += '<a class="font-small" href="#">Editar</a>&nbsp;&nbsp; <a class="font-small" href="#">Detalles</a>&nbsp;'
         }else{
-            opciones += '<a class="font-small" href="#">Tomar asistencia</a>&nbsp;&nbsp; <a class="font-small" href="#">Detalles</a>&nbsp;'
+            opciones += '<a class="font-small">Tomar asistencia</a>&nbsp;&nbsp; <a class="font-small" href="{{ config('global.url_base')."/clases/view/" }}'+asistencia.id_clase+'">Detalles</a>&nbsp;'
         }
         return opciones
     }

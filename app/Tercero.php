@@ -11,6 +11,13 @@ class Tercero extends Model
     protected $table = 'terceros';
     protected $primaryKey = 'id_tercero';
 
+    public function get_imagen()
+    {
+        $imagen = 'assets/images/users/sin_foto.jpg';
+        if ($this->foto) $imagen = 'files/'.$this->cedula.'/'.$this->foto;
+        return asset($imagen);            
+    }
+
     public function getNameFull()
     {
     	return $this->nombre.' '.$this->apellido;

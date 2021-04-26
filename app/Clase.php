@@ -9,6 +9,22 @@ class Clase extends Model
     protected $table = 'clases';
     protected $primaryKey = 'id_clase';
 
+    public function grupo()
+    {
+        return $this->belongsTo(Grupo::class, 'id_grupo');
+    }
+
+    public function alumnos()
+    {   
+        $terceros = TerceroGrupo::all()->where('id_grupo', $this->id_grupo);
+        foreach ($terceros as $tercero) {
+            $tercero->asistencia = ClaseAsistencia::where('id_clase', $this->id_clase)
+                                                  ->where('id_tercero', $tercero->id_tercero)
+                                                  ->first();
+        }
+        return $terceros;
+    }
+
     public function detalles()
     {
     	return $this->hasMany(ClaseDetalle::class, 'id_clase');

@@ -83,21 +83,74 @@ class ClaseController extends Controller
         ]);
     }
 
-    public function crear(Request $request)
+    public function gestion(Request $request)
     {
         $post = $request->all();
-        $escenario = "crear";
+        $errores = null;
         $periodo_academico = DB::table('periodo_academico')
                                ->orderBy('id_periodo_academico','desc')
                                ->first();
-        $asignatura = new Asignatura;
-        $periodo_academico = new PeriodoAcademico;
+        $clase = new Clase;
         $grupo = new Grupo;
-        if($post){
+        $grupo->id_periodo_academico = $periodo_academico->id_periodo_academico;
+        $clase->fecha_inicio = date('Y-m-d H:i');
+        $clase->fecha_fin = date('Y-m-d H:i', strtotime($clase->fecha_inicio. "+ 120 minutes"));
+        if ($post) {
             $post = (object) $post;
-            $asignatura = Asignatura::find($id_asignatura);
-            $periodo_academico = PeriodoAcademico::find($id_periodo_academico);
+            if (isset($post->clase)) {
+                $clase = Clase::find($post->clase);
+                if ($clase == null) {
+                    $titulo = "Acceso denegado";
+                    $mensaje = "La clase no es valida.";
+                    return view('sitio.error',compact(['titulo', 'mensaje']));
+                }
+                $grupo = $clase->grupo;
+            }
         }
-        return view('clase.form', compact(['escenario','asignatura','periodo_academico','grupo']));
+        if($request->except(['clase'])){
+            $post = (object) $post;
+            $grupo = $clase->id_clase ? $clase->grupo : Grupo::find($post->id_grupo);
+            $clase->id_grupo = $grupo->id_grupo;
+            $clase->fecha_inicio = date('Y-m-d H:i:s', strtotime($post->fecha." ".$post->hora_inicio));
+            $clase->fecha_fin = date('Y-m-d H:i:s', strtotime($post->fecha." ".$post->hora_fin));
+            $clase->tema = $post->tema;
+            $clase->nota = $post->nota;
+            if ($clase->fecha_fin > $clase->fecha_inicio) {
+                if ($clase->save()) {
+                   return redirect()->route('clases/view', $clase->id_clase);
+                }else{
+                    $errores = $clase->errors[0];
+                }
+            }else{
+                $errores = "La hora de inicio de la clase no pude ser mayor ni igual a la hora fin";
+            }
+        }
+        return view('clase.form', compact(['clase','grupo', 'errores']));
+    }
+
+    public function view($id_clase)
+    {
+        $clase = Clase::find($id_clase);
+        if ($clase) return view('clase.view', compact('clase'));
+        $titulo = "Acceso denegado";
+        $mensaje = "La clase no es valida.";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
+    }
+
+    public function gestionar_asistencia($id_clase)
+    {
+        $clase = Clase::find($id_clase);
+        $message = "";
+        if ($clase) {
+            if ($clase->grupo->id_tercero == session('id_tercero_usuario')) {
+                return view('clase.form_asistencia', compact('clase'));
+            }else{
+                $message = "Esta clase no pertence al usuario";
+            }
+        }else{
+            $message = "Clase invalida";
+        }
+        $titulo = "Acceso denegado";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
     }
 }

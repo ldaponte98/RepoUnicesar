@@ -51,21 +51,22 @@
     <script src="<?php echo e(asset('js/TableToExcel.js')); ?>"></script>
 
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
-<script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
 
-<script src="<?php echo e(asset('ckeditor.js')); ?>"></script>
-<link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
+    <script src="<?php echo e(asset('ckeditor.js')); ?>"></script>
+    <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    
     <style type="text/css">
         body {
             --ck-z-default: 100;
@@ -258,14 +259,6 @@
             }
         }
     </script>
-
-     
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
 </head>
 
 <body onclick="$('#cuadro_busqueta').fadeOut(); $('#txt_busqueda').val('')" class="fix-header fix-sidebar card-no-border mini-sidebar">
@@ -506,46 +499,34 @@
         <!-- Left Sidebar - style you can find in sidebar.scss  -->
         <!-- ============================================================== -->
         <aside class="left-sidebar">
-            <!-- Sidebar scroll-->
             <div class="scroll-sidebar">
-                <!-- Sidebar navigation-->
                 <nav class="sidebar-nav">
                     <ul id="sidebarnav" class="in">
-                    <div class="user-profile">
-                    <!-- User profile image -->
-                    <div class="profile-img"> <img width="50" height="50"  src="<?php echo e(asset($imagen)); ?>" alt="usuario"> </div>
-                    <!-- User profile text-->
-                    <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><?php
-                        {{ echo $usuario->tercero->getNameFull();}}
-                    ?></font></font><span class="caret"></span></a>
-                        <div class="dropdown-menu animated flipInY">
-                            <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                            <a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
+                        <div class="user-profile">
+                            <div class="profile-img"> <img width="50" height="50"  src="<?php echo e(asset($imagen)); ?>" alt="usuario"> </div>
+                            <div class="profile-text"> <a href="#" class="dropdown-toggle link u-dropdown" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;"><?php
+                                {{ echo $usuario->tercero->getNameFull();}}
+                            ?></font></font><span class="caret"></span></a>
+                                <div class="dropdown-menu animated flipInY">
+                                    <a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
+                                    <a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
 
-                            <div class="dropdown-divider"></div> <a href="<?php echo e(route('logout')); ?>" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
+                                    <div class="dropdown-divider"></div> <a href="<?php echo e(route('logout')); ?>" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-                <ul id="sidebarnav" class="in">
+                    <ul id="sidebarnav" class="in">
                         <li >
                             <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
                         </li>
                         <li>
-                            <!--<a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="user" class="m-r-10" aria-hidden="true"></i></i>Mi perfil</a>-->
                         </li>
                         <li>
-
-
                             <a href="<?php echo e(route('docente/listado_docentes')); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="users" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docentes</font></font></a>
                         </li>
                         
                         <li >
                             <a href="<?php echo e(route('asignatura/listado_asignaturas')); ?>" class="waves-effect" style="display: flex !important;"><i data-feather="book" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
-                        </li>
-
-                         
-                        <li>
-                            <!--<a href="PeriodosAcademicos.php" class="waves-effect"><i class="fa fa-area-chart m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Carga academica</font></font></a>-->
                         </li>
                          <?php
                             $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
@@ -595,45 +576,39 @@
                                 </li>
                                 <li class="">
                                     <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
-                                   
-                             <?php if($total_seguimientos_sin_leer > 0): ?>
-                                <span class="label label-rounded label-warning" title="<?php echo e($total_seguimientos_sin_leer); ?> sin revisar "><?php echo e($total_seguimientos_sin_leer); ?>
+                                    <?php if($total_seguimientos_sin_leer > 0): ?>
+                                        <span class="label label-rounded label-warning" title="<?php echo e($total_seguimientos_sin_leer); ?> sin revisar "><?php echo e($total_seguimientos_sin_leer); ?>
 
-                                </span>
-                             <?php endif; ?>
-                             </a>
-                             <ul aria-expanded="false" class="collapse">
-                                    <li>
-                                    <a href="<?php echo e(route('seguimiento/consultar')); ?>" style="font-size: 14px;">Seguimiento por corte</a>
-                                    <a href="<?php echo e(route('seguimiento/consultar_informe_final')); ?>"  style="font-size: 14px;">Informe final</a>
-                                </li>
-
-                                </ul>
+                                        </span>
+                                    <?php endif; ?>
+                                    </a>
+                                    <ul aria-expanded="false" class="collapse">
+                                        <li>
+                                            <a href="<?php echo e(route('seguimiento/consultar')); ?>" style="font-size: 14px;">Seguimiento por corte</a>
+                                            <a href="<?php echo e(route('seguimiento/consultar_informe_final')); ?>"  style="font-size: 14px;">Informe final</a>
+                                        </li>
+                                    </ul>
                                 </li>
 
                                 <li>
-
-                        <a class="has-arrow " style="display: flex !important;" href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
-                            <?php
-                            
-                        $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
-                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
-                                            ->where('actividades_complementarias.estado', 'Enviado')
-                                            ->where('id_licencia', session('id_licencia'))
-                                            ->count();
-                            ?>
-                        </span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li class="">
-                                    <a href="<?php echo e(route('actividades_complementarias/consultar')); ?>">Informe por corte  <?php if($total_actividades_pendientes > 0): ?>
-                                <span class="label label-rounded label-warning" title="<?php echo e($total_actividades_pendientes); ?> sin revisar"><?php echo e($total_actividades_pendientes); ?></span></a>
-                             <?php endif; ?></a>
+                                    <a class="has-arrow " style="display: flex !important;" href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
+                                        <?php
+                                        
+                                    $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
+                                                        ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
+                                                        ->where('actividades_complementarias.estado', 'Enviado')
+                                                        ->where('id_licencia', session('id_licencia'))
+                                                        ->count();
+                                        ?>
+                                    </span></a>
+                                    <ul aria-expanded="false" class="collapse">
+                                        <li class="">
+                                            <a href="<?php echo e(route('actividades_complementarias/consultar')); ?>">Informe por corte  <?php if($total_actividades_pendientes > 0): ?>
+                                                <span class="label label-rounded label-warning" title="<?php echo e($total_actividades_pendientes); ?> sin revisar"><?php echo e($total_actividades_pendientes); ?></span></a>
+                                            <?php endif; ?>
+                                        </li>
+                                    </ul>                            
                                 </li>
-                                
-                            </ul>
-
-                            
-                        </li>
                             </ul>
                         </li>
                        
@@ -644,123 +619,32 @@
                                 <li><a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>">Fechas Generales</a></li>
                             </ul>
                         </li>
-                        
-                        
-
-                        
-                       
-                       
                     </ul>
 
-                <!--
-                <li class="nav-small-cap"><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">PERSONAL</font></font></li>
-                        <li class="active">
-                            <a href="EditarDocenteUsu.php?x=cedula" class="waves-effect active"><i class="fa fa-users m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Mi Perfil</font></font></a>
-                        </li>
-                        <li >
-                            <a href="miseguimientos.php" class="waves-effect "><i class="fa fa-table m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Seguimiento de asignatura</font></font></a>
-                        </li>
-                        <li>
-                            <a href="../cerrarsesion.php" class="waves-effect"><i class="fa fa-sign-out m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Salir</font></font></a>
-                        </li>
-                        <div id="men" style="background-color: red; display: none;" >
-                        <li >
-                            <a id="mensajewey" style="color: white; font-size: 12px;"></a>
-                        </li>
-                        </div>
-                    -->
                     </ul>
                     
                 </nav>
-                <!-- End Sidebar navigation -->
             </div>
 
-<!--
-            <div class="sidebar-footer">
-               
-                <a href="" class="link" data-toggle="tooltip" title="Ajustes"><i class="ti-settings"></i></a>
-               
-                <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-              
-
-                <a href="" class="link" data-toggle="tooltip" title="Cerrar sesión"><i class="mdi mdi-power"></i></a>
-            </div>
-           
-            -->
         </aside>
 
         <?php echo $__env->yieldContent('menu',''); ?>
-
-        <!-- ============================================================== -->
-        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
-        <!-- ============================================================== -->
-        <!-- ============================================================== -->
-        <!-- Page wrapper  -->
-        <!-- ============================================================== -->
         <div class="page-wrapper">
-            <!-- ============================================================== -->
-            <!-- Container fluid  -->
-            <!-- ============================================================== -->
             <div class="container-fluid">
-                <!-- ============================================================== -->
-                <!-- Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
-                <!--<div class="row page-titles">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Inicio</a></li>
-                            <li class="hidden-sm-down breadcrumb-item active">Inicio</li>
-                        </ol>
-                    </div>
-                    
-                </div> -->
-
-                <!-- ============================================================== -->
-                <!-- End Bread crumb and right sidebar toggle -->
-                <!-- ============================================================== -->
-                <!-- ============================================================== -->
-                <!-- Start Page Content -->
-                <!-- ============================================================== -->
                 
                  <?php echo $__env->yieldContent('header_content',''); ?>
                  <?php echo $__env->yieldContent('content',''); ?>
-                <!-- ============================================================== -->
-                <!-- End PAge Content -->
-                <!-- ============================================================== -->
-               
 
             </div>
-            <!-- ============================================================== -->
-            <!-- End Container fluid  -->
-            <!-- ============================================================== -->
-            <!-- ============================================================== -->
-            <!-- footer -->
-            <!-- ============================================================== -->
             <footer class="footer text-center">
                 © 2018 Luis Aponte y Ever Lazo
             </footer>
-            <!-- ============================================================== -->
-            <!-- End footer -->
-            <!-- ============================================================== -->
         </div>
-        <!-- ============================================================== -->
-        <!-- End Page wrapper  -->
-        <!-- ============================================================== -->
     </div>
-    <!-- ============================================================== -->
-    <!-- End Wrapper -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- All Jquery -->
-    <!-- ============================================================== -->
-   
-   
-    <!--<script src="assets/plugins/jquery/jquery.min.js"></script>-->
-    <!-- Bootstrap tether Core JavaScript -->
    
    <script>
       feather.replace()
+      $('.clockpicker').clockpicker();
     </script>
     <script src=" <?php echo e(asset('assets/plugins/bootstrap/js/tether.min.js')); ?> "></script>
     <script src="<?php echo e(asset('assets/plugins/bootstrap/js/bootstrap.min.js')); ?>"></script>
@@ -775,9 +659,8 @@
     <script src="<?php echo e(asset('assets/plugins/sticky-kit-master/dist/sticky-kit.min.js')); ?>"></script>
     <!--Custom JavaScript -->
     <script src="<?php echo e(asset('assets/js/custom.min.js')); ?>"></script>
-    <!-- ============================================================== -->
-    <!-- Style switcher -->
-    <!-- ============================================================== -->
+    
+
 </body>
 
 </html>

@@ -236,15 +236,17 @@
       });
 
 });
-</script>
 
-     
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+    function SetFilter(id_input, id_table) {
+        $('#' + id_input).keyup(function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('#' + id_table + ' tbody tr').hide();
+            $('#' + id_table + ' tbody tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
+        })
+    }
+</script>
 </head>
 
 <body class="fix-header fix-sidebar card-no-border mini-sidebar">
@@ -506,104 +508,101 @@
                 </div>
                 <ul id="sidebarnav" class="in">
                     <li class="nav-small-cap">Personal</li>
-                        <li>
-                            <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
-                        </li>
-                        <li>
-                            <!--<a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>-->
-                        </li>
-                        <li>
-                            <a href="{{ route('docente/horario', $usuario->tercero->id_tercero) }}" style="display: flex !important;" class="waves-effect"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i>Horario</a>
-                        </li>
-                        <li class="nav-devider"></li>
-                        <li class="nav-small-cap">Formatos</li>
-                        <li>
-                            <a href="{{ route('plan_trabajo/view') }}" class="waves-effect"  style="display: flex !important;" ><i data-feather="file-text" class="m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('plan_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;" ><i data-feather="book" class="m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
-                        </li>
-                        <li>
-                            <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
-                                <i data-feather="trello" class="m-r-10" aria-hidden="true"></i> Plan desarrollo asignatura
-                            </a>
-                        </li>
+                    <li>
+                        <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
+                    </li>
+                    <li>
+                        <!--<a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>-->
+                    </li>
+                    <li>
+                        <a href="{{ route('docente/horario', $usuario->tercero->id_tercero) }}" style="display: flex !important;" class="waves-effect"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i>Horario</a>
+                    </li>
+                    <li class="nav-devider"></li>
+                    <li class="nav-small-cap">Formatos</li>
+                    <li>
+                        <a href="{{ route('plan_trabajo/view') }}" class="waves-effect"  style="display: flex !important;" ><i data-feather="file-text" class="m-r-10" aria-hidden="true"></i>Plan de trabajo</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('plan_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;" ><i data-feather="book" class="m-r-10" aria-hidden="true"></i>Plan de asignatura</a>
+                    </li>
+                    <li>
+                        <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
+                            <i data-feather="trello" class="m-r-10" aria-hidden="true"></i> Plan desarrollo asignatura
+                        </a>
+                    </li>
 
-                        <li>
+                    <li>
 
-                             <a class="has-arrow waves-effect" href="#" aria-expanded="false"><i data-feather="truck" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
-                            @php
-                            $total_seguimientos_pendientes = \App\SeguimientoAsignatura::where('estado', 'Pendiente')
-                                                    ->where('id_tercero', $usuario->tercero->id_tercero)
-                                                    ->count();
-                             @endphp 
-                             @if ($total_seguimientos_pendientes > 0)
-                                <span class="label label-rounded label-danger" title="{{ $total_seguimientos_pendientes }} pendientes">{{ $total_seguimientos_pendientes }}</span></a>
-                             @endif</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li class="">
-                                    <a href="{{ route('seguimiento/consultar') }}">Seguimiento por corte</a>
-                                </li>
-                                <li class="">
-                                    <a href="{{ route('seguimiento/consultar_informe_final') }}">Informe final</a>
-                                </li>
-                            </ul>
+                         <a class="has-arrow waves-effect" href="#" aria-expanded="false"><i data-feather="truck" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Seguimiento de asignatura  
+                        @php
+                        $total_seguimientos_pendientes = \App\SeguimientoAsignatura::where('estado', 'Pendiente')
+                                                ->where('id_tercero', $usuario->tercero->id_tercero)
+                                                ->count();
+                         @endphp 
+                         @if ($total_seguimientos_pendientes > 0)
+                            <span class="label label-rounded label-danger" title="{{ $total_seguimientos_pendientes }} pendientes">{{ $total_seguimientos_pendientes }}</span></a>
+                         @endif</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li class="">
+                                <a href="{{ route('seguimiento/consultar') }}">Seguimiento por corte</a>
+                            </li>
+                            <li class="">
+                                <a href="{{ route('seguimiento/consultar_informe_final') }}">Informe final</a>
+                            </li>
+                        </ul>
 
-                            
-                        </li>
-
-                         <li>
-
-                             <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i data-feather="layers" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
-                            @php
-                            $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
-                                                    ->where('id_tercero', $usuario->tercero->id_tercero)
-                                                    ->count();
-                             @endphp 
-                             @if ($total_actividades_pendientes > 0)
-                                <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
-                             @endif</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li class="">
-                                    <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
-                                <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
-                             @endif</a>
-                                </li>
-                                
-                            </ul>
-
-                            
-                        </li>
-
-                        <li class="">
-                            <a class="has-arrow " href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Reportes</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li class="">
-                                    <a href="fgdfgdf">.</a>
-                                </li>
-                            </ul>
-                        </li>
-
-                        <li class="nav-devider"></li>
-                        <li class="nav-small-cap">Clases</li>
-                        <li>
-                            <a href="{{ route('clases/crear') }}" class="waves-effect" style="display: flex !important;">
-                                <i data-feather="clock" class="m-r-10" aria-hidden="true"></i> Nueva clase
-                            </a>
-                        </li>
                         
-                        <li>
-                            <a href="{{ route('clases/mis_clases') }}" class="waves-effect" style="display: flex !important;">
-                                <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
-                                <i data-feather="check-circle" class="m-r-10" aria-hidden="true"></i> Registrar asistencia
-                            </a>
-                        </li>
+                    </li>
 
-                    </ul>
+                     <li>
+
+                         <a style="font-size: 13px !important;" class="has-arrow " href="#" aria-expanded="false"><i data-feather="layers" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Actividades complementarias  
+                        @php
+                        $total_actividades_pendientes = \App\ActividadesComplementarias::where('estado', 'Pendiente')
+                                                ->where('id_tercero', $usuario->tercero->id_tercero)
+                                                ->count();
+                         @endphp 
+                         @if ($total_actividades_pendientes > 0)
+                            <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
+                         @endif</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li class="">
+                                <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
+                            <span class="label label-rounded label-danger" title="{{ $total_actividades_pendientes }} pendientes">{{ $total_actividades_pendientes }}</span></a>
+                         @endif</a>
+                            </li>
+                            
+                        </ul>
+
+                        
+                    </li>
+                    <li class="">
+                        <a class="has-arrow " href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Reportes</span></a>
+                        <ul aria-expanded="false" class="collapse">
+                            <li class="">
+                                <a href="fgdfgdf">.</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-devider"></li>
+                    <li class="nav-small-cap">Clases</li>
+                     <li>
+                        <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
+                            <i data-feather="check-circle" class="m-r-10" aria-hidden="true"></i> Tomar asistencia
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ route('clases/gestion') }}" class="waves-effect" style="display: flex !important;">
+                            <i data-feather="clock" class="m-r-10" aria-hidden="true"></i> Nueva clase
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="{{ route('clases/mis_clases') }}" class="waves-effect" style="display: flex !important;">
+                            <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial
+                        </a>
+                    </li>
+                </ul>
                     </ul>
                     
                 </nav>

@@ -9,7 +9,7 @@
             <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="javascript:void(0)">Clases</a></li>
-                <li class="hidden-sm-down breadcrumb-item active"> @if($escenario == "crear") Nueva Clase @else Actualización Clase @endif
+                <li class="hidden-sm-down breadcrumb-item active"> Gestion de clases </li>
         </div>
         <div class="col-md-6 col-4 align-self-center">
         </div>
@@ -24,22 +24,25 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/clockpicker/0.0.7/jquery-clockpicker.min.css" integrity="sha512-Dh9t60z8OKsbnVsKAY3RcL2otV6FZ8fbZjBrFENxFK5H088Cdf0UVQaPoZd/E0QIccxqRxaSakNlmONJfiDX3g==" crossorigin="anonymous" />
 @endsection
 @section('content')
-
+<form id="form-clase" method="POST">
+    @csrf
+    @php
+        $disabled = $clase->id_clase ? "disabled" : "";
+    @endphp
 <div class="row">
 <div class="col-sm-12">
     <div class="card">
         <div class="card-block">
-
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
                         @php
                             $periodos_academicos = \App\PeriodoAcademico::orderBy('id_periodo_academico', 'desc')->get();
                         @endphp
-                    <label style="color: black;"><b>Periodo academico</b></label>
-                    <select onchange="buscar_carga_academica(this.value)" class="form-control hasDatepicker form-control-line" id="id_periodo_academico" name="id_periodo_academico">
+                    <label style="color: black;"><b>* Periodo academico</b></label>
+                    <select onchange="buscar_carga_academica(this.value)" class="form-control hasDatepicker form-control-line" id="id_periodo_academico" {{ $disabled }} name="id_periodo_academico" required>
                         @foreach ($periodos_academicos as $d)
-                            <option @if($periodo_academico->id_periodo_academico == $d->id_periodo_academico) selected @endif value="{{ $d->id_periodo_academico }}">{{ $d->periodo }}</option>
+                            <option @if($grupo->id_periodo_academico == $d->id_periodo_academico) selected @endif value="{{ $d->id_periodo_academico }}">{{ $d->periodo }}</option>
                         @endforeach
                     </select>
                     <script type="text/javascript">
@@ -53,9 +56,13 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label style="color: black;"><b>Asignatura</b></label>
-                        <select onchange="buscar_grupos(this.value)" class="form-control hasDatepicker form-control-line" id="id_asignatura" name="id_asignatura">
-                            <option value="" disabled selected>Consultar por nombre o codigo</option>
+                        <label style="color: black;"><b>* Asignatura</b></label>
+                        <select onchange="buscar_grupos(this.value)" {{ $disabled }} class="form-control hasDatepicker form-control-line" id="id_asignatura" name="id_asignatura" required>
+                            @if ($grupo->id_asignatura)
+                                <option value="{{ $grupo->id_asignatura }}" {{ $disabled }} selected>{{ $grupo->asignatura->nombre }}</option>
+                            @else
+                                <option value="" disabled selected>Consultar por nombre o codigo</option>
+                            @endif
                         </select>
                         <script type="text/javascript">
                         $(document).ready(function() {
@@ -68,9 +75,13 @@
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label style="color: black;"><b>Grupo</b></label>
-                        <select onclick="buscar_estudiantes(this.value)" class="form-control hasDatepicker form-control-line" id="id_grupo" name="id_grupo">
-                            <option value="" disabled selected>Consultar por nombre</option>
+                        <label style="color: black;"><b>* Grupo</b></label>
+                        <select onclick="buscar_estudiantes(this.value)" {{ $disabled }} class="form-control hasDatepicker form-control-line" id="id_grupo" name="id_grupo" required>
+                            @if ($grupo->id_grupo)
+                                <option value="{{ $grupo->id_grupo }}" {{ $disabled }} selected>{{ $grupo->codigo }}</option>
+                            @else
+                                <option value="" disabled selected>Consultar por nombre</option>
+                            @endif
                         </select>
                         <script type="text/javascript">
                         $(document).ready(function() {
@@ -84,12 +95,12 @@
 
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label style="color: black;"><b>Fecha clase</b></label>
-                        <input type="text" readonly class="form-control hasDatepicker form-control-line" id="fecha_clase">
+                        <label style="color: black;"><b>* Fecha clase</b></label>
+                        <input type="text" readonly class="form-control hasDatepicker form-control-line"  name="fecha" id="fecha_clase" required value="{{ date('Y-m-d', strtotime($clase->fecha_inicio)) }}">
                         <script type="text/javascript">
                         $(document).ready(function() {
                             $('#fecha_clase').datepicker({
-                                format: "dd/mm/yyyy",
+                                format: "yyyy-mm-dd",
                                 language: "es",
                                 autoclose: true
                             });
@@ -102,196 +113,78 @@
             <div class="row">
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label style="color: black;"><b>Hora inicio</b></label>
+                        <label style="color: black;"><b>* Hora inicio</b></label>
                         <div class="input-group clockpicker " data-autoclose="true">
                             <span class="input-group-addon">
                             <i data-feather="clock" style="font-size: 12px;" aria-hidden="true"></i>
                             </span>
-                            <input type="text" id="hora_inicio" autocomplete="off" class="form-control" value="" />
+                            <input  type="text" required name="hora_inicio" id="hora_inicio" autocomplete="off" class="form-control" value="{{ date('H:i', strtotime($clase->fecha_inicio)) }}"/>
                         </div>
                     </div>
                 </div>
                 <div class="col-sm-3">
                     <div class="form-group">
-                        <label style="color: black;"><b>Hora fin</b></label>
+                        <label style="color: black;"><b>* Hora fin</b></label>
                         <div class="input-group clockpicker " data-autoclose="true">
                             <span class="input-group-addon">
                             <i data-feather="clock" style="font-size: 12px;" aria-hidden="true"></i>
                             </span>
-                            <input type="text" id="hora_fin" autocomplete="off" class="form-control" value="" />
+                            <input type="text" name="hora_fin" id="hora_fin" autocomplete="off" class="form-control" value="{{ date('H:i', strtotime($clase->fecha_fin)) }}" />
                         </div>
                     </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                    <div class="form-group">
-                        <label style="color: black;"><b>Tema</b></label>
-                        <input class="form-control" list="list_temas" id="tema"/>
+                        <label style="color: black;"><b>* Tema(s)</b></label>
+                        <input class="form-control" list="list_temas" id="tema" name="tema" value="{{ $clase->tema }}" required>
                         <datalist id="list_temas"></datalist>
                     </div>
                 </div>
-            </div>
-                <br>
-                <h4 class="card-title"><b>Asistencia</b></h4>
-                
-        </div>
-    </div>
-</div>
-</div>
-
-<div class="row">
-    <div class="col-sm-6">
-        <div class="_card" >
-            <div class="container-img">
-                <img src="{{ asset('assets/images/users/sin_foto.jpg') }}">
-            </div>
-            <div class="content-event">
-                <div class="name-event">
-                    <h2>Este es el nombre del evento</h2>
-                </div>
-                <div class="options-buttons">
-                    <button class="button-1">Option 1</button>
-                    <button class="button-2">Option 2</button>
+                <div class="col-sm-3">
+                   <div class="form-group">
+                        <label style="color: black;"><b>Observaciones o nota</b></label>
+                        <input class="form-control" type="text" name="nota" value="{{ $clase->nota }}" />
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="col-sm-6">
-        <div class="_card" >
-            gdghdfghdfg
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"><button type="submit" class="btn btn-primary w-100">Guardar cambios</button></div>
+            </div>
         </div>
     </div>
 </div>
+</div> 
+</form>               
 
-<style type="text/css">
-
-
-    @media only screen and (min-width: 250px) and (max-width: 450px){
-        
-        .container-img img{
-            width: 30% !important;
-            border-radius: 50%;
-            
-        }
-
-        ._card{
-            display: block !important;
-         
-        }
-        .container-img{
-            padding: 0px 30px 0px 30px;
-            width: 100% !important;
-            display: flex  !important;
-            justify-content: center !important;
-            align-items: center !important;
-        }
-        
-    }
-
-
-
-    ._card{
-        background: #fff;
-        padding: 0px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex: wrap;
-    }
-    .content-event{
-        width: 80%;
-        display: block;
-        padding: 15px;
-    }
-
-    .options-buttons{
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .options-buttons button{
-        border-radius: 8px;
-        padding: 8px 12px 8px 12px;
-        font-size: 12px;
-        font-weight: 600;
-        margin-right: 15px; 
-        cursor: pointer;
-    }
-
-    .options-buttons .button-1{
-        border: 2px solid #97BB49;
-        background: #fff;
-        color: #97BB49;
-    }
-
-    .options-buttons .button-2{
-        border: 2px solid #F62D51;
-        background: #fff;
-        color: #F62D51;
-    }
-
-    .button-success{
-        border: 2px solid #97BB49;
-        background-color: #97BB49;
-        color: #fff;
-    }
-
-    .button-danger{
-        border: 2px solid #F62D51;
-        background-color: #F62D51;
-        color:#fff;
-    }
-
-    .container-img{
-        width: 20%;
-    }
-    .container-img img{
-        width: 100%;
-        height: auto;
-    }
-
-    ._card:hover{
-        box-shadow: 0px 19px 20px 0px rgba(212,212,212,1);
-        transform: scale(1.03);
-        transition: all .4s;
-    }
-</style>
-
-                
-@csrf
 <script type="text/javascript">
-
-    $('.button-1').click(function(){
-        $('.button-1').addClass("button-success");
-        $('.button-1').removeClass("button-1");
-        $('.button-danger').addClass("button-2");
-        $('.button-2').removeClass("button-danger");
-        
-    })
-
-    $('.button-2').click(function(){
-        $('.button-2').addClass("button-danger");
-        $('.button-2').removeClass("button-2");
-        $('.button-success').addClass("button-1");
-        $('.button-1').removeClass("button-success");
-    })
 
     var tabla = null;
     $(document).ready(()=>{
-        this.buscar_carga_academica({{ $periodo_academico->id_periodo_academico }})
-        $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:1});
         $('.clockpicker').clockpicker();
+        this.buscar_carga_academica({{ $grupo->id_periodo_academico }})
+        $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:1});
     })
+
+    
+
     function buscar_carga_academica(id_periodo){
         let url = "{{ config('global.url_base') }}/docente/buscar_asignaturas/"+id_periodo+"/{{ $usuario->id_tercero }}"
         $.get(url, (response) => {
             var asignaturas = '<option value="" disabled selected>Consultar por nombre o codigo</option>';
             response.asignaturas.forEach((asignatura) => {
-                asignaturas += "<option value = '"+asignatura.id_asignatura+"' >"+asignatura.nombre+"</option>"
+                let id_asignatura_antiguo = "{{ $grupo->id_asignatura }}"
+                let selected = ""
+                if(id_asignatura_antiguo == asignatura.id_asignatura) selected = "selected"
+                asignaturas += "<option value = '"+asignatura.id_asignatura+"' "+selected+">"+asignatura.nombre+"</option>"
             })
             $("#id_asignatura").html(asignaturas)
             var grupos = "<option value='' disabled selected>Consultar por nombre</option>"
             $("#id_grupo").html(grupos)
             $("#list_temas").html("")
+            @if ($grupo->id_asignatura)
+                buscar_grupos({{ $grupo->id_asignatura }})
+            @endif
         })
     }
 
@@ -303,13 +196,14 @@
         var grupos = '<option value="" disabled selected>Consultar por nombre</option>'
         $.get(ruta, function(response) {
             response.forEach(function(grupo){
-                grupos += '<option value="'+grupo.id_grupo+'">'+grupo.codigo+'</option>'
+                let id_grupo_antiguo = "{{ $grupo->id_grupo }}"
+                let selected = ""
+                if(id_grupo_antiguo == grupo.id_grupo) selected = "selected"
+                grupos += '<option value="'+grupo.id_grupo+'" '+selected+'>'+grupo.codigo+'</option>'
             })
             $("#id_grupo").html(grupos)
             buscar_temas()
         })
-        
-        
     }
 
     function buscar_temas() {
@@ -415,16 +309,6 @@
         $("#bodytable").html(tabla_html)
         $("#paginador").html("")
         $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:10});
-    }
-
-    function opciones_clase(permiso_asistencia) {
-        let opciones = ""
-        if(permiso_asistencia == 0){
-            opciones += '<a class="font-small" href="#">Editar</a>&nbsp;&nbsp; <a class="font-small" href="#">Detalles</a>&nbsp;'
-        }else{
-            opciones += '<a class="font-small" href="#">Tomar asistencia</a>&nbsp;&nbsp; <a class="font-small" href="#">Detalles</a>&nbsp;'
-        }
-        return opciones
     }
 </script>
 @endsection
