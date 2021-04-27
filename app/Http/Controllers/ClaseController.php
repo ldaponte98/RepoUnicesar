@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Clase;
-use App\ClaseDetalle;
+use App\ClaseAsistencia;
 use App\TerceroGrupo;
 use App\PlanDesarrolloAsignatura;
 use App\PeriodoAcademico;
@@ -152,5 +153,44 @@ class ClaseController extends Controller
         }
         $titulo = "Acceso denegado";
         return view('sitio.error',compact(['titulo', 'mensaje']));
+    }
+
+    public function guardar_asistencia(Request $request)
+    {
+        $post = $request->all();
+        $error = true;
+        $message = "";
+        if ($post) {
+            $post = (object) $post;
+            $post->asistencias = json_decode($post->asistencias);
+            foreach ($post->asistencias as $alumno) {
+                $alumno = (object) $alumno;
+                $asistencia = ClaseAsistencia::find($alumno->id_clase_asistencia);
+                if ($asistencia == null) $asistencia = new ClaseAsistencia;
+                $asistencia->id_clase      = $post->id_clase;
+                $asistencia->id_tercero    = $alumno->id_tercero;
+                $asistencia->asistio       = $alumno->asistio;
+                $asistencia->excusa        = $alumno->excusa;
+                $asistencia->motivo_excusa = $alumno->motivo_excusa;
+                $file_excusa = $request->file('file_excusa_'.$alumno->id_tercero);
+                if ($file_excusa) {
+                    $file_name = $file_excusa->getClientOriginalName();
+                    $extension = explode(".", $file_name);
+                    $extension = $extension[count($extension) - 1];
+                    $soporte = $alumno->id_tercero."-".date("Y-m-d-H-i-s").".".$extension;
+                    $ruta = '/files/asistencias';
+                    Storage::makeDirectory($ruta, 0777);
+                    Storage::disk('public')->put($ruta."/".$soporte,  \File::get($file_excusa));
+                    $asistencia->archivo_excusa = $soporte;
+                }
+                $asistencia->save();
+            }
+            $error = false; $message = "Asistencia registrada exitosamente";
+        }
+        return response()->json([
+            'error' => $error,
+            'message' => $message,
+            'post' => $post
+        ]);
     }
 }

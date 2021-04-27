@@ -52,6 +52,7 @@ Route::post('clases/buscar_clases','ClaseController@buscar_clases')->name('clase
 Route::any('clases/gestion','ClaseController@gestion')->name('clases/gestion');
 Route::any('clases/view/{id_clase}','ClaseController@view')->name('clases/view');
 Route::any('clases/gestionar_asistencia/{id_clase}','ClaseController@gestionar_asistencia')->name('clases/gestionar_asistencia');
+Route::post('clases/guardar_asistencia','ClaseController@guardar_asistencia')->name('clases/guardar_asistencia');
 
 
 //RUTAS ASIGNATURA

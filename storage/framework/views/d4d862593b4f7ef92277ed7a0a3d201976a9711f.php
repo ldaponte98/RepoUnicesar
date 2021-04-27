@@ -30,47 +30,38 @@
     <!-- You can change the theme colors from here -->
     <link href="<?php echo e(asset("assets/css/colors/blue.css")); ?>" id="theme" rel="stylesheet">
    
-            <link href="<?php echo e(asset("css/estilos_card.css")); ?>" rel="stylesheet">
-
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link href="<?php echo e(asset("css/estilos_card.css")); ?>" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
-<script src="http://malsup.github.io/jquery.blockUI.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-<script src="<?php echo e(asset('js/TableToExcel.js')); ?>"></script>
-<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <script src="<?php echo e(asset('js/TableToExcel.js')); ?>"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
-<script src="<?php echo e(asset('js/paginacion.js')); ?>"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="<?php echo e(asset('js/paginacion.js')); ?>"></script>
 
-<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-<link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
- 
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
+    <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
+     
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
 
-     <style type="text/css">
-
+    <style type="text/css">
         body {
             --ck-z-default: 100;
             --ck-z-modal: calc( var(--ck-z-default) + 999 );
@@ -81,105 +72,116 @@
         .ck a{
             text-decoration: underline !important;
         }
-     #fotico:hover{
-       cursor: hand;
-       width: 205;
-    }
-    div#iconedit{
-        width: 40;
-        height: 40;
-        background-color: rgba(160, 191, 76, 1);
-        position: absolute;
-        right: 65;
-        top: 200;
+        #fotico:hover{
+           cursor: hand;
+           width: 205;
+        }
+        div#iconedit{
+            width: 40;
+            height: 40;
+            background-color: rgba(160, 191, 76, 1);
+            position: absolute;
+            right: 65;
+            top: 200;
 
-    }
-    div#iconedit a{
-        color : white;
-        top: 12;
-        position: relative;
-    }
+        }
+        div#iconedit a{
+            color : white;
+            top: 12;
+            position: relative;
+        }
 
-    div#iconedit:hover{
-         background-color: rgba(160, 191, 76, 0.9);
-    }
-    .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
-    text-decoration: none;
-    background-color: #9bbf4c;
-    }
-    .search{
-    line-height: inherit;
-    height: 31px;
-    background-color: #f2f7f8;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: #ddd;
-    }
-    .search:focus{
-       border-bottom-color: black; 
-       transition: 2.5s;
-    }
-    .fil{
-        cursor: pointer;
-    }
-    .fil:hover{
-        background-color: #DAF7A6;
+        div#iconedit:hover{
+             background-color: rgba(160, 191, 76, 0.9);
+        }
+        .dropdown-item.active, .dropdown-item:active {
+        color: #fff;
+        text-decoration: none;
+        background-color: #9bbf4c;
+        }
+        .search{
+        line-height: inherit;
+        height: 31px;
+        background-color: #f2f7f8;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        border-bottom-color: #ddd;
+        }
+        .search:focus{
+           border-bottom-color: black; 
+           transition: 2.5s;
+        }
+        .fil{
+            cursor: pointer;
+        }
+        .fil:hover{
+            background-color: #DAF7A6;
 
-    }
-    input[type="checkbox"] {
-        cursor: pointer;
-    }
+        }
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
 
-    li .active{
-        background-color:  #DAF7A6;
-    }
-    .sidebar-nav ul li a {
-        font-size: 14px !important;
-    }
+        li .active{
+            background-color:  #DAF7A6;
+        }
+        .sidebar-nav ul li a {
+            font-size: 14px !important;
+        }
 
-    .hidden-md-up{
-        margin-top: 15px !important;
-        margin-right: 40px !important;
-    }
+        .hidden-md-up{
+            margin-top: 15px !important;
+            margin-right: 40px !important;
+        }
 
-    @media (max-width: 767px){
-        .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
-            left: -280px;
-        }   
+        @media (max-width: 767px){
+            .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+                left: -280px;
+            }   
+
+            .blockMsg h1{
+                font-size:  13px !important;
+            }
+        }
 
         .blockMsg h1{
-            font-size:  13px !important;
+            color: #ffffff !important;
         }
-    }
 
-    .blockMsg h1{
-        color: #ffffff !important;
-    }
+        .page-item{
+            cursor: pointer !important;
+        }
+        .font-small{
+            font-size: 12px;
+        }
 
-    .page-item{
-        cursor: pointer !important;
-    }
-    .font-small{
-        font-size: 12px;
-    }
+        .select2-selection--single{
+            padding-bottom: 35px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__arrow {
+            top: 6px !important;
+        }
+        .select2-container--default .select2-selection--single .select2-selection__rendered {
+            margin-top: 3px !important;
+            font-size: 16px !important;
+        }
 
-    .select2-selection--single{
-        padding-bottom: 35px !important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__arrow {
-        top: 6px !important;
-    }
-    .select2-container--default .select2-selection--single .select2-selection__rendered {
-        margin-top: 3px !important;
-        font-size: 16px !important;
-    }
-</style>
-    
+        .btn-primary.active, .btn-primary.disabled.active, .btn-primary.disabled:focus, .btn-primary:focus {
+            background: #7b9838 !important;
+            border: 1px solid #7b9838 !important;
+        }
+        .btn-primary.focus, .btn-primary:focus {
+            -webkit-box-shadow: 0 0 0 2px rgb(2 117 216 / 50%);
+            box-shadow: 0 0 0 2px #9bbf4c9e;
 
-</style>
-<style type="text/css">
+        }
+        .btn-primary.active.focus, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary.focus, .btn-primary.focus:active, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary:focus, .open>.dropdown-toggle.btn-primary.focus, .open>.dropdown-toggle.btn-primary:focus, .open>.dropdown-toggle.btn-primary:hover {
+                background-color: #7b9838 !important;   
+                border: 1px solid #7b9838 !important;
+                color: #ffffff;
+            }
+
         .btn_tintilante{
             margin-right: 10px;
             border-radius: 20px; 
@@ -207,45 +209,62 @@
             }
         }
     </style>
+
     <script type="text/javascript">
-    $(document).ready(function () {
-    $('#txtfiltro').keyup(function () {
-      var rex = new RegExp($(this).val(), 'i');
-        $('#bodytable tr').hide();
-        $('#bodytable tr').filter(function () {
-            return rex.test($(this).text());
-        }).show();
+        $(document).ready(function () {
+            $('#txtfiltro').keyup(function () {
+              var rex = new RegExp($(this).val(), 'i');
+                $('#bodytable tr').hide();
+                $('#bodytable tr').filter(function () {
+                    return rex.test($(this).text());
+                }).show();
 
-        })
+            })
 
+            $(document).on('change', 'input[type=file]', function(e) {
+                var TmpPath = URL.createObjectURL(e.target.files[0]);
+                var nombre =  e.target.files[0].name;
+                var size =  e.target.files[0].size;
+                var dosmb = 1024 * 1024 * 2;
+                console.log("Tamaño de la imagen: "+size)
+                console.log("2MB: "+dosmb)
+                if (size > dosmb) {
+                    alert("La imagen es muy pesada, tamaño maximo 2MB")
+                    return false;
+                }
+                $("#labelfile").html(nombre);
+                $('#imagen_update').attr('src', TmpPath);
+            });
+        });
 
-      $(document).on('change', 'input[type=file]', function(e) {
-       
-        var TmpPath = URL.createObjectURL(e.target.files[0]);
-        var nombre =  e.target.files[0].name;
-        var size =  e.target.files[0].size;
-        var dosmb = 1024 * 1024 * 2;
-        console.log("Tamaño de la imagen: "+size)
-        console.log("2MB: "+dosmb)
-        if (size > dosmb) {
-            alert("La imagen es muy pesada, tamaño maximo 2MB")
-            return false;
+        function SetFilter(id_input, id_table) {
+            $('#' + id_input).keyup(function () {
+                var rex = new RegExp($(this).val(), 'i');
+                $('#' + id_table + ' tbody tr').hide();
+                $('#' + id_table + ' tbody tr').filter(function () {
+                    return rex.test($(this).text());
+                }).show();
+            })
         }
-        $("#labelfile").html(nombre);
-        $('#imagen_update').attr('src', TmpPath);
-      });
 
-});
-
-    function SetFilter(id_input, id_table) {
-        $('#' + id_input).keyup(function () {
-            var rex = new RegExp($(this).val(), 'i');
-            $('#' + id_table + ' tbody tr').hide();
-            $('#' + id_table + ' tbody tr').filter(function () {
-                return rex.test($(this).text());
-            }).show();
-        })
-    }
+        function Loading(show = true, text = "Espere..."){
+            if(show){
+                $.blockUI({
+                    message: '<h1>'+text+'</h1><i class="fa fa-spinner fa-spin fa-3x fa-fw">',
+                    css: {
+                        border: 'none',
+                        padding: '15px',
+                        backgroundColor: '#000',
+                        '-webkit-border-radius': '10px',
+                        '-moz-border-radius': '10px',
+                        opacity: .8,
+                        color: '#fff'
+                    }
+                });
+            }else{
+                $.unblockUI();
+            }
+        }
 </script>
 </head>
 

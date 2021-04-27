@@ -19,81 +19,81 @@
 @section('content')
 
 <div class="row">
-<div class="col-sm-12">
-    <div class="card">
-        <div class="card-block">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-block">
 
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        @php
-                            $periodos_academicos = \App\PeriodoAcademico::orderBy('id_periodo_academico', 'desc')->get();
-                        @endphp
-                    <label style="color: black;"><b>Periodo academico</b></label>
-                    <select onchange="buscar_carga_academica(this.value)" class="form-control hasDatepicker form-control-line" id="id_periodo_academico" name="id_periodo_academico">
-                        <option value="" disabled selected>Consultar por nombre</option>
-                        @foreach ($periodos_academicos as $d)
-                            <option value="{{ $d->id_periodo_academico }}">{{ $d->periodo }}</option>
-                        @endforeach
-                    </select>
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-                            $("#id_periodo_academico").select2({
-                                width : '100%',
-                            })
-                        });
-                    </script>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label style="color: black;"><b>Asignatura</b></label>
-                        <select class="form-control hasDatepicker form-control-line" id="id_asignatura" name="id_asignatura">
-                            <option value="" disabled selected>Consultar por nombre o codigo</option>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @php
+                                $periodos_academicos = \App\PeriodoAcademico::orderBy('id_periodo_academico', 'desc')->get();
+                            @endphp
+                        <label style="color: black;"><b>Periodo academico</b></label>
+                        <select onchange="buscar_carga_academica(this.value)" class="form-control hasDatepicker form-control-line" id="id_periodo_academico" name="id_periodo_academico">
+                            <option value="" disabled selected>Consultar por nombre</option>
+                            @foreach ($periodos_academicos as $d)
+                                <option value="{{ $d->id_periodo_academico }}">{{ $d->periodo }}</option>
+                            @endforeach
                         </select>
                         <script type="text/javascript">
-                        $(document).ready(function() {
-                            $("#id_asignatura").select2({
-                                width : '100%',
-                            })
-                        });
+                            $(document).ready(function() {
+                                $("#id_periodo_academico").select2({
+                                    width : '100%',
+                                })
+                            });
                         </script>
+                      </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label style="color: black;"><b>Asignatura</b></label>
+                            <select class="form-control hasDatepicker form-control-line" id="id_asignatura" name="id_asignatura">
+                                <option value="" disabled selected>Consultar por nombre o codigo</option>
+                            </select>
+                            <script type="text/javascript">
+                            $(document).ready(function() {
+                                $("#id_asignatura").select2({
+                                    width : '100%',
+                                })
+                            });
+                            </script>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <br>
+                        <button type="submit" onclick="buscar_clases()" class="btn btn-info">Consultar</button>
+                        <button type="submit" class="btn btn-success">Exportar Excel</button>
                     </div>
                 </div>
-                <div class="col-sm-4">
-                    <br>
-                    <button type="submit" onclick="buscar_clases()" class="btn btn-info">Consultar</button>
-                    <button type="submit" class="btn btn-success">Exportar Excel</button>
+                <h4 class="card-title">Clases</h4>
+                <div class="table-responsive">
+                    <table class="table" id="tabla">
+                        <thead>
+                            <tr>
+                                <th><center><b>#</b></center></th>
+                                <th><b>Clase</b></th>
+                                <th><b>Fecha de creación</b></th>
+                                <th><b>Hora de creación</b></th>
+                                <th><b>Asistentes</b></th>
+                                <th><b>Faltantes</b></th>
+                                <th><b>Opciones</b></th>
+                            </tr>
+                        </thead>
+                        <style type="text/css"> 
+                            .fil td{
+                                color: black !important;
+                            }
+                        </style>
+                        <tbody id="bodytable">
+                           
+                        </tbody>
+                    </table>
+                    <ul class="pagination" id="paginador"></ul>
                 </div>
-            </div>
-            <h4 class="card-title">Clases</h4>
-            <div class="table-responsive">
-                <table class="table" id="tabla">
-                    <thead>
-                        <tr>
-                            <th><center><b>#</b></center></th>
-                            <th><b>Clase</b></th>
-                            <th><b>Fecha de creación</b></th>
-                            <th><b>Hora de creación</b></th>
-                            <th><b>Asistentes</b></th>
-                            <th><b>Faltantes</b></th>
-                            <th><b>Opciones</b></th>
-                        </tr>
-                    </thead>
-                    <style type="text/css"> 
-                        .fil td{
-                            color: black !important;
-                        }
-                    </style>
-                    <tbody id="bodytable">
-                       
-                    </tbody>
-                </table>
-                <ul class="pagination" id="paginador"></ul>
             </div>
         </div>
     </div>
-</div>
 </div>
 
 @csrf
@@ -177,12 +177,8 @@
     }
 
     function opciones_clase(asistencia) {
-        let opciones = ""
-        if(asistencia.permiso_asistencia == 0){
-            opciones += '<a class="font-small" href="#">Editar</a>&nbsp;&nbsp; <a class="font-small" href="#">Detalles</a>&nbsp;'
-        }else{
-            opciones += '<a class="font-small">Tomar asistencia</a>&nbsp;&nbsp; <a class="font-small" href="{{ config('global.url_base')."/clases/view/" }}'+asistencia.id_clase+'">Detalles</a>&nbsp;'
-        }
+        let texto_asistencia = asistencia.permiso_asistencia == 0 ? "Asistencia" : "Tomar Asistencia"
+        let opciones = '<a class="font-small" href="{{ config('global.url_base')."/clases/view/" }}'+asistencia.id_clase+'">Detalles</a>&nbsp;&nbsp; <a class="font-small" href="{{ config('global.url_base')."/clases/gestionar_asistencia/" }}'+asistencia.id_clase+'">'+texto_asistencia+'</a>&nbsp;'
         return opciones
     }
 </script>

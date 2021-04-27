@@ -37,11 +37,11 @@
     @foreach ($clase->alumnos() as $alumno)
     @php
         $asistio = "button-1"; $no_asistio = "button-2"; $tiene_excusa = false;
-        if ($alumno->tercero->asistencia) {
-            if ($alumno->tercero->asistencia->asistio == 1) {
+        if ($alumno->asistencia) {
+            if ($alumno->asistencia->asistio == 1) {
                 $asistio = "button-success";
             }else{
-                if ($alumno->tercero->asistencia->excusa == 1) $tiene_excusa = true;
+                if ($alumno->asistencia->excusa == 1) $tiene_excusa = true;
                 $no_asistio = "button-danger";
             }
         }else{
@@ -75,12 +75,16 @@
                             class="btn-info pull-right" 
                             id="btn-excusa-{{ $alumno->id_tercero }}" 
                             onclick="ModalExcusa({{ $alumno->id_tercero }})">
-                            <i class="fa fa-heartbeat"></i> Excusa</button>
+                            <i class="fa fa-heartbeat"></i> Excusa </button>
                 </div>
             </div>
         </div>
     </div>
     @endforeach
+    
+    <div class="col-sm-12 text-center"><br>
+        <button class="btn btn-primary" onclick="GuardarAsistencia()">Guardar asistencia</button>
+    </div>
 </div>
 
 <div class="modal" id="modalExcusa" tabindex="-1" role="dialog" aria-hidden="true">
@@ -155,6 +159,13 @@
             margin-right: 0px !important;
         }
     }
+
+    .name-event h2{
+        margin-bottom: 0px;
+    }
+    .name-event p{
+        margin-bottom: 5px;
+    }
     ._card{
         background: #fff;
         padding: 0px;
@@ -219,9 +230,7 @@
         transform: scale(1.03);
         transition: all .4s;
     }
-</style>
-
-                
+</style>          
 @csrf
 <script type="text/javascript">
     var alumnos = []
@@ -239,7 +248,6 @@
         $("#excusa-motivo").val(alumno.motivo_excusa)
         $("#excusa-soporte").val(null)
         $("#excusa-file-name").html(alumno.archivo_excusa)
-        
     }
 
     function GuardarExcusa() {
@@ -248,7 +256,7 @@
         let file = $("#excusa-soporte")[0].files[0]
         let motivo = $("#excusa-motivo").val()
         if(motivo.trim() == ""){ alert("El motivo de la excusa es obligatorio"); return false }
-        if(!file && alumno.file_soporte == null){ 
+        if(!file && alumno.file_soporte == null && alumno.archivo_excusa == ""){ 
             alert("El archivo de soporte de la excusa es obligatorio");
             return false; 
         }
@@ -280,16 +288,51 @@
         }
     }
 
+    function GuardarAsistencia() {
+        let request = new FormData();
+        let _token = $('input[name=_token]')[0].value
+        request.append('_token', _token);
+        request.append('id_clase', {{ $clase->id_clase }});
+        request.append('asistencias', JSON.stringify(this.alumnos));
+        this.alumnos.forEach((item) =>{
+            if(item.asistio == 0 && item.excusa == 1 && item.file_soporte != null){
+                request.append('file_excusa_' + item.id_tercero, item.file_soporte);
+            }
+        })
+        Loading(true, "Guardando asistencia")
+        $.ajax({
+            url: "{{ url('clases/guardar_asistencia') }}",
+            type: 'POST',
+            data: request,
+            dataType : "json",
+            processData: false,
+            contentType: false
+        })      
+        .done(function(response) {
+            Loading(false)
+            if(response.error == false){
+                toastr.success(response.message)
+                location.reload()
+            }else{
+                toastr.error(response.message, "Error")
+            }
+        }).fail(function() {
+            Loading(false)
+            toastr.error("Ocurrio un error", "Error")
+            console.log("error");
+        });
+    }
+
     function CargarAlumnos() {
         @foreach ($clase->alumnos() as $alumno)
-            @php $asistencia = $alumno->tercero->asistencia; @endphp
+            @php $asistencia = $alumno->asistencia; @endphp
             this.alumnos.push({
                 'id_tercero' : {{ $alumno->id_tercero }},
                 'id_clase_asistencia' : {{ $asistencia ? $asistencia->id_clase_asistencia : "null" }},
-                'asistio' : {{ $asistencia ? $asistencia->asistio : "null" }},
-                'excusa' : {{ $asistencia ? $asistencia->excusa : "null" }},
-                'motivo_excusa' : {{ $asistencia ? $asistencia->motivo_excusa : "null" }},
-                'archivo_excusa' : {{ $asistencia ? $asistencia->archivo_excusa : "null" }},
+                'asistio' : {{ $asistencia ? $asistencia->asistio : 0 }},
+                'excusa' : {{ $asistencia ? $asistencia->excusa : 0 }},
+                'motivo_excusa' : "{{ $asistencia ? ($asistencia->motivo_excusa ? $asistencia->motivo_excusa : "null") : "null" }}",
+                'archivo_excusa' : "{{ $asistencia ? ($asistencia->archivo_excusa ? $asistencia->archivo_excusa : "null") : "null" }}",
                 'file_soporte' : null
             })
         @endforeach
@@ -298,5 +341,7 @@
     $(document).ready(()=>{
         CargarAlumnos()
     })
+
+
 </script>
 @endsection
