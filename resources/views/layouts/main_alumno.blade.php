@@ -31,40 +31,33 @@
     <!-- You can change the theme colors from here -->
     <link href="{{ asset("assets/css/colors/blue.css") }}" id="theme" rel="stylesheet">
    
-            <link href="{{ asset("css/estilos_card.css") }}" rel="stylesheet">
+    <link href="{{ asset("css/estilos_card.css") }}" rel="stylesheet">
 
-
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
 
-<script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
-<script src="http://malsup.github.io/jquery.blockUI.js"></script>
-<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
-<script src="{{ asset('js/TableToExcel.js') }}"></script>
-<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
+    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css"/>
+    <script src="{{ asset('js/TableToExcel.js') }}"></script>
+    <script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
 
-<script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
-<script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/23.0.0/classic/ckeditor.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
 
-     <style type="text/css">
+    <style type="text/css">
 
         body {
             --ck-z-default: 100;
@@ -76,86 +69,86 @@
         .ck a{
             text-decoration: underline !important;
         }
-     #fotico:hover{
-       cursor: hand;
-       width: 205;
-    }
-    div#iconedit{
-        width: 40;
-        height: 40;
-        background-color: rgba(160, 191, 76, 1);
-        position: absolute;
-        right: 65;
-        top: 200;
-
-    }
-    div#iconedit a{
-        color : white;
-        top: 12;
-        position: relative;
-    }
-
-    div#iconedit:hover{
-         background-color: rgba(160, 191, 76, 0.9);
-    }
-    .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
-    text-decoration: none;
-    background-color: #9bbf4c;
-    }
-    .search{
-    line-height: inherit;
-    height: 31px;
-    background-color: #f2f7f8;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: #ddd;
-    }
-    .search:focus{
-       border-bottom-color: black; 
-       transition: 2.5s;
-    }
-    .fil{
-        cursor: pointer;
-    }
-    .fil:hover{
-        background-color: #DAF7A6;
-
-    }
-    input[type="checkbox"] {
-        cursor: pointer;
-    }
-
-    li .active{
-        background-color:  #DAF7A6;
-    }
-    .sidebar-nav ul li a {
-        font-size: 14px !important;
-    }
-
-    .hidden-md-up{
-        margin-top: 15px !important;
-        margin-right: 40px !important;
-    }
-
-    @media (max-width: 767px){
-        .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
-            left: -280px;
-        }   
-        #mobile_agregar_clase{
-            display: block !important;
+        #fotico:hover{
+           cursor: hand;
+           width: 205;
         }
+        div#iconedit{
+            width: 40;
+            height: 40;
+            background-color: rgba(160, 191, 76, 1);
+            position: absolute;
+            right: 65;
+            top: 200;
+
+        }
+        div#iconedit a{
+            color : white;
+            top: 12;
+            position: relative;
+        }
+
+        div#iconedit:hover{
+             background-color: rgba(160, 191, 76, 0.9);
+        }
+        .dropdown-item.active, .dropdown-item:active {
+        color: #fff;
+        text-decoration: none;
+        background-color: #9bbf4c;
+        }
+        .search{
+        line-height: inherit;
+        height: 31px;
+        background-color: #f2f7f8;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        border-bottom-color: #ddd;
+        }
+        .search:focus{
+           border-bottom-color: black; 
+           transition: 2.5s;
+        }
+        .fil{
+            cursor: pointer;
+        }
+        .fil:hover{
+            background-color: #DAF7A6;
+
+        }
+        input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        li .active{
+            background-color:  #DAF7A6;
+        }
+        .sidebar-nav ul li a {
+            font-size: 14px !important;
+        }
+
+        .hidden-md-up{
+            margin-top: 15px !important;
+            margin-right: 40px !important;
+        }
+
+        @media (max-width: 767px){
+            .mini-sidebar .left-sidebar, .mini-sidebar .sidebar-footer {
+                left: -280px;
+            }   
+            #mobile_agregar_clase{
+                display: block !important;
+            }
+            .blockMsg h1{
+                font-size:  13px !important;
+            }
+        }
+
         .blockMsg h1{
-            font-size:  13px !important;
+            color: #ffffff !important;
         }
-    }
 
-    .blockMsg h1{
-        color: #ffffff !important;
-    }
-
-    .select2-selection--single{
+        .select2-selection--single{
             padding-bottom: 35px !important;
         }
         .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -165,10 +158,7 @@
             margin-top: 3px !important;
             font-size: 16px !important;
         }
-    
 
-</style>
-<style type="text/css">
         .btn_tintilante{
             margin-right: 10px;
             border-radius: 20px; 
@@ -196,45 +186,95 @@
                 box-shadow: 0 0 0 0 rgba(115, 142, 57, 0), 0 0 0 10px rgba(115, 142, 57, 0);
             }
         }
+
+        .cuadro_busqueta{
+            background: white; 
+            position: absolute;
+            border-radius: 5px;
+            padding: 15px;
+            width: 400px;
+        }
+
+        .page-wrapper {
+            margin-left: 290px;
+            transition: 0.2s ease-in;
+        }
+
+        .link_search:hover{
+            color: #9bbf4c;
+            cursor: pointer;
+        }
+        .link_search{
+            color: #54667a;
+        }
+        .topbar .top-navbar .app-search .srh-btn {
+            position: absolute;
+            top: 13px;
+            cursor: pointer;
+            background: #ffffff;
+            width: 15px;
+            height: 15px;
+            right: 10px;
+            font-size: 14px;
+        }
+
+        @media(max-width: 767px){
+            .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
+                padding-left: .75rem;
+                padding-right: .75rem;
+                font-size: 25px;
+                line-height: 50px;
+            }
+
+            .mini-sidebar .top-navbar .navbar-header {
+                width: 20px;
+                text-align: center;
+            }
+            .hidden-md-up {
+                margin-top: 15px !important;
+                margin-right: 10px !important;
+            }
+            #icon_message{
+                padding-top: 16px !important;
+            }
+            .left-sidebar {
+                width: 260px !important;
+            }
+        }
+
+        .hide-menu{
+            position: absolute;
+        }
     </style>
     <script type="text/javascript">
     $(document).ready(function () {
-    $('#txtfiltro').keyup(function () {
-      var rex = new RegExp($(this).val(), 'i');
-        $('#bodytable tr').hide();
-        $('#bodytable tr').filter(function () {
-            return rex.test($(this).text());
-        }).show();
-
+        $('#txtfiltro').keyup(function () {
+            var rex = new RegExp($(this).val(), 'i');
+            $('#bodytable tr').hide();
+            $('#bodytable tr').filter(function () {
+                return rex.test($(this).text());
+            }).show();
         })
 
 
-      $(document).on('change', 'input[type=file]', function(e) {
-       
-        var TmpPath = URL.createObjectURL(e.target.files[0]);
-        var nombre =  e.target.files[0].name;
-        var size =  e.target.files[0].size;
-        var dosmb = 1024 * 1024 * 2;
-        console.log("Tamaño de la imagen: "+size)
-        console.log("2MB: "+dosmb)
-        if (size > dosmb) {
-            alert("La imagen es muy pesada, tamaño maximo 2MB")
-            return false;
-        }
-        $("#labelfile").html(nombre);
-        $('#imagen_update').attr('src', TmpPath);
+        $(document).on('change', 'input[type=file]', function(e) {
+            var TmpPath = URL.createObjectURL(e.target.files[0]);
+            var nombre =  e.target.files[0].name;
+            var size =  e.target.files[0].size;
+            var dosmb = 1024 * 1024 * 2;
+            console.log("Tamaño de la imagen: "+size)
+            console.log("2MB: "+dosmb)
+            if (size > dosmb) {
+                alert("La imagen es muy pesada, tamaño maximo 2MB")
+                return false;
+            }
+            if(nombre.length > 10) nombre = nombre.substring(0,17) + "..." 
+            $("#labelfile").html(nombre);
+            $('#imagen_update').attr('src', TmpPath);
       });
 
 });
 </script>
-
-     
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
 </head>
 
 <body class="fix-header fix-sidebar card-no-border mini-sidebar">
@@ -270,10 +310,6 @@
                             
                         </b>
                         </span>
-                        
-                        <!--End Logo icon -->
-                        <!-- Logo text -->
-                        
                     </a>
                 </div>
                 <!-- ============================================================== -->
@@ -367,12 +403,6 @@
 
                             </div>
                         </li>
-                         <li class="nav-item dropdown">
-                            <a style="display: none;" id="mobile_agregar_clase" data-toggle="modal" data-target="#modal_agregar_clase" class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="mdi mdi-plus-box"></i>
-                            </a>
-                        </li>
-                        
-
                     </ul>
                     @php
 
@@ -386,7 +416,6 @@
                     <!-- ============================================================== -->
 
                     <ul class="navbar-nav my-lg-0">
-                        
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="{{ asset($imagen) }}" alt="user" class="rounded-circle" width="50" height="50"></a>
                             <div class="dropdown-menu dropdown-menu-right user-dd animated flipInY">
@@ -398,9 +427,6 @@
                                         <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="btn btn-rounded btn-danger btn-sm">Ver perfil</a>
                                     </div>
                                 </div>
-                                <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
-                                <a href="{{ route('notificacion/mis_notificaciones') }}" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
-                               
                                 <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
                             </div>
                         </li>
@@ -408,69 +434,6 @@
                 </div>
             </nav>
         </header>
-
-        <style type="text/css">
-                            .cuadro_busqueta{
-                                background: white; 
-                                position: absolute;
-                                border-radius: 5px;
-                                padding: 15px;
-                                width: 400px;
-                            }
-
-                            .page-wrapper {
-                                margin-left: 290px;
-                                transition: 0.2s ease-in;
-                            }
-
-                            .link_search:hover{
-                                color: #9bbf4c;
-                                cursor: pointer;
-                            }
-                            .link_search{
-                                color: #54667a;
-                            }
-                            .topbar .top-navbar .app-search .srh-btn {
-                                position: absolute;
-                                top: 13px;
-                                cursor: pointer;
-                                background: #ffffff;
-                                width: 15px;
-                                height: 15px;
-                                right: 10px;
-                                font-size: 14px;
-                            }
-
-                            @media(max-width: 767px){
-                                .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
-                                    padding-left: .75rem;
-                                    padding-right: .75rem;
-                                    font-size: 25px;
-                                    line-height: 50px;
-                                }
-
-                                .mini-sidebar .top-navbar .navbar-header {
-                                    width: 20px;
-                                    text-align: center;
-                                }
-                                .hidden-md-up {
-                                    margin-top: 15px !important;
-                                    margin-right: 10px !important;
-                                }
-                                #icon_message{
-                                    padding-top: 16px !important;
-                                }
-                                .left-sidebar {
-                                    width: 260px !important;
-                                }
-                            }
-
-                            .hide-menu{
-                                position: absolute;
-                            }
-                            
-
-                        </style>
 
         <!-- ============================================================== -->
         <!-- End Topbar header -->
@@ -493,12 +456,9 @@
                     @endphp</font></font><span class="caret"></span></a>
                         <div class="dropdown-menu animated flipInY">
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                            <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Fechas </a>
-                            <a href="{{ route('notificacion/mis_notificaciones') }}" class="dropdown-item"><i class="mdi mdi-alarm"></i> Mis extra-plazos</a>
-                           
+                            <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Clases </a>
                             <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
                         </div>
-                        <button class="btn btn-success w-75 mt-2" data-toggle="modal" data-target="#modal_agregar_clase" style="background-color: #73942B; border-color: #73942B;"><i class="fa fa-plus-circle"></i> Nueva clase </button>
                     </div>
                 </div>
                 
@@ -523,7 +483,7 @@
                         }
                 </style>
                 <ul id="sidebarnav" class="in">
-                    <li class="nav-small-cap">Clases</li>
+                    <li class="nav-small-cap">Carga academica</li>
 
                         @php
                             $menu_asignaturas = $usuario->tercero->menu_asignaturas();
@@ -547,19 +507,6 @@
                 </nav>
                 <!-- End Sidebar navigation -->
             </div>
-
-<!--
-            <div class="sidebar-footer">
-               
-                <a href="" class="link" data-toggle="tooltip" title="Ajustes"><i class="ti-settings"></i></a>
-               
-                <a href="" class="link" data-toggle="tooltip" title="Email"><i class="mdi mdi-gmail"></i></a>
-              
-
-                <a href="" class="link" data-toggle="tooltip" title="Cerrar sesión"><i class="mdi mdi-power"></i></a>
-            </div>
-           
-            -->
         </aside>
 
         <!-- ============================================================== -->

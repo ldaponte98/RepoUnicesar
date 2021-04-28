@@ -81,9 +81,16 @@
         </div>
     </div>
     @endforeach
-    
     <div class="col-sm-12 text-center"><br>
-        <button class="btn btn-primary" onclick="GuardarAsistencia()">Guardar asistencia</button>
+        @php
+            $fecha_actual = date('Y-m-d H:i:s');
+            $fecha_actual_mas_15 = date('Y-m-d H:i:s', strtotime($clase->fecha_fin." +15 minutes"));
+        @endphp
+        @if ($fecha_actual >= $clase->fecha_inicio and $fecha_actual <= $fecha_actual_mas_15)
+            <button class="btn btn-primary" onclick="GuardarAsistencia()">Guardar asistencia</button>
+        @else
+            <b><i>No se puede tomar la asitencia de esta clase debido a que no esta dentro del horario de la clase</i></b>
+        @endif
     </div>
 </div>
 
@@ -125,6 +132,8 @@
         .container-img img{
             width: 30% !important;
             border-radius: 50%;
+            max-height: 90px !important;
+
         }
         ._card{
             display: block !important;
@@ -137,6 +146,7 @@
             display: flex  !important;
             justify-content: center !important;
             align-items: center !important;
+            max-height: 90px !important;
         }
 
         .content-event {
@@ -223,6 +233,7 @@
     .container-img img{
         width: 100%;
         height: auto;
+        max-height: 170px;
     }
 
     ._card:hover{

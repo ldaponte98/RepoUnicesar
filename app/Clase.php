@@ -52,7 +52,7 @@ class Clase extends Model
     								 ->where('id_clase', $this->id_clase)
     								 ->where('excusa', 1)
     								 ->first();
-   		if($excusa) return true;
+   		if($excusa) return $excusa;
 
    		return false;
     }

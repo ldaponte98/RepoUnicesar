@@ -35,6 +35,7 @@ class TerceroController extends Controller
     	$docente = Tercero::find($id_tercero);
         if (session("is_admin")==true) return view('docente.view',compact('docente'));
         if (session("is_docente")==true) return view('docente.view_perfil',compact('docente'));
+        if (session("is_alumno")==true) return view('docente.view_perfil',compact('docente'));
     }
 
     public function buscarAsignaturas($id_periodo_academico, $id_tercero)

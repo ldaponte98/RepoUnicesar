@@ -121,4 +121,4 @@
 
 
 <?php $__env->stopSection(); ?>
-<?php echo $__env->make((session("is_admin") == true ? 'layouts.main' : 'layouts.main_docente'), \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\RepoUnicesar\resources\views/docente/view_perfil.blade.php ENDPATH**/ ?>
+<?php echo $__env->make((session("is_admin") ? 'layouts.main' : (session("is_docente")) ? 'layouts.main_docente' : 'layouts.main_alumno'), \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?><?php /**PATH C:\xampp\htdocs\RepoUnicesar\resources\views/docente/view_perfil.blade.php ENDPATH**/ ?>

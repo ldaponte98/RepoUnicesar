@@ -20,10 +20,13 @@ class ClaseController extends Controller
     								 ->where('id_grupo', $id_grupo)
     								 ->where('estado', 1)
     								 ->first();
+        
         if($tercero_grupo){
         	$plan_desarrollo_asignatura = PlanDesarrolloAsignatura::where('id_asignatura', $tercero_grupo->grupo->id_asignatura)
         														  ->where('id_periodo_academico', $tercero_grupo->grupo->id_periodo_academico)
         														  ->first();
+            if (!$plan_desarrollo_asignatura) $plan_desarrollo_asignatura = new PlanDesarrolloAsignatura;
+            
         	$clases = Clase::where('id_grupo', $id_grupo)
         					->where('estado', 1)
         					->orderBy('created_at', 'desc')
@@ -39,6 +42,17 @@ class ClaseController extends Controller
     public function clases_docente()
     {
         return view('clase.clases_docente');
+    }
+
+    public function clases_pendientes()
+    {
+        $fecha_actual = date('Y-m-d H:i:s');
+        $clases_pendientes = Clase::select('clases.*')
+                ->join('grupo', 'grupo.id_grupo', '=', 'clases.id_grupo')
+                ->where('fecha_inicio', '<=', $fecha_actual)
+                ->where('fecha_fin', '>=', $fecha_actual)
+                ->get();        
+        return view('clase.clases_docente_pendientes', compact('clases_pendientes'));
     }
 
 
@@ -60,6 +74,7 @@ class ClaseController extends Controller
                 ->get();
             foreach ($clases as $query_clase) {
                 $clase = Clase::find($query_clase['id_clase']);
+                $clase->nom_grupo = $clase->grupo->codigo; 
                 $clase->detalles =  $clase->detalles;
                 $clase->fecha_creacion = date('d/m/Y', strtotime($clase->created_at));
                 $clase->hora_creacion = date('H:i', strtotime($clase->created_at));

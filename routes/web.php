@@ -53,6 +53,7 @@ Route::any('clases/gestion','ClaseController@gestion')->name('clases/gestion');
 Route::any('clases/view/{id_clase}','ClaseController@view')->name('clases/view');
 Route::any('clases/gestionar_asistencia/{id_clase}','ClaseController@gestionar_asistencia')->name('clases/gestionar_asistencia');
 Route::post('clases/guardar_asistencia','ClaseController@guardar_asistencia')->name('clases/guardar_asistencia');
+Route::any('clases/mis_clases_pendientes','ClaseController@clases_pendientes')->name('clases/mis_clases_pendientes');
 
 
 //RUTAS ASIGNATURA
@@ -161,11 +162,12 @@ Route::post('plan_desarrollo_asignatura/obtener_temas','PlanDesarrolloAsignatura
 
 
 //RUTAS PARA ALIMENTAR DESDE ACADEMUSOFT
-Route::any('comunication/updateFacultades','ComunicationController@updateFacultades')->name('comunication/updateFacultades');
-Route::any('comunication/updateProgramasAcademicos','ComunicationController@updateProgramasAcademicos')->name('comunication/updateProgramasAcademicos');
-Route::any('comunication/updatePeriodosAcademicos','ComunicationController@updatePeriodosAcademicos')->name('comunication/updatePeriodosAcademicos');
-Route::any('comunication/updateAsignaturas','ComunicationController@updateAsignaturas')->name('comunication/updateAsignaturas');
-Route::any('comunication/auth','ComunicationController@auth')->name('comunication/auth');
+Route::post('comunication/updateFacultades','ComunicationController@updateFacultades')->name('comunication/updateFacultades');
+Route::post('comunication/updateProgramasAcademicos','ComunicationController@updateProgramasAcademicos')->name('comunication/updateProgramasAcademicos');
+Route::post('comunication/updatePeriodosAcademicos','ComunicationController@updatePeriodosAcademicos')->name('comunication/updatePeriodosAcademicos');
+Route::post('comunication/updateAsignaturas','ComunicationController@updateAsignaturas')->name('comunication/updateAsignaturas');
+Route::post('comunication/auth','ComunicationController@auth')->name('comunication/auth');
+Route::get('comunication/redirect/{token}','ComunicationController@login')->name('comunication/redirect');
 
 
 

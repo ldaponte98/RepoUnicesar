@@ -23,11 +23,11 @@
         	animation: movimiento 10s infinite alternate !important;
      	}
      	@keyframes movimiento{
-	      from{
-	        background: url('https://www.mapfrere.com/reaseguro/es/images/servicio-estudios-mapfre-1198x248_tcm636-523037.jpg');
-	        background-size: cover; 
-			height: 130px;
-	        background-position: left center ;
+            from{
+    	        background: url('https://www.mapfrere.com/reaseguro/es/images/servicio-estudios-mapfre-1198x248_tcm636-523037.jpg');
+    	        background-size: cover; 
+    			height: 130px;
+    	        background-position: left center ;
 	        }
 
 	        to{
@@ -36,8 +36,24 @@
 				height: 130px;
 	        	background-position: right center;
 	        } 
-	      }
+	    }
+
+        .container-options{
+            text-align: center !important;
+            padding-top: 10px !important;
+        }
      }
+
+     .container-options{
+        text-align: right;
+        padding-top: 20px;
+     }
+
+     .label-rounded {
+        font-size: 14px !important;
+        border-radius: 60px;
+        padding: 6px 20px 6px 20px;
+    }
 </style>
 <div class="row">
 	<div class="col-sm-12">
@@ -50,13 +66,14 @@
                         	<a type="button" style="cursor: pointer;" class="btn-primary-outline" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span><i class="ti-menu"></i></span>
                             </a>
-                             <div class="dropdown-menu animated slideInUp" style="position: absolute;
-							    top: auto;
-							    left: auto;
-							    right: 35;">
-	                              <a class="dropdown-item" target="_blank" href="{{ route('plan_desarrollo_asignatura/imprimir', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura) }}" style="cursor: pointer;"><i class="fa fa-balance-scale"></i> &nbsp;Plan de desarrollo asignatura</a> 
-	                         </div>
-	                         
+                            @if ($plan_desarrollo_asignatura->id_plan_desarrollo_asignatura)
+                                <div class="dropdown-menu animated slideInUp" style="position: absolute;
+                                    top: auto;
+                                    left: auto;
+                                    right: 35;">
+                                      <a class="dropdown-item" target="_blank" href="{{ route('plan_desarrollo_asignatura/imprimir', $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura) }}" style="cursor: pointer;"><i class="fa fa-balance-scale"></i> &nbsp;Plan de desarrollo asignatura</a> 
+                                 </div>
+                            @endif
                         </div>
                     </div>
                     <div class="d-inline-block">
@@ -68,12 +85,12 @@
                  	<style>
                  		.grow{
                  			background-color: #fff;
-                 			color: black;
-                 			padding: 20px;
-                 			margin-bottom: 15px !important;
-							transition: 0.5s ease;
-							box-shadow: 5px 10px 18px #888888;
-							display: flex !important;
+                            color: black;
+                            padding: 20px;
+                            margin-bottom: 25px !important;
+                            transition: 0.5s ease;
+                            box-shadow: 5px 5px 10px #888888;
+                            display: flex !important;
 						}
 
 						.grow:hover{
@@ -86,27 +103,60 @@
 						.card-body {
 						    height: 100%; 
 						}
+
+
+
+                        @media(max-width: 767px){
+                            .grow{
+                                text-align: center;
+                            }
+                            .ml-4{
+                                margin-left: 0px !important;
+                            }
+                            .title-h2{
+                                text-align: center;
+                            }
+                        }
                  	</style>
-                 	<h2><b>Clases</b></h2>
+                 	<div class="title-h2"><h2><b>Clases</b></h2></div>
                  	@if(count($clases) > 0)
                  	@php 
                  		$cont = count($clases);
                  	@endphp
                  	@foreach($clases as $clase)
+                    @php
+                        $puede_calificar = true;
+                    @endphp
                  		<div class="card grow shadow" style="">
                  			<div class="row">
                  				<div class="col-sm-6">
-                 					<strong><b>{{ $cont }}. </b><label class="mb-0">{{ $clase->tema }} </label></strong> @if(!$clase->validar_asistencia(session('id_tercero_usuario'))) 
-                                    @if($clase->validar_excusa(session('id_tercero_usuario')))
-                                        <span class="label label-rounded label-warning">Presente excusa</span> 
+                 					<strong><b>#{{ $cont }} <label class="mb-0">{{ $clase->tema }} </label></b></strong> 
+                                    <br>
+                                    <small class="ml-4">{{ date('Y-m-d H:i', strtotime($clase->fecha_inicio)) }} - {{ date('H:i', strtotime($clase->fecha_fin)) }}</small> <br>
+                                    @if(!$clase->validar_asistencia(session('id_tercero_usuario'))) 
+                                        @if($clase->validar_excusa(session('id_tercero_usuario')))
+                                            @php
+                                                $asistencia = $clase->validar_excusa(session('id_tercero_usuario'));
+                                            @endphp
+                                            <span class="ml-4 mt-1 label label-rounded label-warning">
+                                                <a class="text-white" href="{{ $asistencia->get_file_soporte() }}">Presente excusa</a>
+                                            </span> 
+                                        @else
+                                        @php $puede_calificar = false; @endphp
+                                            <span class="ml-4 mt-1 label label-rounded label-danger">No asistí</span> 
+                                        @endif
                                     @else
-                                        <span class="label label-rounded label-danger">No asistí</span> 
+                                        <span class="ml-4 mt-1 label label-rounded label-success">Asistí</span>
                                     @endif
-                                    @endif 
                  				</div>
-                 				<div class="col-sm-6" style="text-align: right;">
-                 					<a href="" title="Configuraciones de acceso"><i data-feather="settings" aria-hidden="true"></i></a>
-                 				</div>
+                                @if ($puede_calificar)
+                                    <div class="col-sm-6 container-options">
+                                        <a href="" title="Calificar clase">
+                                            <i data-feather="star" aria-hidden="true"></i>
+                                        </a>
+                                    </div>
+                                @endif
+                 				
                  			</div>
                  			
                  		</div>

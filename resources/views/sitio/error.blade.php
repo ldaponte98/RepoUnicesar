@@ -9,16 +9,19 @@
 		.container{
 			padding: 50px;
 		}
+		.img{
+			width: 700px;
+    		height: 700px;
+		}
+
 	</style>
 </head>
 <body>
 	<div class="container">
 		<center>
 			<h1><b>{{ strtoupper($titulo) }}</b></h1>
-			<img height="500" src="{{ asset('Imagenes/not-found.gif') }}">
-			<h3>@php
-				echo $mensaje;
-			@endphp</h3>
+			<h3>{{ $mensaje }}</h3>
+			<img class="img" src="{{ asset('Imagenes/not-found.gif') }}">
 		</center>
 	</div>
 </body>

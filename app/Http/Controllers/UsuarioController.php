@@ -17,8 +17,6 @@ class UsuarioController extends Controller
     public function login(Request $post)
     {
     	$usuario = new Usuario;
-
-        
     	if ($post) {
     		$usuario = Usuario::where('usuario','=',$post->usuario)
     					->where('clave','=',md5($post->clave))
@@ -50,7 +48,6 @@ class UsuarioController extends Controller
 
     public function panel()
     {
-        
         if (session('is_admin')) return view('sitio.index');
         if (session('is_docente')) return view('sitio.index2');
         if (session('is_alumno')) return view('sitio.index3');
@@ -59,7 +56,8 @@ class UsuarioController extends Controller
     public function logout(Request $request)
     {
         $request->session()->flush();
-         return redirect('/');
+
+         return redirect('http://www2.unicesar.edu.co/unicesar/hermesoft/vortal/miVortal/logueo.jsp');
     }
 
     public function registro(Request $request)
@@ -149,6 +147,4 @@ class UsuarioController extends Controller
 
         return back()->withErrors(['mensaje'=>$message, 'data' => $post]);
     }
-
-
 }

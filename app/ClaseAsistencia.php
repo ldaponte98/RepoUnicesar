@@ -29,4 +29,9 @@ class ClaseAsistencia extends Model
     	}
     	return $soporte;
     }
+
+    public function get_file_soporte()
+    {
+        return asset("files/asistencias/".$this->archivo_excusa);
+    }
 }

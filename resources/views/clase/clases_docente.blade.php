@@ -60,10 +60,8 @@
                             </script>
                         </div>
                     </div>
-                    <div class="col-sm-4">
-                        <br>
-                        <button type="submit" onclick="buscar_clases()" class="btn btn-info">Consultar</button>
-                        <button type="submit" class="btn btn-success">Exportar Excel</button>
+                    <div class="col-sm-4"><br>
+                        <button type="submit" onclick="buscar_clases()" class="btn btn-primary mt-1">Consultar</button>
                     </div>
                 </div>
                 <h4 class="card-title">Clases</h4>
@@ -72,6 +70,7 @@
                         <thead>
                             <tr>
                                 <th><center><b>#</b></center></th>
+                                <th><b>Grupo</b></th>
                                 <th><b>Clase</b></th>
                                 <th><b>Fecha de creación</b></th>
                                 <th><b>Hora de creación</b></th>
@@ -100,7 +99,12 @@
 <script type="text/javascript">
     var tabla = null;
     $(document).ready(()=>{
-        $('#tabla').pageMe({pagerSelector:'#paginador',showPrevNext:true,hidePageNumbers:false,perPage:1});
+        $('#tabla').pageMe({
+            pagerSelector : '#paginador',
+            showPrevNext : true,
+            hidePageNumbers : false,
+            perPage : 10
+        });
     })
     function buscar_carga_academica(id_periodo){
         let url = "{{ config('global.url_base') }}/docente/buscar_asignaturas/"+id_periodo+"/{{ $usuario->id_tercero }}"
@@ -162,6 +166,7 @@
         this.tabla.forEach((asistencia) => {
             tabla_html += '<tr>'+
                         '<td>'+cont+'</td>'+
+                        '<td>'+asistencia.nom_grupo+'</td>'+
                         '<td>'+asistencia.tema+'</td>'+
                         '<td>'+asistencia.fecha_creacion+'</td>'+
                         '<td>'+asistencia.hora_creacion+'</td>'+

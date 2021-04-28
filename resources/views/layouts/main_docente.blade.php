@@ -232,6 +232,7 @@
                     alert("La imagen es muy pesada, tamaño maximo 2MB")
                     return false;
                 }
+                if(nombre.length > 10) nombre = nombre.substring(0,17) + "..."
                 $("#labelfile").html(nombre);
                 $('#imagen_update').attr('src', TmpPath);
             });
@@ -406,6 +407,10 @@
                             </a>
                         </li>
 
+                        <li class="nav-item dropdown">
+                            <a id="mobile_agregar_clase" href="{{ route('clases/gestion') }}" class="nav-link dropdown-toggle text-muted text-muted waves-effect waves-dark"> <i class="mdi mdi-plus-box"></i>
+                            </a>
+                        </li>
 
                     </ul>
                     @php
@@ -443,59 +448,57 @@
         </header>
 
         <style type="text/css">
-                            .cuadro_busqueta{
-                                background: white; 
-                                position: absolute;
-                                border-radius: 5px;
-                                padding: 15px;
-                                width: 400px;
-                            }
+            .cuadro_busqueta{
+                background: white; 
+                position: absolute;
+                border-radius: 5px;
+                padding: 15px;
+                width: 400px;
+            }
 
-                            .link_search:hover{
-                                color: #9bbf4c;
-                                cursor: pointer;
-                            }
-                            .link_search{
-                                color: #54667a;
-                            }
-                            .topbar .top-navbar .app-search .srh-btn {
-                                position: absolute;
-                                top: 13px;
-                                cursor: pointer;
-                                background: #ffffff;
-                                width: 15px;
-                                height: 15px;
-                                right: 10px;
-                                font-size: 14px;
-                            }
+            .link_search:hover{
+                color: #9bbf4c;
+                cursor: pointer;
+            }
+            .link_search{
+                color: #54667a;
+            }
+            .topbar .top-navbar .app-search .srh-btn {
+                position: absolute;
+                top: 13px;
+                cursor: pointer;
+                background: #ffffff;
+                width: 15px;
+                height: 15px;
+                right: 10px;
+                font-size: 14px;
+            }
 
-                            @media(max-width: 767px){
-                                .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
-                                    padding-left: .75rem;
-                                    padding-right: .75rem;
-                                    font-size: 25px;
-                                    line-height: 50px;
-                                }
+            @media(max-width: 767px){
+                .topbar .top-navbar .navbar-nav>.nav-item>.nav-link {
+                    padding-left: .75rem;
+                    padding-right: .75rem;
+                    font-size: 25px;
+                    line-height: 50px;
+                }
 
-                                .mini-sidebar .top-navbar .navbar-header {
-                                    width: 20px;
-                                    text-align: center;
-                                }
-                                .hidden-md-up {
-                                    margin-top: 15px !important;
-                                    margin-right: 10px !important;
-                                }
-                                #icon_message{
-                                    padding-top: 16px !important;
-                                }
-                            }
+                .mini-sidebar .top-navbar .navbar-header {
+                    width: 20px;
+                    text-align: center;
+                }
+                .hidden-md-up {
+                    margin-top: 15px !important;
+                    margin-right: 10px !important;
+                }
+                #icon_message{
+                    padding-top: 16px !important;
+                }
+            }
 
-                            .hide-menu{
-                                position: absolute;
-                            }
-                            
-
-                        </style>
+            .hide-menu{
+                position: absolute;
+            }
+        </style>
 
         <!-- ============================================================== -->
         <!-- End Topbar header -->
@@ -606,7 +609,7 @@
                     <li class="nav-devider"></li>
                     <li class="nav-small-cap">Clases</li>
                      <li>
-                        <a href="{{ route('plan_desarrollo_asignatura/consultar_desde_docente') }}" class="waves-effect" style="display: flex !important;">
+                        <a href="{{ route('clases/mis_clases_pendientes') }}" class="waves-effect" style="display: flex !important;">
                             <i data-feather="check-circle" class="m-r-10" aria-hidden="true"></i> Tomar asistencia
                         </a>
                     </li>
