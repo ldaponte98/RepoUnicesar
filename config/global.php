@@ -20,6 +20,6 @@ return [
     'email_general' => 'repounicesar@gmail.com',
 
     'url_base' => ENV('APP_URL'),
-    'ips' => ['127.0.0.1']
+    'ips' => ['127.0.0.1', '192.168.1.20']
 ]
 ?>

@@ -54,6 +54,7 @@ Route::any('clases/view/{id_clase}','ClaseController@view')->name('clases/view')
 Route::any('clases/gestionar_asistencia/{id_clase}','ClaseController@gestionar_asistencia')->name('clases/gestionar_asistencia');
 Route::post('clases/guardar_asistencia','ClaseController@guardar_asistencia')->name('clases/guardar_asistencia');
 Route::any('clases/mis_clases_pendientes','ClaseController@clases_pendientes')->name('clases/mis_clases_pendientes');
+Route::any('clases/calificar/{id_clase}','ClaseController@calificar')->name('clases/calificar');
 
 
 //RUTAS ASIGNATURA

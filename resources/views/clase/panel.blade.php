@@ -151,14 +151,27 @@
                  				</div>
                                 @if ($puede_calificar)
                                     <div class="col-sm-6 container-options">
-                                        <a href="" title="Calificar clase">
-                                            <i data-feather="star" aria-hidden="true"></i>
-                                        </a>
+                                        @php
+                                            $calificacion = \App\ClaseCalificacion::where('id_clase', $clase->id_clase)
+                                                  ->where('id_tercero', session('id_tercero_usuario'))
+                                                  ->where('estado', 1)
+                                                  ->first(); 
+                                        @endphp
+                                        @if ($calificacion)
+                                            <a 
+                                               title="Clase calificada">
+                                                <i data-feather="award" aria-hidden="true"></i>
+                                            </a>
+                                        @else
+                                            <a href="{{ route('clases/calificar', $clase->id_clase) }}" 
+                                               title="Calificar clase">
+                                                <i data-feather="star" aria-hidden="true"></i>
+                                            </a>
+                                        @endif
+                                        
                                     </div>
                                 @endif
-                 				
                  			</div>
-                 			
                  		</div>
                  	@php 
                  		$cont -= 1;

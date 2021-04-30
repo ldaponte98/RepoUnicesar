@@ -598,17 +598,10 @@
 
                         
                     </li>
-                    <li class="">
-                        <a class="has-arrow " href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Reportes</span></a>
-                        <ul aria-expanded="false" class="collapse">
-                            <li class="">
-                                <a href="fgdfgdf">.</a>
-                            </li>
-                        </ul>
-                    </li>
+                    
                     <li class="nav-devider"></li>
                     <li class="nav-small-cap">Clases</li>
-                     <li>
+                    <li>
                         <a href="{{ route('clases/mis_clases_pendientes') }}" class="waves-effect" style="display: flex !important;">
                             <i data-feather="check-circle" class="m-r-10" aria-hidden="true"></i> Tomar asistencia
                         </a>
@@ -618,18 +611,20 @@
                             <i data-feather="clock" class="m-r-10" aria-hidden="true"></i> Nueva clase
                         </a>
                     </li>
-                    
                     <li>
                         <a href="{{ route('clases/mis_clases') }}" class="waves-effect" style="display: flex !important;">
                             <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial
                         </a>
                     </li>
+
+                    <li class="nav-devider"></li>
+                    <li class="nav-small-cap">Reportes</li>
+
+
                 </ul>
-                    </ul>
-                    
-                </nav>
-                <!-- End Sidebar navigation -->
-            </div>
+            </ul>
+    </nav>
+</div>
 
 <!--
             <div class="sidebar-footer">

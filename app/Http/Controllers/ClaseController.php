@@ -6,11 +6,14 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use App\Clase;
 use App\ClaseAsistencia;
+use App\ClaseCalificacion;
+use App\ClaseCalificacionDetalle;
 use App\TerceroGrupo;
 use App\PlanDesarrolloAsignatura;
 use App\PeriodoAcademico;
 use App\Asignatura;
 use App\Grupo;
+use App\Dominio;
 
 class ClaseController extends Controller
 {
@@ -39,10 +42,8 @@ class ClaseController extends Controller
         return view('sitio.error',compact(['titulo', 'mensaje']));
     }
 
-    public function clases_docente()
-    {
-        return view('clase.clases_docente');
-    }
+    public function clases_docente() { return view('clase.clases_docente'); }
+     
 
     public function clases_pendientes()
     {
@@ -54,8 +55,6 @@ class ClaseController extends Controller
                 ->get();        
         return view('clase.clases_docente_pendientes', compact('clases_pendientes'));
     }
-
-
 
     public function buscar_clases(Request $request)
     {
@@ -207,5 +206,69 @@ class ClaseController extends Controller
             'message' => $message,
             'post' => $post
         ]);
+    }
+
+    public function calificar($id_clase, Request $request)
+    {   
+        $mensaje = "";
+        $clase = Clase::find($id_clase);
+        if ($clase) {
+            if (session('is_alumno')) {
+                $id_alumno = session('id_tercero_usuario');
+                if ($clase->validar_asistencia($id_alumno)) {
+                    $calificacion = ClaseCalificacion::where('id_tercero', $id_alumno)
+                                                     ->where('id_clase', $clase->id_clase)
+                                                     ->first();
+                    if (!$calificacion) $calificacion = new ClaseCalificacion;
+
+                    $tercero_grupo = TerceroGrupo::where('id_tercero', session('id_tercero_usuario'))
+                                     ->where('id_grupo', $clase->id_grupo)
+                                     ->where('estado', 1)
+                                     ->first();
+        
+                    $plan_desarrollo = PlanDesarrolloAsignatura::where('id_asignatura', $tercero_grupo->grupo->id_asignatura)
+                                    ->where('id_periodo_academico', $tercero_grupo->grupo->id_periodo_academico)
+                                    ->first();
+                        if (!$plan_desarrollo) $plan_desarrollo = new PlanDesarrolloAsignatura;
+
+                        $post = $request->all();
+                        if ($post) {
+                            $calificacion = ClaseCalificacion::where('id_clase', $id_clase)
+                                                  ->where('id_tercero', $id_alumno)
+                                                  ->first();
+                            if (!$calificacion) {
+                                $calificacion = new ClaseCalificacion;
+                                $calificacion->id_clase = $id_clase;
+                                $calificacion->id_tercero = $id_alumno;
+                                $calificacion->save();
+                            }
+                            DB::table('clase_calificacion_detalle')
+                                ->where('id_clase_calificacion', $calificacion->id_clase_calificacion)
+                                ->delete();
+                            $criterios = Dominio::all()->where('id_padre', 34);
+                            foreach ($criterios as $criterio) {
+                                if (isset($post["respuesta_" . $criterio->id_dominio])) {
+                                    $detalle = new ClaseCalificacionDetalle;
+                                    $detalle->id_clase_calificacion = $calificacion->id_clase_calificacion;
+                                    $detalle->id_dominio_criterio = $criterio->id_dominio;
+                                    $detalle->valor = $post["respuesta_" . $criterio->id_dominio];
+                                    $detalle->save();
+                                }
+                            }
+                            return redirect()->route('clases/panel', $clase->id_grupo);
+                        }
+
+                        return view('clase.form_calificacion', compact(['tercero_grupo', 'plan_desarrollo','calificacion']));
+                }else{
+                   $mensaje = "No tiene permisos para calificar esta clase debido a la inasistencia de la misma.";
+                }
+            }else{
+                $mensaje = "No tiene permisos para calificar esta clase.";
+            }
+        }else{
+            $mensaje = "La clase no es valida.";
+        }
+        $titulo = "Acceso denegado";
+        return view('sitio.error',compact(['titulo', 'mensaje']));
     }
 }
