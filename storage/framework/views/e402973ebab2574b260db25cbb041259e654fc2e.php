@@ -190,7 +190,7 @@
                                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                                             </tbody>
                                         </table>
-                                        <?php echo e($notificaciones_recibidas->links()); ?>
+                                        <?php echo e($notificaciones_enviadas->links()); ?>
 
                                     </div>
 

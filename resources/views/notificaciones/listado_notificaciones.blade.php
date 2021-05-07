@@ -192,7 +192,7 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
-                                        {{ $notificaciones_recibidas->links() }}
+                                        {{ $notificaciones_enviadas->links() }}
                                     </div>
 
                                     </div>

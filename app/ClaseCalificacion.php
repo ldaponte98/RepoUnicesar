@@ -18,4 +18,9 @@ class ClaseCalificacion extends Model
     {
         return $this->belongsTo(Clase::class, 'id_clase');
     }
+
+    public function detalles()
+    {
+        return $this->hasMany(ClaseCalificacionDetalle::class, 'id_clase_calificacion');
+    }
 }

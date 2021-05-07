@@ -66,7 +66,7 @@
                          href="#asistencias" 
                          role="tab" 
                          aria-controls="asistencias"
-                         aria-selected="true"><b>Asistencia</b></a>
+                         aria-selected="true"><b>Toma de Asistencia</b></a>
 
 
                     </li>
@@ -87,19 +87,18 @@
                          id="asistencias" 
                          role="tabpanel" 
                          aria-labelledby="asistencias-tab">
-                         {{ view('clase.listado_asistencias', compact('clase')) }}            
+                         {{ view('clase.tab_asistencias', compact('clase')) }}            
                     </div>
 
                     <div class="tab-pane fade" 
                          id="calificaciones" 
                          role="tabpanel" 
                          aria-labelledby="calificaciones-tab">
-                                       
+                         {{ view('clase.tab_calificaciones', compact('clase')) }}              
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-                
+</div>              
 @endsection

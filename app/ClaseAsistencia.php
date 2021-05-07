@@ -24,7 +24,7 @@ class ClaseAsistencia extends Model
     	$soporte = "Ninguno";
     	if ($this->asistio == 1 and $this->archivo_excusa != null and $this->archivo_excusa != "") {
     		$soporte = "<a href='".asset("files/asistencias/".$this->archivo_excusa)."'>
-							<i data-feather='user' aria-hidden='true'></i>
+							<i data-feather='file' aria-hidden='true'></i>
 						</a>";
     	}
     	return $soporte;
