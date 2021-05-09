@@ -456,7 +456,7 @@
                     @endphp</font></font><span class="caret"></span></a>
                         <div class="dropdown-menu animated flipInY">
                             <a href="{{ route('docente/view', $usuario->tercero->id_tercero) }}" class="dropdown-item"><i class="ti-user"></i> Mi Perfil</a>
-                            <a href="{{ route('fechas/fechas_de_entrega') }}" class="dropdown-item"><i class="ti-wallet"></i>  Clases </a>
+                            <a href="{{ route('panel') }}" class="dropdown-item"><i class="ti-wallet"></i>  Inicio </a>
                             <div class="dropdown-divider"></div> <a href="{{ route('logout') }}" class="dropdown-item"><i class="fa fa-power-off"></i> Cerrar sesion</a>
                         </div>
                     </div>

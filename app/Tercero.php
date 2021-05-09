@@ -125,7 +125,6 @@ class Tercero extends Model
 		return $total;
 	}
 
-
 	public function planes_trabajo($estado = null)
 	{
 		$planes = [];
@@ -254,8 +253,7 @@ class Tercero extends Model
         return $planes;
 	}
 
-
-	 public function actividades_complementarias($estado = null)
+	public function actividades_complementarias($estado = null)
     {
         $condiciones = "";
         $condiciones .= " and t.id_licencia = ".session('id_licencia');
@@ -350,5 +348,177 @@ class Tercero extends Model
         }
 
         return $asignaturas;
+    }
+
+    public function clases_docente($limit = null)
+    {
+        $id_tercero = $this->id_tercero;
+        $condicion = $limit == null ? "" : " LIMIT $limit";
+        $clases = [];
+        $sql = "SELECT DISTINCT(c.id_clase) as id_clase 
+                       FROM clases c
+                       INNER JOIN grupo g USING (id_grupo)
+                       WHERE c.estado = 1
+                       AND g.id_tercero = '$id_tercero'
+                       ORDER BY c.fecha_inicio ASC
+                       $condicion";
+        $results = DB::select($sql);
+        foreach ($results as $result) {
+            $result = (object) $result;
+            $clases[] = Clase::find($result->id_clase);
+        }
+
+        return $clases;
+    }
+
+    public function clases_pendientes($limit = null)
+    {
+        $id_tercero = $this->id_tercero;
+        $condicion = $limit == null ? "" : " LIMIT $limit";
+        $fecha_actual = date('Y-m-d H:i:s');
+        $clases = [];
+        $sql = "SELECT DISTINCT(c.id_clase) as id_clase 
+                       FROM clases c
+                       INNER JOIN grupo g USING (id_grupo)
+                       WHERE c.estado = 1
+                       AND c.fecha_fin >= '$fecha_actual'
+                       AND g.id_tercero = '$id_tercero'
+                       ORDER BY c.fecha_inicio ASC
+                       $condicion";
+        $results = DB::select($sql);
+        foreach ($results as $result) {
+            $result = (object) $result;
+            $clases[] = Clase::find($result->id_clase);
+        }
+
+        return $clases;
+    }
+
+    public function formatos_pendientes($limit = null)
+    {
+        $formatos = [];
+        $cont = 0;
+        foreach ($this->planes_trabajo('Pendiente') as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_plan_trabajo,
+                    'tipo' => 'plan_trabajo',
+                    'titulo' =>  'Plan de trabajo',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo." <br> 
+                                    <b>Estado:</b>  ".$plan->retraso,
+                    'ruta' => config('global.url_base')."/plan_trabajo/view?id_periodo_escojido=".$plan->id_periodo
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->planes_desarrollo_asignatura('Pendiente') as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_plan_desarrollo_asignatura,
+                    'tipo' => 'plan_desarrollo',
+                    'titulo' =>  'Plan de desarrollo asignatura',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo." <br> 
+                                    <b>Asignatura:</b> ".$plan->asignatura." <br> 
+                                    <b>Estado:</b>  ".$plan->retraso,
+                    'ruta' => route('plan_desarrollo_asignatura/view', [
+                                    $plan->id_tercero, 
+                                    $plan->id_asignatura, 
+                                    $plan->id_periodo
+                                ])
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->actividades_complementarias('Pendiente') as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_actividad_complementaria,
+                    'tipo' => 'actividades_complementarias',
+                    'titulo' =>  'Actividad complementaria',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo_academico." <br> 
+                                    <b>Corte:</b> ".$plan->corte." <br> 
+                                    <b>Progreso:</b>  ".$plan->progreso."%",
+                    'ruta' => route('actividades_complementarias/editar', $plan->id_actividad_complementaria)
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->seguimientos_asignatura as $plan) {
+            $plan = (object) $plan;
+            if ($plan->estado == 'Pendiente') {
+                if ($cont < $limit or $limit == null) { 
+                    $formatos[] = (object) [
+                        'id' => $plan->id_seguimiento,
+                        'tipo' => 'seguimiento_asignatura',
+                        'titulo' =>  'Seguimiento de asignatura',
+                        'subtitulo' => '<b>Periodo academico:</b> '.$plan->grupo->periodo_academico->periodo." <br> 
+                                        <b>Asignatura:</b> ".$plan->asignatura->nombre." <br> 
+                                        <b>Grupo:</b> ".$plan->grupo->codigo." <br> 
+                                        <b>Corte:</b> ".$plan->corte." <br> 
+                                        <b>Estado:</b>  ".$plan->retraso(),
+                        'ruta' => route('seguimiento/view', $plan->id_seguimiento)
+                    ];
+                }
+                $cont++;
+            }
+        }
+
+
+        return $formatos;
+    }
+
+    public function get_calificacion_general()
+    {
+        $clases = $this->clases_docente();
+        $calificacion_final = 0;
+        foreach ($clases as $clase) {
+             $calificacion_final += $clase->get_calificacion_final() / count($clases);
+        }
+        return round($calificacion_final);
+    }
+
+    public function total_calificaciones($tipo = null) //positiva, neutral, negativa
+    {   
+        $total = 0;
+        $clases = $this->clases_docente();
+        foreach ($clases as $clase) {
+            foreach ($clase->calificaciones as $calificacion) {
+                foreach ($calificacion->detalles as $detalle) {
+                    if (($tipo == "positiva" and  $detalle->valor >= 80)) $total++;
+                    if (($tipo == "neutral" and  $detalle->valor >= 60 and $detalle->valor < 80)) $total++;
+                    if (($tipo == "negativa" and  $detalle->valor < 60)) $total++;
+                    if ($tipo == null) $total;
+                }
+            }
+        }
+        return $total;
+    }
+
+    public function porcentaje_calificaciones($tipo = null) //positiva, neutral, negativa
+    {   
+        $total = 0;
+        $total_todas = 0;
+        $clases = $this->clases_docente();
+        foreach ($clases as $clase) {
+            foreach ($clase->calificaciones as $calificacion) {
+                foreach ($calificacion->detalles as $detalle) {
+                    if (($tipo == "positiva" and  $detalle->valor >= 80)) $total++;
+                    if (($tipo == "neutral" and  $detalle->valor >= 60 and $detalle->valor < 80)) $total++;
+                    if (($tipo == "negativa" and  $detalle->valor < 60)) $total++;
+                    if ($tipo == null) $total;
+                    $total_todas++;
+                }
+            }
+        }
+        return  $total_todas > 0 ? ($total / $total_todas) * 100 : 0;
     }
 }

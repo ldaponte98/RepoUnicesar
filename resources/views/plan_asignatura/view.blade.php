@@ -251,7 +251,7 @@
                           </td>
                       </tr>
                       <tr>
-                          <td colspan="10" style="background-color: #38A970; ">
+                          <td colspan="10" style="background-color: #38A970; color: #000000;">
                               <center><b>CONTENIDOS, COMPETENCIAS ESPECÍFICAS Y RESULTADOS DE APRENDIZAJE </b></center>
                           </td>
                       </tr>

@@ -3,9 +3,11 @@
     <div class="col-lg-5 col-xl-3 col-md-6">
         <div class="card-body">
             <h3 class="card-title mb-4">Calificación</h3>
-            <span class="mt-5 display-6">{{ $clase->get_calificacion_final() }}</span> Puntos
+            @php
+                $calificacion = $clase->get_calificacion_final();
+            @endphp
+            <span class="mt-5 display-6">{{ $calificacion }}</span> Puntos <br>
             <h6 class="card-subtitle mt-1 mb-4">Esta clase la han calificado <b>{{ $clase->cantidad_asistentes_calificaciones() }}</b> estudiantes de <b>{{ count($clase->asistencias) }}</b> asistentes</h6>
-            
         </div>
     </div>
     <!-- Column -->
@@ -50,7 +52,6 @@
                     style="width: {{ $clase->porcentaje_calificaciones("neutral") }}%; height:6px;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </li>
-        </ul>
-    </div>
+        </ul></div>
     <!-- Column -->
 </div>

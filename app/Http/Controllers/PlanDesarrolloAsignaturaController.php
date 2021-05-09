@@ -58,7 +58,7 @@ class PlanDesarrolloAsignaturaController extends Controller
                 return view('plan_desarrollo_asignatura.view', compact(['plan_desarrollo_asignatura','tercero', 'asignatura', 'periodo_academico', 'plan_asignatura','codigos_acceso']));
             }else{
                 $titulo = "No exite un plan de asignatura registrado para esta asignatura en el periodo academico ".$periodo_academico->periodo.".";
-                $mensaje = "Favor verificar si tiene carga academica para este periodo academico.";
+                $mensaje = "Favor verificar si tiene carga academica para este periodo academico o comuniquese con su jefe de departamento para gestionar el plan de asignatura previamente.";
                 return view('sitio.error',compact(['titulo', 'mensaje']));
             }
         }else{

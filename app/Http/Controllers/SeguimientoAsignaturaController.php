@@ -41,6 +41,11 @@ class SeguimientoAsignaturaController extends Controller
     		}
 
             $fechas = FechasEntrega::where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))->where('id_periodo_academico', $seguimiento->grupo->id_periodo_academico)->first();
+            if ($fechas == null) {
+                $titulo = "Fechas de entrega indefinidas";
+                $mensaje = "El seguimiento no puede ser visualizado debido a que no se han configurado de parte del administrador las fechas correspondientes";
+                return view('sitio.error',compact(['titulo', 'mensaje']));
+            }
     		return view('seguimiento_asignatura.view',compact('seguimiento'),compact('fechas'));
     	}
         $titulo = "Este archivo no existe";

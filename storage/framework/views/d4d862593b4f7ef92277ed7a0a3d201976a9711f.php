@@ -531,7 +531,7 @@
                 <ul id="sidebarnav" class="in">
                     <li class="nav-small-cap">Personal</li>
                     <li>
-                        <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
+                        <a class="waves-effect" href="<?php echo e(route('panel')); ?>" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
                     </li>
                     <li>
                         <!--<a href="<?php echo e(route('docente/view', $usuario->tercero->id_tercero)); ?>" class="waves-effect"><i class="fa fa-user m-r-10" aria-hidden="true"></i>Mi perfil</a>-->
@@ -616,11 +616,6 @@
                             <i data-feather="database" class="m-r-10" aria-hidden="true"></i> Historial
                         </a>
                     </li>
-
-                    <li class="nav-devider"></li>
-                    <li class="nav-small-cap">Reportes</li>
-
-
                 </ul>
             </ul>
     </nav>

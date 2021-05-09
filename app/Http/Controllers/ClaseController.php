@@ -70,6 +70,7 @@ class ClaseController extends Controller
 
             $clases = Clase::select('clases.*')
                 ->join('grupo', 'grupo.id_grupo', '=', 'clases.id_grupo')
+                ->where('grupo.id_tercero', session('id_tercero_usuario'))
                 ->get();
             foreach ($clases as $query_clase) {
                 $clase = Clase::find($query_clase['id_clase']);

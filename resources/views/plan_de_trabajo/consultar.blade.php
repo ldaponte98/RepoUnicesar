@@ -28,25 +28,22 @@
     }
 </style>
 @section('header_content')
-
     <script src="http://malsup.github.io/jquery.blockUI.js"></script>
 
-<div class="row page-titles">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
-                            <li class="breadcrumb-item active">Plan de trabajo</li>
-                        </ol>
-                    </div>
-                    <div class="col-md-2 col-8 align-self-center">
-                    </div><div class="col-md-2 col-8 align-self-center">
-                    </div>
-                    <div class="col-md-2 col-8 align-self-center">
-                      <br> <br>   
-                    <a target="_blank" id="btnlistar" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-success">Excel tabla actual</a>
-                    </div>
-                </div>
+    <div class="row page-titles">
+        <div class="col-md-6 col-8 align-self-center">
+            <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
+                <li class="breadcrumb-item active">Plan de trabajo</li>
+            </ol>
+        </div>
+        <div class="col-md-2 col-8 align-self-center"></div>
+        <div class="col-md-2 col-8 align-self-center"></div>
+        <div class="col-md-2 col-8 align-self-center"><br><br>   
+        <a target="_blank" id="btnlistar" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-success">Excel tabla actual</a>
+        </div>
+    </div>
 @endsection
 @section('content')
 {{ Form::open(array('id' => 'form_fltros')) }}

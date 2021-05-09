@@ -222,6 +222,7 @@
                 alert("La imagen es muy pesada, tamaño maximo 2MB")
                 return false;
             }
+            if(nombre.length > 10) nombre = nombre.substring(0,17) + "..."
             $("#labelfile").html(nombre);
             $('#imagen_update').attr('src', TmpPath);
           });

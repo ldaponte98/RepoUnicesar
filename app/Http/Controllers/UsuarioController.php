@@ -48,16 +48,15 @@ class UsuarioController extends Controller
 
     public function panel()
     {
-        if (session('is_admin')) return view('sitio.index');
-        if (session('is_docente')) return view('sitio.index2');
-        if (session('is_alumno')) return view('sitio.index3');
+        if (session('is_admin')) return view('sitio.index_jefe_departamento');
+        if (session('is_docente')) return view('sitio.index_docente');
+        if (session('is_alumno')) return view('sitio.index_alumno');
     }
 
     public function logout(Request $request)
     {
         $request->session()->flush();
-
-         return redirect('http://www2.unicesar.edu.co/unicesar/hermesoft/vortal/miVortal/logueo.jsp');
+        return redirect('http://www2.unicesar.edu.co/unicesar/hermesoft/vortal/miVortal/logueo.jsp');
     }
 
     public function registro(Request $request)
