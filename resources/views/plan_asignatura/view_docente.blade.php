@@ -72,7 +72,7 @@
                         <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
                         <td width="25%"><b>Programa académico </b></td>
-                        <td colspan="9" width="75%">{{ $asignatura->licencia->nombre }}</td>
+                        <td colspan="9" width="85%">{{ $asignatura->licencia->nombre }}</td>
                       </tr>
                       <tr>
                         <td><b>Nombre de la asignatura </b></td>
@@ -90,15 +90,15 @@
                         <td rowspan="2"><b>Horas de trabajo semestral del estudiante </b></td>
                         <td style="background-color: #EAF1DD;" colspan="4"><center><b>Horas con acompañamiento docente</b></center></td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTI</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_trabajo_independiente }}</center></td>
+                        <td rowspan="2"><center>{{ $plan_asignatura->horas_totales_trabajo_independiente }}</center></td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTT</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_semestre }}</center></td>
+                        <td rowspan="2"><center>{{ $plan_asignatura->horas_totales_semestre }}</center></td>
                       </tr>
                       <tr>
                         <td style="background-color: #EAF1DD;" ><center><b>HDD</b></center></td>
-                        <td style="" ><center>{{ $asignatura->horas_teoricas }}</center></td>
+                        <td style="" ><center>{{ $plan_asignatura->horas_teoricas }}</center></td>
                         <td style="background-color: #EAF1DD;" ><center><b>HTP</b></center></td>
-                        <td style="" ><center>{{ $asignatura->horas_practicas }}</center></td>
+                        <td style="" ><center>{{ $plan_asignatura->horas_practicas }}</center></td>
                       </tr>
                       <tr>
                         <td><b>Prerrequisitos </b></td>
@@ -249,7 +249,6 @@
                                          <th colspan="2"><center>Horas presenciales</center></th>
                                          <th rowspan="2"><center>HTI</center></th>
                                          <th rowspan="2"><center>HTT</center></th>
-                                         <th rowspan="2"></th>
                                      </tr>
                                      <tr>
                                          <th><center>HDD</center></th>
@@ -336,10 +335,16 @@
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col-sm-12">
+                            <label for="recipient-name" class="col-form-label"><b>Competencias especificas</b></label>
+                            <textarea type="text" rows="4" placeholder="" class="form-control" id="modal_competencias_especificas"></textarea>
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col-sm-12"><br>
                             <div class="row">
                               <div class="col-sm-9">
-                                <label for="recipient-name" class="col-form-label"><b>Competencias especificas</b></label>
+                                <label for="recipient-name" class="col-form-label"><b>Ejes tematicos</b></label>
                               </div>
                             </div>
                                 <table class="table">
@@ -393,26 +398,23 @@
            
             function actualizar_tabla_unidades() {
               $("#tabla_unidades").html("")
+              let cont = 0
               unidades.forEach((unidad) => {
+                cont++
                     let posicion = unidades.indexOf(unidad)
                     let fila = '<tr>'+
-                                  '<td>'+unidad.nombre+'</td>'+
-                                  '<td>'
+                                  '<td><center><b>Unidad N° '+cont+'</b><br> '+unidad.nombre+'<br><br>'
                     unidad.competencias.forEach((competencia) => {
-                      fila += '<li>'+competencia.nombre+'</li>'
+                      fila += '<li><i>'+competencia.nombre+'</i></li>'
                     })
                                     
-                    fila +=       '</td>'+
+                    fila +=       '</center></td>'+
+                                  '<td><center>'+unidad.competencias_especificas+'</center></td>'+
                                   '<td>'+unidad.resultado_aprendizaje+'</td>'+
                                   '<td><center>'+unidad.horas_hdd+'</center></td>'+
                                   '<td><center>'+unidad.horas_htp+'</center></td>'+
                                   '<td><center>'+unidad.horas_hti+'</center></td>'+
                                   '<td><center>'+unidad.horas_htt+'</center></td>'+
-                                  '<td>'+
-                                    '<div style="text-align: center;">'+
-                                      '<a style="cursor: pointer;" onclick="modal_editar_unidad('+posicion+')">'+
-                                        '<i class="fa fa-cog"></i></a>'
-                    fila +=       '</div></td>'+
                                 '</tr>'
                     $("#tabla_unidades").append(fila)
               })
@@ -429,6 +431,7 @@
               $("#modal_horas_HTP").val(unidad.horas_htp)
               $("#modal_horas_HTI").val(unidad.horas_hti)
               $("#modal_horas_HTT").val(unidad.horas_htt)
+              $("#modal_competencias_especificas").val(unidad.modal_competencias_especificas)
               this.competencias_especificas_actuales = unidad.competencias
               actualizar_tabla_competencias()
               $("#modal_unidades").modal('show')
@@ -512,6 +515,7 @@
                     'horas_htp' : {{ $unidad->horas_htp }},
                     'horas_hti' : {{ $unidad->horas_hti }},
                     'horas_htt' : {{ $unidad->horas_htt }},
+                    'competencias_especificas' : '{{ $unidad->competencias_especificas }}',
                     'competencias' : competencias
                 }) 
                 competencias = []

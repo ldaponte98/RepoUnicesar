@@ -75,7 +75,7 @@
                         <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
                         <td width="25%"><b>Programa académico </b></td>
-                        <td colspan="9" width="75%">{{ $asignatura->licencia->nombre }}</td>
+                        <td colspan="9" width="85%">{{ $asignatura->licencia->nombre }}</td>
                       </tr>
                       <tr>
                         <td><b>Nombre de la asignatura </b></td>
@@ -93,15 +93,31 @@
                         <td rowspan="2"><b>Horas de trabajo semestral del estudiante </b></td>
                         <td style="background-color: #EAF1DD;" colspan="4"><center><b>Horas con acompañamiento docente</b></center></td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTI</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_trabajo_independiente }}</center></td>
+                        <td rowspan="2">
+                          <center>
+                            <input onkeyup="EstablecerHTT()" onchange="EstablecerHTT()" type="number" id="horas_totales_trabajo_independiente" class="form-control" style="width: 65px" value="{{ $plan_asignatura->horas_totales_trabajo_independiente }}">
+                          </center>
+                        </td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTT</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_semestre }}</center></td>
+                        <td rowspan="2" >
+                            <center>
+                              <input disabled readonly type="number" id="horas_totales_semestre" class="form-control" style="width: 65px" value="{{ $plan_asignatura->horas_totales_semestre }}">
+                            </center>
+                          </td>
                       </tr>
                       <tr>
                         <td style="background-color: #EAF1DD;" ><center><b>HDD</b></center></td>
-                        <td style="" ><center>{{ $asignatura->horas_teoricas }}</center></td>
+                        <td style="" >
+                          <center>
+                            <input onkeyup="EstablecerHTT()" onchange="EstablecerHTT()" type="number" id="horas_teoricas" class="form-control" style="width: 65px" value="{{ $plan_asignatura->horas_teoricas }}">
+                          </center>
+                        </td>
                         <td style="background-color: #EAF1DD;" ><center><b>HTP</b></center></td>
-                        <td style="" ><center>{{ $asignatura->horas_practicas }}</center></td>
+                        <td style="" >
+                          <center>
+                            <input onkeyup="EstablecerHTT()" onchange="EstablecerHTT()" type="number" id="horas_practicas" class="form-control" style="width: 65px" value="{{ $plan_asignatura->horas_practicas }}">
+                          </center>
+                        </td>
                       </tr>
                       <tr>
                         <td><b>Prerrequisitos </b></td>
@@ -385,13 +401,19 @@
                           </div>
                         </div>
                         <div class="row">
+                          <div class="col-sm-12">
+                            <label for="recipient-name" class="col-form-label"><b>Competencias especificas</b></label>
+                            <textarea type="text" rows="4" placeholder="" class="form-control" id="modal_competencias_especificas"></textarea>
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col-sm-12"><br>
                             <div class="row">
                               <div class="col-sm-9">
-                                <label for="recipient-name" class="col-form-label"><b>Competencias especificas</b></label>
+                                <label for="recipient-name" class="col-form-label"><b>Ejes tematicos</b></label>
                               </div>
                               <div class="col-sm-3">
-                                <button class="btn btn-info w-100" onclick="$('#div_competencia_especifica').fadeIn()">Nueva</button>
+                                <button class="btn btn-info w-100" onclick="$('#div_competencia_especifica').fadeIn()">Nuevo Eje</button>
                               </div>
                             </div>
                             <div class="row" id="div_competencia_especifica" style="display:none;">
@@ -486,6 +508,7 @@
               if($("#modal_horas_HTI").val().trim() == ""){ alert("Las horas HTI son un campo obligatorio."); return false }
               if($("#modal_horas_HTT").val().trim() == ""){ alert("Las horas HTT son un campo obligatorio."); return false }
               if(this.competencias_especificas_actuales.length == 0) { alert("Es necesario el registro de competencias especificas para la unidad tematica."); return false }
+
               return true
             }
 
@@ -576,6 +599,7 @@
                     'horas_htp' : $("#modal_horas_HTP").val(),
                     'horas_hti' : $("#modal_horas_HTI").val(),
                     'horas_htt' : $("#modal_horas_HTT").val(),
+                    'competencias_especificas' : $("#modal_competencias_especificas").val(),
                     'competencias' : this.competencias_especificas_actuales
                 }
                 competencias_especificas_actuales = []
@@ -600,6 +624,7 @@
                     'horas_htp' : $("#modal_horas_HTP").val(),
                     'horas_hti' : $("#modal_horas_HTI").val(),
                     'horas_htt' : $("#modal_horas_HTT").val(),
+                    'competencias_especificas' : $("#modal_competencias_especificas").val(),
                     'competencias' : this.competencias_especificas_actuales
                 }
                 competencias_especificas_actuales = []
@@ -609,22 +634,25 @@
                 $("#modal_horas_HTP").val("")
                 $("#modal_horas_HTI").val("")
                 $("#modal_horas_HTT").val("")
+                $("#modal_competencias_especificas").val("")
                 this.unidades.splice(this.posicion_unidad_editar, 1, unidad) //editar
                 actualizar_tabla_unidades()
             }
 
             function actualizar_tabla_unidades() {
               $("#tabla_unidades").html("")
+              let cont = 0
               unidades.forEach((unidad) => {
+                cont++
                     let posicion = unidades.indexOf(unidad)
                     let fila = '<tr>'+
-                                  '<td>'+unidad.nombre+'</td>'+
-                                  '<td>'
+                                  '<td><center><b>Unidad N° '+cont+'</b><br> '+unidad.nombre+'<br><br>'
                     unidad.competencias.forEach((competencia) => {
-                      fila += '<li>'+competencia.nombre+'</li>'
+                      fila += '<li><i>'+competencia.nombre+'</i></li>'
                     })
                                     
-                    fila +=       '</td>'+
+                    fila +=       '</center></td>'+
+                                  '<td><center>'+unidad.competencias_especificas+'</center></td>'+
                                   '<td>'+unidad.resultado_aprendizaje+'</td>'+
                                   '<td><center>'+unidad.horas_hdd+'</center></td>'+
                                   '<td><center>'+unidad.horas_htp+'</center></td>'+
@@ -657,6 +685,7 @@
               $("#modal_horas_HTP").val(unidad.horas_htp)
               $("#modal_horas_HTI").val(unidad.horas_hti)
               $("#modal_horas_HTT").val(unidad.horas_htt)
+              $("#modal_competencias_especificas").val(unidad.competencias_especificas)
               this.competencias_especificas_actuales = unidad.competencias
               actualizar_tabla_competencias()
               $("#modal_unidades").modal('show')
@@ -753,6 +782,44 @@
               if(this.editor_descripcion_asignatura.getData() == ""){ alert("La descripcion de la asignatura es obligatoria"); return false }
               if(this.editor_objetivo_general.getData() == ""){ alert("El objetivo general es obligatorio"); return false }
               if(this.unidades.length == 0) { alert("Es necesario el registro de unidades tematicas al plan de asignatura"); return false }
+
+              if($("#horas_teoricas").val().trim() == "") { alert("Es necesario el registro de horas HDD."); return false }
+              if($("#horas_practicas").val().trim() == "") { alert("Es necesario el registro de horas HTP."); return false }
+              if($("#horas_totales_trabajo_independiente").val().trim() == "") { alert("Es necesario el registro de horas HTI."); return false }
+              if($("#horas_totales_semestre").val().trim() == "") { alert("Es necesario el registro de horas HTT."); return false }
+
+              let hdd = parseInt($("#horas_teoricas").val())
+              let htp = parseInt($("#horas_practicas").val())
+              let hti = parseInt($("#horas_totales_trabajo_independiente").val())
+              let htt = parseInt($("#horas_totales_semestre").val())
+
+              let hdd_asignadas = 0;
+              let htp_asignadas = 0;
+              let hti_asignadas = 0;
+              let htt_asignadas = 0; 
+              this.unidades.forEach((unidad) => {
+                  hdd_asignadas += parseInt(unidad.horas_hdd);
+                  htp_asignadas += parseInt(unidad.horas_htp);
+                  hti_asignadas += parseInt(unidad.horas_hti);
+                  htt_asignadas += parseInt(unidad.horas_htt);
+              })
+
+              if (hdd_asignadas != hdd) {
+                alert("Ocurrio un problema con las horas HDD asignadas en las unidades registradas debido a que no concuerdan con la cantidad total de horas estipuladas en el plan de asignatura: "+hdd_asignadas+" de "+hdd+" estipuladas."); return false
+              }
+
+              if (htp_asignadas != htp) {
+                alert("Ocurrio un problema con las horas HTP asignadas en las unidades registradas debido a que no concuerdan con la cantidad total de horas estipuladas en el plan de asignatura: "+htp_asignadas+" de "+htp+" estipuladas."); return false
+              }
+
+              if (hti_asignadas != hti) {
+                alert("Ocurrio un problema con las horas HTI asignadas en las unidades registradas debido a que no concuerdan con la cantidad total de horas estipuladas en el plan de asignatura: "+hti_asignadas+" de "+hti+" estipuladas."); return false
+              }
+
+              if (htt_asignadas != htt) {
+                alert("Ocurrio un problema con las horas HTT asignadas en las unidades registradas debido a que no concuerdan con la cantidad total de horas estipuladas en el plan de asignatura: "+htt_asignadas+" de "+htt+" estipuladas."); return false
+              }
+
               return true
             }
 
@@ -761,12 +828,18 @@
               if(validar_data()){
                 let url = '{{ route('plan_asignatura/editar') }}'
                 let _token = ""
+                
                 $("[name='_token']").each(function() { _token = this.value })
                 let request = {
                     '_token' : _token,
+
                     'id_plan_asignatura' : '{{ $plan_asignatura->id_plan_asignatura }}',
                     'id_asignatura' : '{{ $asignatura->id_asignatura }}',
                     'id_periodo_academico' : '{{ $periodo_academico->id_periodo_academico }}',
+                    'horas_teoricas' : $("#horas_teoricas").val(),
+                    'horas_practicas' : $("#horas_practicas").val(),
+                    'horas_totales_trabajo_independiente' : $("#horas_totales_trabajo_independiente").val(),
+                    'horas_totales_semestre' : $("#horas_totales_semestre").val(),
                     'descripcion_asignatura' : editor_descripcion_asignatura.getData().replace(/&nbsp;/gi,' '),
                     'objetivo_general' : editor_objetivo_general.getData().replace(/&nbsp;/gi,' '),
                     'objetivos_especificos' : editor_objetivos_especificos.getData().replace(/&nbsp;/gi,' '),
@@ -823,6 +896,7 @@
                     'horas_htp' : {{ $unidad->horas_htp }},
                     'horas_hti' : {{ $unidad->horas_hti }},
                     'horas_htt' : {{ $unidad->horas_htt }},
+                    'competencias_especificas' : '{{ $unidad->competencias_especificas }}',
                     'competencias' : competencias
                 }) 
                 competencias = []
@@ -909,6 +983,14 @@
                 })
               }
               
+            }
+
+            function EstablecerHTT() {
+              let hdd = $("#horas_teoricas").val().trim() == "" ? 0 : parseInt($("#horas_teoricas").val())
+              let htp = $("#horas_practicas").val().trim() == "" ? 0 : parseInt($("#horas_practicas").val())
+              let hti = $("#horas_totales_trabajo_independiente").val().trim() == "" ? 0 : parseInt($("#horas_totales_trabajo_independiente").val())
+
+              $("#horas_totales_semestre").val(hdd + htp + hti)
             }
 
             

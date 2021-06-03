@@ -456,14 +456,11 @@
 
 
                     </ul>
-                    @php
-                                {{ 
-                                    $imagen = 'assets/images/users/sin_foto.jpg';
-                                if($usuario->tercero->foto) 
-                                $imagen = 'files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
+                    @php 
+                        $imagen = 'assets/images/users/sin_foto.jpg';
+                        if($usuario->tercero->foto) 
+                        $imagen = 'files/'.$usuario->tercero->cedula.'/'.$usuario->tercero->foto;
                                 
-                            
-                                 }}
                     @endphp
                     <!-- ============================================================== -->
                     <!-- User profile and search -->
@@ -515,108 +512,110 @@
                                 </div>
                             </div>
                         </div>
-                    <ul id="sidebarnav" class="in">
-                        <li >
-                            <a class="waves-effect" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
-                        </li>
-                        <li>
-                        </li>
-                        <li>
-                            <a href="{{ route('docente/listado_docentes') }}" class="waves-effect" style="display: flex !important;"><i data-feather="users" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docentes</font></font></a>
-                        </li>
-                        
-                        <li >
-                            <a href="{{ route('asignatura/listado_asignaturas') }}" class="waves-effect" style="display: flex !important;"><i data-feather="book" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
-                        </li>
-                         @php
-                            $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
-                                            ->leftJoin('asignatura', 'asignatura.id_asignatura', '=', 'seguimiento_asignatura.id_asignatura')
-                                            ->where('seguimiento_asignatura.estado', 'Enviado')
-                                            ->where('id_licencia', session('id_licencia'))
-                                            ->count();
+                        <ul id="sidebarnav" class="in">
+                            <li >
+                                <a class="waves-effect" href="{{ route('panel') }}" style="display: flex !important;"><i data-feather="airplay" class="m-r-10" aria-hidden="true"></i> Actividades</a>
+                            </li>
+                            <li>
+                            </li>
+                            <li>
+                                <a href="{{ route('docente/listado_docentes') }}" class="waves-effect" style="display: flex !important;"><i data-feather="users" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Docentes</font></font></a>
+                            </li>
+                            
+                            <li >
+                                <a href="{{ route('asignatura/listado_asignaturas') }}" class="waves-effect" style="display: flex !important;"><i data-feather="book" class="m-r-10" aria-hidden="true"></i><font style="vertical-align: inherit;"><font style="vertical-align: inherit;">Asignaturas</font></font></a>
+                            </li>
+                             @php
+                                $total_seguimientos_sin_leer = \Illuminate\Support\Facades\DB::table('seguimiento_asignatura')
+                                                ->leftJoin('asignatura', 'asignatura.id_asignatura', '=', 'seguimiento_asignatura.id_asignatura')
+                                                ->where('seguimiento_asignatura.estado', 'Enviado')
+                                                ->where('id_licencia', session('id_licencia'))
+                                                ->count();
 
-                            $total_plan_trabajo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_trabajo')
-                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_trabajo.id_tercero')
-                                            ->where('plan_trabajo.estado', 'Enviado')
-                                            ->where('terceros.id_licencia', session('id_licencia'))
-                                            ->count();
+                                $total_plan_trabajo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_trabajo')
+                                                ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_trabajo.id_tercero')
+                                                ->where('plan_trabajo.estado', 'Enviado')
+                                                ->where('terceros.id_licencia', session('id_licencia'))
+                                                ->count();
 
-                            $total_plan_desarrollo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_desarrollo_asignatura')
-                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_desarrollo_asignatura.id_tercero')
-                                            ->where('plan_desarrollo_asignatura.estado', 'Enviado')
-                                            ->where('terceros.id_licencia', session('id_licencia'))
-                                            ->count();
-                        @endphp 
-                        <li class="">
-                            <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Gestion docencia</span></a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li>
-                                    <a href="{{ route('plan_trabajo/consultar') }}" class="waves-effect" style="font-size:14px;">Plan de trabajo  @if ($total_plan_trabajo_sin_leer > 0)
-                                <span class="label label-rounded label-warning" title="{{ $total_plan_trabajo_sin_leer }} sin revisar ">{{ $total_plan_trabajo_sin_leer }}
-                                </span>
-                             @endif</a>
-                                </li>
-                                <li>
-                                    <a href="{{ route('plan_asignatura/buscar_asignatura') }}" class="waves-effect" style="font-size:14px;">Plan de asignatura</a>
-                                </li>
-                                <li>
-                                    <a  class="has-arrow " href="#" aria-expanded="false" style="font-size:14px;">Plan desarrollo asignatura 
-                                    @if ($total_plan_desarrollo_sin_leer > 0)
-                                        <span class="label label-rounded label-warning" title="{{ $total_plan_desarrollo_sin_leer }} sin revisar ">{{ $total_plan_desarrollo_sin_leer }}
-                                        </span>
-                                    @endif</a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li>
-                                            <a href="{{ route('plan_desarrollo_asignatura/consultar') }}" style="font-size: 14px;">Busqueda individual</a>
-                                            <a href="{{ route('plan_desarrollo_asignatura/consultar_general') }}"  style="font-size: 14px;">Informe general</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="">
-                                    <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
-                                    @if ($total_seguimientos_sin_leer > 0)
-                                        <span class="label label-rounded label-warning" title="{{ $total_seguimientos_sin_leer }} sin revisar ">{{ $total_seguimientos_sin_leer }}
-                                        </span>
-                                    @endif
-                                    </a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li>
-                                            <a href="{{ route('seguimiento/consultar') }}" style="font-size: 14px;">Seguimiento por corte</a>
-                                            <a href="{{ route('seguimiento/consultar_informe_final') }}"  style="font-size: 14px;">Informe final</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                $total_plan_desarrollo_sin_leer = \Illuminate\Support\Facades\DB::table('plan_desarrollo_asignatura')
+                                                ->leftJoin('terceros', 'terceros.id_tercero', '=', 'plan_desarrollo_asignatura.id_tercero')
+                                                ->where('plan_desarrollo_asignatura.estado', 'Enviado')
+                                                ->where('terceros.id_licencia', session('id_licencia'))
+                                                ->count();
+                            @endphp 
+                            <li class="">
+                                <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Gestion docencia</span></a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li>
+                                        <a href="{{ route('plan_trabajo/consultar') }}" class="waves-effect" style="font-size:14px;">Plan de trabajo  @if ($total_plan_trabajo_sin_leer > 0)
+                                    <span class="label label-rounded label-warning" title="{{ $total_plan_trabajo_sin_leer }} sin revisar ">{{ $total_plan_trabajo_sin_leer }}
+                                    </span>
+                                 @endif</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('plan_asignatura/buscar_asignatura') }}" class="waves-effect" style="font-size:14px;">Plan de asignatura</a>
+                                    </li>
+                                    <li>
+                                        <a  class="has-arrow " href="#" aria-expanded="false" style="font-size:14px;">Plan desarrollo asignatura 
+                                        @if ($total_plan_desarrollo_sin_leer > 0)
+                                            <span class="label label-rounded label-warning" title="{{ $total_plan_desarrollo_sin_leer }} sin revisar ">{{ $total_plan_desarrollo_sin_leer }}
+                                            </span>
+                                        @endif</a>
+                                        <ul aria-expanded="false" class="collapse">
+                                            <li>
+                                                <a href="{{ route('plan_desarrollo_asignatura/consultar') }}" style="font-size: 14px;">Busqueda individual</a>
+                                                <a href="{{ route('plan_desarrollo_asignatura/consultar_general') }}"  style="font-size: 14px;">Informe general</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <li class="">
+                                        <a class="has-arrow " href="#" aria-expanded="false" style="font-size: 14px;">Seguimiento de asignatura
+                                        @if ($total_seguimientos_sin_leer > 0)
+                                            <span class="label label-rounded label-warning" title="{{ $total_seguimientos_sin_leer }} sin revisar ">{{ $total_seguimientos_sin_leer }}
+                                            </span>
+                                        @endif
+                                        </a>
+                                        <ul aria-expanded="false" class="collapse">
+                                            <li>
+                                                <a href="{{ route('seguimiento/consultar') }}" style="font-size: 14px;">Seguimiento por corte</a>
+                                                <a href="{{ route('seguimiento/consultar_informe_final') }}"  style="font-size: 14px;">Informe final</a>
+                                            </li>
+                                        </ul>
+                                    </li>
 
-                                <li>
-                                    <a class="has-arrow " style="display: flex !important;" href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
-                                        @php
+                                    @php
+                                        $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
+                                                            ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
+                                                            ->where('actividades_complementarias.estado', 'Enviado')
+                                                            ->where('id_licencia', session('id_licencia'))
+                                                            ->count();
                                         
-                                    $total_actividades_pendientes =  \Illuminate\Support\Facades\DB::table('actividades_complementarias')
-                                                        ->leftJoin('terceros', 'terceros.id_tercero', '=', 'actividades_complementarias.id_tercero')
-                                                        ->where('actividades_complementarias.estado', 'Enviado')
-                                                        ->where('id_licencia', session('id_licencia'))
-                                                        ->count();
-                                        @endphp
-                                    </span></a>
-                                    <ul aria-expanded="false" class="collapse">
-                                        <li class="">
-                                            <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
-                                                <span class="label label-rounded label-warning" title="{{ $total_actividades_pendientes }} sin revisar">{{ $total_actividades_pendientes }}</span></a>
-                                            @endif
-                                        </li>
-                                    </ul>                            
-                                </li>
-                            </ul>
-                        </li>
-                       
-                        <li class="">
-                            <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i> Ajuste de fechas</a>
-                            <ul aria-expanded="false" class="collapse">
-                                <li><a href="{{ route('fechas/plazo_extra_por_docente') }}">Plazo por docente</a></li>
-                                <li><a href="{{ route('fechas/fechas_de_entrega') }}">Fechas Generales</a></li>
-                            </ul>
-                        </li>
-                    </ul>
+                                    @endphp
+                                    <li>
+                                        <a class="has-arrow " style="display: flex !important;" href="#" aria-expanded="false"><span style="font-size:14px;" class="hide-menu">Actividades complementarias  
+                                            
+                                        </span></a>
+                                        <ul aria-expanded="false" class="collapse">
+                                            <li class="">
+                                                <a href="{{ route('actividades_complementarias/consultar') }}">Informe por corte  @if ($total_actividades_pendientes > 0)
+                                                    <span class="label label-rounded label-warning" title="{{ $total_actividades_pendientes }} sin revisar">{{ $total_actividades_pendientes }}</span>
+                                                @endif
+                                                </a>
+                                            </li>
+                                        </ul>                            
+                                    </li>
+                                </ul>
+                            </li>
+                           
+                            <li class="">
+                                <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="calendar" class="m-r-10" aria-hidden="true"></i> Ajuste de fechas</a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a href="{{ route('fechas/plazo_extra_por_docente') }}">Plazo por docente</a></li>
+                                    <li><a href="{{ route('fechas/fechas_de_entrega') }}">Fechas Generales</a></li>
+                                </ul>
+                            </li>
+                        </ul>
 
                     </ul>
                     

@@ -114,6 +114,6 @@ class Clase extends Model
                 $total_todas++;
             }
         }
-        return ($total / $total_todas) * 100;
+        return $total_todas > 0 ? ($total / $total_todas) * 100 : 0;
     }
 }

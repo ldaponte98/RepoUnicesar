@@ -27,7 +27,7 @@
 				  <td rowspan="1" colspan="4" style="font-size: 14px">
 				  <center >
 				  	<div style="margin-top: 10px">
-				  PLAN DE TRABAJO
+				      PLAN DE ASIGNATURA
 				  	</div>
 				  </center></td>
 				  <td rowspan="1" style="font-size: 11px; padding-left: 5px;" >Pagina 1 de 1</td>
@@ -175,15 +175,15 @@
                         <td rowspan="2"><center><b>Horas de trabajo semestral del estudiante</b></center></td>
                         <td style="background-color: #EAF1DD;" colspan="5" ><center><b style="font-size: 12px;">Horas con acompañamiento docente</b></center></td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTI</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_trabajo_independiente }}</center></td>
+                        <td rowspan="2"><center>{{ $plan_asignatura->horas_totales_trabajo_independiente }}</center></td>
                         <td style="background-color: #EAF1DD;" rowspan="2"><center><b>HTT</b></center></td>
-                        <td rowspan="2"><center>{{ $asignatura->horas_totales_semestre }}</center></td>
+                        <td rowspan="2"><center>{{ $plan_asignatura->horas_totales_semestre }}</center></td>
                       </tr>
                       <tr>
                         <td style="background-color: #EAF1DD;" ><center><b>HDD</b></center></td>
-                        <td style="" ><center>{{ $asignatura->horas_teoricas }}</center></td>
+                        <td style="" ><center>{{ $plan_asignatura->horas_teoricas }}</center></td>
                         <td style="background-color: #EAF1DD;" ><center><b>HTP</b></center></td>
-                        <td colspan="2" ><center>{{ $asignatura->horas_practicas }}</center></td>
+                        <td colspan="2" ><center>{{ $plan_asignatura->horas_practicas }}</center></td>
                       </tr>
                       <tr>
                         <td><b>Prerrequisitos </b></td>
@@ -315,20 +315,28 @@
                                      </tr>
                                  </thead>
                                   <tbody id="tabla_unidades">
+                                    @php
+                                      $cont = 0;
+                                    @endphp
                                   	@foreach($plan_asignatura->unidades() as $unidad)
-                   						<tr>
-                                  <td>{{ $unidad->nombre }}</td>
-                                  <td>
-                   					@foreach($unidad->ejes as $eje)
-                      					<li style="margin-left: 5px;">{{ $eje->nombre }}</li>
-                   					@endforeach
-	                              </td>
-                                  <td>{{ $unidad->resultados_aprendizaje }}</td>
-                                  <td><center>{{ $unidad->horas_hdd }}</center></td>
-                                  <td><center>{{ $unidad->horas_htp }}</center></td>
-                                  <td><center>{{ $unidad->horas_hti }}</center></td>
-                                  <td><center>{{ $unidad->horas_htt }}</center></td>
-                                </tr>
+                                    @php
+                                      $cont++;
+                                    @endphp
+                         						<tr>
+                                        <td><center>
+                                          <b>Unidad N° {{ $cont }}</b><br>
+                                          {{ $unidad->nombre }}<br><br>
+                                          @foreach($unidad->ejes as $eje)
+                                              <i>- {{ $eje->nombre }}</i><br>
+                                          @endforeach
+                                        </center></td>
+                                        <td>{{ $unidad->competencias_especificas }}</td>
+                                        <td>{{ $unidad->resultados_aprendizaje }}</td>
+                                        <td><center>{{ $unidad->horas_hdd }}</center></td>
+                                        <td><center>{{ $unidad->horas_htp }}</center></td>
+                                        <td><center>{{ $unidad->horas_hti }}</center></td>
+                                        <td><center>{{ $unidad->horas_htt }}</center></td>
+                                    </tr>
                                 @endforeach
                                   </tbody>
                               </table>

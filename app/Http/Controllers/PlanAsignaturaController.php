@@ -52,6 +52,10 @@ class PlanAsignaturaController extends Controller
             $plan_asignatura->referencias_bibliograficas = $post->referencias_bibliograficas;
             $plan_asignatura->id_asignatura = $post->id_asignatura;
             $plan_asignatura->id_periodo_academico = $post->id_periodo_academico;
+            $plan_asignatura->horas_teoricas = $post->horas_teoricas;
+            $plan_asignatura->horas_practicas = $post->horas_practicas;
+            $plan_asignatura->horas_totales_trabajo_independiente = $post->horas_totales_trabajo_independiente;
+            $plan_asignatura->horas_totales_semestre = $post->horas_totales_semestre;
 
             if($plan_asignatura->save()){
                 /*
@@ -89,6 +93,7 @@ class PlanAsignaturaController extends Controller
                         $unidad_plan_asignatura->horas_htp = $unidad->horas_htp;
                         $unidad_plan_asignatura->horas_hti = $unidad->horas_hti;
                         $unidad_plan_asignatura->horas_htt = $unidad->horas_htt;
+                        $unidad_plan_asignatura->competencias_especificas = $unidad->competencias_especificas;
                         $unidad_plan_asignatura->save();
 
                         //ahora recorremos las competencias de la unidad

@@ -14,10 +14,12 @@ class PlanAsignatura extends Model
 	{
 		return $this->belongsTo(PeriodoAcademico::class, 'id_periodo_academico');
 	}
+	
 	public function asignatura()
 	{
 		return $this->belongsTo(Asignatura::class, 'id_asignatura');
 	}
+
 	public function detalles()
 	{
 		return $this->hasMany(PlanAsignaturaDetalle::class, 'id_plan_asignatura');
@@ -41,6 +43,7 @@ class PlanAsignatura extends Model
 				$unidad->horas_htp = $uni->horas_htp;
 				$unidad->horas_hti = $uni->horas_hti;
 				$unidad->horas_htt = $uni->horas_htt;
+				$unidad->competencias_especificas = $uni->competencias_especificas;
 
 
 				//ahora miramos si la unidad la usaron en el mismo periodo academico 
@@ -101,6 +104,10 @@ class PlanAsignatura extends Model
                 $this->competencias_genericas = $plan_asignatura_carga->competencias_genericas;
                 $this->mecanismos_evaluacion = $plan_asignatura_carga->mecanismos_evaluacion;
                 $this->referencias_bibliograficas = $plan_asignatura_carga->referencias_bibliograficas;
+                $this->horas_teoricas = $plan_asignatura_carga->horas_teoricas;
+                $this->horas_practicas = $plan_asignatura_carga->horas_practicas;
+                $this->horas_totales_trabajo_independiente = $plan_asignatura_carga->horas_totales_trabajo_independiente;
+                $this->horas_totales_semestre = $plan_asignatura_carga->horas_totales_semestre;
                 if($this->save()){
                      if($this->cargar_unidades_ejes($plan_asignatura_carga)){
                         $error = false;
@@ -108,7 +115,6 @@ class PlanAsignatura extends Model
                     }else{
                         $message = "No se pudieron actualizar las unidades y ejes tematicos del actual plan de asignatura.";
                     }
-                    
                 }else{
                     $message = "No se pudo actualizar la información del actual plan de asignatura.";
                 }
@@ -154,7 +160,4 @@ class PlanAsignatura extends Model
         }
         return true;
     }
-
-
-
 }

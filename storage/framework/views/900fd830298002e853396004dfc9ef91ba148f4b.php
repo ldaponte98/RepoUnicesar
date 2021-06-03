@@ -41,16 +41,14 @@
                     </style>
                     <tbody id="bodytable">
 
-                    	<?php $__currentLoopData = $docentes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $docente): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        
+                    	<?php $__currentLoopData = $docentes; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $doc): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php
+                            $docente = \App\Tercero::find($doc->id_tercero);
+                        ?>
                     	  <tr class="fil" onclick="location.href = 'view/<?php echo e($docente->id_tercero); ?>'">
                     		<td>
                     			<center>
-                    			<?php
-                                	$imagen = 'assets/images/users/sin_foto.jpg';
-                                	if ($docente->foto)$imagen = 'files/'.$docente->cedula.'/'.$docente->foto;
-                                ?>
-                                <img src="<?php echo e(asset($imagen)); ?>" class="img-circle" width="35" height="35" />
+                                <img src="<?php echo e($docente->get_imagen()); ?>" class="img-circle" width="35" height="35" />
                                 </center>
                             </td>
                             <td><?php echo e($docente->nombre); ?> <?php echo e($docente->apellido); ?></td>

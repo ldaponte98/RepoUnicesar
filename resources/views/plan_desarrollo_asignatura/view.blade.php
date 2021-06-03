@@ -106,12 +106,12 @@
                     </div>
                   @endif
                 <div class="row">
-                  
-                    <div class="col-sm-12">
-                        <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
+                    <div class="col-sm-12"> 
+                      <div class="table-responsive">
+                      <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
                       <tr>
                         <td width="25%" style="background-color: #C7E6A4;"><b>APELLIDOS Y NOMBRES DEL DOCENTE</b></td>
-                        <td colspan="9" width="75%">{{ $tercero->getNameFull() }}</td>
+                        <td colspan="9" width="100%">{{ $tercero->getNameFull() }}</td>
                       </tr>
                       <tr>
                         <td><b>CORREO ELECTRÓNICO </b></td>
@@ -161,27 +161,30 @@
                         <td><b>AÑO LECTIVO: </b>{{ explode('-', $periodo_academico->periodo)[0] }}</td>
                         <td><b>PERIODO ACADEMICO: </b>{{ explode('-', $periodo_academico->periodo)[1] }}</td>
                         <td colspan="2"><b>FECHA DE INICIO: </b>{{ $fecha_inicio }}</td>
-                        <td colspan="2"><b>TOTAL: </b>{{ $periodo_academico->total_semanas }} semanas</td>
+                        <td colspan="1"><b>TOTAL: </b>{{ $periodo_academico->total_semanas }} semanas</td>
                         <td colspan="2"><b>FECHA DE TERMINACION: </b>{{ $fecha_fin }}</td>
                       </tr>
                     </table> 
-                    <table class="tabla_info table-responsive" width="100%" cellspacing="0" cellpadding="0" border="1">
-                      <thead>
-                      <tr>
-                        <td width="10%" style="background-color: #C7E6A4;"><center><b>SEMANA</center></b></td>
-                        <td width="15%" style="background-color: #C7E6A4;"><center><b>EJES TEMÁTICOS</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>TEMAS DOCENCIA DIRECTA</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>TEMAS TRABAJO INDEPENDIENTE</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>ESTRATEGIAS METODOLÓGICAS O ACCIONES PEDAGÓGICAS</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>COMPETENCIAS</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>EVALUACIÓN ACADÉMICA</center></b></td>
-                        <td style="background-color: #C7E6A4;"><center><b>BIBLIOGRAFÍA (capítulos, páginas)</center></b></td>
-                      </tr>
-                      </thead>
-                      <tbody id="tabla_detalles">
-                        
-                      </tbody>
-                    </table>
+                    </div>
+                    <div class="table-responsive">
+                      <table class="tabla_info" width="100%" cellspacing="0" cellpadding="0" border="1">
+                        <thead>
+                        <tr>
+                          <td width="10%" style="background-color: #C7E6A4;"><center><b>SEMANA</center></b></td>
+                          <td width="15%" style="background-color: #C7E6A4;"><center><b>EJES TEMÁTICOS</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>TEMAS DOCENCIA DIRECTA</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>TEMAS TRABAJO INDEPENDIENTE</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>ESTRATEGIAS METODOLÓGICAS O ACCIONES PEDAGÓGICAS</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>COMPETENCIAS</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>EVALUACIÓN ACADÉMICA</center></b></td>
+                          <td style="background-color: #C7E6A4;"><center><b>BIBLIOGRAFÍA (capítulos, páginas)</center></b></td>
+                        </tr>
+                        </thead>
+                        <tbody id="tabla_detalles">
+                          
+                        </tbody>
+                      </table>
+                    </div>
                     <div>
                       @if($puede_editar)
                         <button id="btn_agregar_semana" class="btn btn-info pull-right" onclick="show_modal_detalle(false)"><i class="fa fa-plus"></i> Agregar semana</button>
@@ -271,7 +274,7 @@
           
           <div class="row" id="div_unidades_ejes">
             <div class="col-sm-6">
-              <label class="col-form-label"><strong><b>Ejes tematicos</b></strong></label><hr>
+              <label class="col-form-label"><strong><b>Unidad</b></strong></label><hr>
               @foreach($plan_asignatura->unidades() as $unidad)
                 <input onclick="mostrar_ejes()" type="checkbox" class="" id="unidad_{{ $unidad->id_unidad }}">
                 <label class="custom-control-label" for="unidad_{{ $unidad->id_unidad }}">{{ $unidad->nombre }}</label>
@@ -279,7 +282,7 @@
               @endforeach
             </div>
             <div class="col-sm-6">
-              <label class="col-form-label"><strong><b>Temas D.directa</b></strong></label><hr>
+              <label class="col-form-label"><strong><b>Ejes tematicos</b></strong></label><hr>
               <div id="div_ejes">
 
               </div>
@@ -466,6 +469,12 @@
       $("#btn_eliminar_detalle").fadeOut()
       posicion_detalle_editar = -1
       semana_actual = detalles.length + 1
+      this.editor_estrategias_metodologicas.setData('@php
+        echo $plan_asignatura->estrategias_pedagogicas;
+      @endphp')
+      this.editor_bibliografia.setData('@php
+        echo $plan_asignatura->referencias_bibliograficas;
+      @endphp')
       this.buscar_fecha_sugerida(semana_actual)
       $("#titulo_modal_detalle").html("Desarrollo en semana "+semana_actual)
     }
@@ -509,8 +518,10 @@
   function mostrar_ejes() {
     $("#div_ejes").html("<center><i>Actualizando...</i></center>")
     let ejes = ""
+    let competencias = ""
     this.unidades.forEach((unidad) => {
       if($("#unidad_"+unidad.id_unidad).prop('checked')){
+        competencias += unidad.competencias_especificas + "<br><br>"
         ejes += '<b>'+unidad.numero+'. '+unidad.nombre+'</b><br>'
         unidad.ejes.forEach((eje) => {
           let checked = ""
@@ -523,6 +534,7 @@
         ejes += '<br>'
       }
     })
+    this.editor_competencias.setData(competencias)
     $("#div_ejes").html(ejes)
   }
 
@@ -821,6 +833,7 @@
     @foreach($plan_asignatura->unidades() as $unidad)
         unidad.id_unidad = '{{ $unidad->id_unidad }}'
         unidad.nombre = '{{ $unidad->nombre }}'
+        unidad.competencias_especificas = '{{ $unidad->competencias_especificas }}'
         unidad.numero = cont_unidades
         cont_ejes = 1
         @foreach($unidad->ejes as $eje)

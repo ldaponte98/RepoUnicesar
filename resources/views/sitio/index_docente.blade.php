@@ -13,7 +13,6 @@
         </div>
     </div>
     <style type="text/css">
-
         input[type="radio"] {
           display: none;
         }
@@ -33,18 +32,16 @@
           unicode-bidi: bidi-override;
           margin-bottom: 0px;
         }
+        .icon-rounded{
+            background-color: #789A2F;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px;
+            border-radius: 150px;
+        }
     </style>
 @endsection
 @section('content')
-<style type="text/css">
-    .icon-rounded{
-        background-color: #789A2F;
-        color: #ffffff;
-        text-align: center;
-        padding: 15px;
-        border-radius: 150px;
-    }
-</style>
 <div class="row">
     <div class="col-sm-4">
         <div class="card">

@@ -12,6 +12,7 @@ use App\Horario;
 use App\Grupo;
 use App\HorarioDetalle;
 use App\Notificaciones;
+use App\PlazoDocente;
 use GuzzleHttp\Client;
 use Mail;
 

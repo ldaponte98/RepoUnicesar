@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-md-2 col-8 align-self-center">
                       <br> <br>   
-                    <a target="_blank" onclick="cargar_unidades_ejes_causa_analisis_antiguos()" style="color: white; width: 100%;" class="btn pull-rigth hidden-sm-down btn-success">Volver</a>
+                    <a href="{{ route('seguimiento/consultar') }}" style="color: white; width: 100%;" class="btn pull-rigth hidden-sm-down btn-success">Volver</a>
                     </div>
                 </div>
 @endsection

@@ -52,6 +52,7 @@ class ClaseController extends Controller
                 ->join('grupo', 'grupo.id_grupo', '=', 'clases.id_grupo')
                 ->where('fecha_inicio', '<=', $fecha_actual)
                 ->where('fecha_fin', '>=', $fecha_actual)
+                ->where('grupo.id_tercero', session('id_tercero_usuario'))
                 ->get();        
         return view('clase.clases_docente_pendientes', compact('clases_pendientes'));
     }

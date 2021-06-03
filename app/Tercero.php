@@ -396,9 +396,10 @@ class Tercero extends Model
 
     public function formatos_pendientes($limit = null)
     {
+        $estado = 'Pendiente';
         $formatos = [];
         $cont = 0;
-        foreach ($this->planes_trabajo('Pendiente') as $plan) {
+        foreach ($this->planes_trabajo($estado) as $plan) {
             $plan = (object) $plan;
             if ($cont < $limit or $limit == null) { 
                 $formatos[] = (object) [
@@ -414,7 +415,7 @@ class Tercero extends Model
         }
 
         $cont = 0;
-        foreach ($this->planes_desarrollo_asignatura('Pendiente') as $plan) {
+        foreach ($this->planes_desarrollo_asignatura($estado) as $plan) {
             $plan = (object) $plan;
             if ($cont < $limit or $limit == null) { 
                 $formatos[] = (object) [
@@ -435,7 +436,7 @@ class Tercero extends Model
         }
 
         $cont = 0;
-        foreach ($this->actividades_complementarias('Pendiente') as $plan) {
+        foreach ($this->actividades_complementarias($estado) as $plan) {
             $plan = (object) $plan;
             if ($cont < $limit or $limit == null) { 
                 $formatos[] = (object) [
@@ -454,7 +455,7 @@ class Tercero extends Model
         $cont = 0;
         foreach ($this->seguimientos_asignatura as $plan) {
             $plan = (object) $plan;
-            if ($plan->estado == 'Pendiente') {
+            if ($plan->estado == $estado) {
                 if ($cont < $limit or $limit == null) { 
                     $formatos[] = (object) [
                         'id' => $plan->id_seguimiento,
@@ -466,6 +467,97 @@ class Tercero extends Model
                                         <b>Corte:</b> ".$plan->corte." <br> 
                                         <b>Estado:</b>  ".$plan->retraso(),
                         'ruta' => route('seguimiento/view', $plan->id_seguimiento)
+                    ];
+                }
+                $cont++;
+            }
+        }
+
+
+        return $formatos;
+    }
+
+    public function formatos_enviados($limit = null)
+    {
+        $estado = 'Enviado';
+        $formatos = [];
+        $cont = 0;
+        foreach ($this->planes_trabajo($estado) as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_plan_trabajo,
+                    'tipo' => 'plan_trabajo',
+                    'titulo' =>  'Plan de trabajo',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo." <br> 
+                                    <b>Fecha de envio:</b>  ".date('d/m/Y H:i', strtotime($plan->fecha)),
+                    'ruta' => config('global.url_base')."/plan_trabajo/view?id_periodo_escojido=".$plan->id_periodo,
+                    'ruta_revision' => config('global.url_base')."/plan_trabajo/imprimir/".$plan->id_plan_trabajo
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->planes_desarrollo_asignatura($estado) as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_plan_desarrollo_asignatura,
+                    'tipo' => 'plan_desarrollo',
+                    'titulo' =>  'Plan de desarrollo asignatura',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo." <br> 
+                                    <b>Asignatura:</b> ".$plan->asignatura." <br> 
+                                    <b>Fecha de envio:</b>  ".date('d/m/Y H:i', strtotime($plan->fecha)),
+                    'ruta' => route('plan_desarrollo_asignatura/view', [
+                                    $plan->id_tercero, 
+                                    $plan->id_asignatura, 
+                                    $plan->id_periodo
+                                ]),
+                    'ruta_revision' => route('plan_desarrollo_asignatura/view', [
+                        $plan->id_tercero, 
+                        $plan->id_asignatura, 
+                        $plan->id_periodo
+                    ])
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->actividades_complementarias($estado) as $plan) {
+            $plan = (object) $plan;
+            if ($cont < $limit or $limit == null) { 
+                $formatos[] = (object) [
+                    'id' => $plan->id_actividad_complementaria,
+                    'tipo' => 'actividades_complementarias',
+                    'titulo' =>  'Actividad complementaria',
+                    'subtitulo' => '<b>Periodo academico:</b> '.$plan->periodo_academico." <br> 
+                                    <b>Corte:</b> ".$plan->corte." <br> 
+                                    <b>Progreso:</b>  ".$plan->progreso."%",
+                    'ruta' => route('actividades_complementarias/editar', $plan->id_actividad_complementaria),
+                    'ruta_revision' => route('actividades_complementarias/editar', $plan->id_actividad_complementaria)
+                ];
+            }
+            $cont++;
+        }
+
+        $cont = 0;
+        foreach ($this->seguimientos_asignatura as $plan) {
+            $plan = (object) $plan;
+            if ($plan->estado == $estado) {
+                if ($cont < $limit or $limit == null) { 
+                    $formatos[] = (object) [
+                        'id' => $plan->id_seguimiento,
+                        'tipo' => 'seguimiento_asignatura',
+                        'titulo' =>  'Seguimiento de asignatura',
+                        'subtitulo' => '<b>Periodo academico:</b> '.$plan->grupo->periodo_academico->periodo." <br> 
+                                        <b>Asignatura:</b> ".$plan->asignatura->nombre." <br> 
+                                        <b>Grupo:</b> ".$plan->grupo->codigo." <br> 
+                                        <b>Corte:</b> ".$plan->corte." <br> 
+                                        <b>Fecha de envio:</b>  ".date('d/m/Y H:i', strtotime($plan->fecha)),
+                        'ruta' => route('seguimiento/view', $plan->id_seguimiento),
+                        'ruta_revision' => route('seguimiento/view', $plan->id_seguimiento)
                     ];
                 }
                 $cont++;
