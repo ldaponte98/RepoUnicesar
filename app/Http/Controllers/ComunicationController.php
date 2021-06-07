@@ -320,7 +320,7 @@ class ComunicationController extends Controller
                     return response()->json([
                         "message" => "Error. Verificar el tipo de tercero: docente, jefe_departamento, alumno son los validos.",
                         "token" => $token,
-                        "access" = route('comunication/redirect', $token)
+                        "access" => config('global.url_base').'comunication/redirect/'.$token,
                         "errors" => $errors
                     ], 400);
         	 	}

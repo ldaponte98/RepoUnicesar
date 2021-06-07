@@ -30,7 +30,7 @@
 	<td><img src="https://app.clez.co/images/teacher.gif" height="350px"></div></td>
 	<td style="padding-left: 50px !important">
 		<b><h1>¡Hola {{ ucfirst(strtolower($nombre_tercero)) }}¡</h1></b>
-		<p>El jefe de departamento te informa que te encuentras atrasado en el informe de: </p>
+		<p>El jefe de departamento al hacer un seguimiento a los informes solicitados identifica que usted no ha presentado el siguiente informe: </p>
 		@if(isset($formato))
         <b><h3>{{ $formato }}</h3></b>
         @endif

@@ -316,7 +316,7 @@
 
         function DarExtraPlazoSeguimiento() {
             $('#seguimientomodalExtraPlazo').modal('hide')
-            var data_form = $("#seguimiento_form").serialize()
+            var data_form = $("#_form").serialize()
             var url = '<?php echo e(route('plazo_docente/registrar')); ?>'
             var id_seguimiento = $("#seguimientoid_seguimiento_para_plazo").val();
             var fechas_plazo = $("#seguimientolapso_de_plazo_extra").val();
