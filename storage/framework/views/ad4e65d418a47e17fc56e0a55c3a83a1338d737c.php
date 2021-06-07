@@ -66,7 +66,7 @@
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
     <script src="https://unpkg.com/feather-icons"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.1.1/dist/echarts.min.js"></script>
     <style type="text/css">
         body {
             --ck-z-default: 100;
@@ -546,7 +546,7 @@
                                                 ->count();
                             ?> 
                             <li class="">
-                                <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Gestion docencia</span></a>
+                                <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="clipboard" class="m-r-10" aria-hidden="true"></i><span class="hide-menu">Informes Gestión Docencia</span></a>
                                 <ul aria-expanded="false" class="collapse">
                                     <li>
                                         <a href="<?php echo e(route('plan_trabajo/consultar')); ?>" class="waves-effect" style="font-size:14px;">Plan de trabajo  <?php if($total_plan_trabajo_sin_leer > 0): ?>
@@ -619,6 +619,14 @@
                                     <li><a href="<?php echo e(route('fechas/fechas_de_entrega')); ?>">Fechas Generales</a></li>
                                 </ul>
                             </li>
+
+                            <li class="">
+                                <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i> Reportes </a>
+                                <ul aria-expanded="false" class="collapse">
+                                    <li><a href="<?php echo e(route('reportes/puntualidad_formatos')); ?>">Puntualidad en formatos</a></li>
+                                    <li><a href="<?php echo e(route('reportes/actividades_docente')); ?>">Actividades docente</a></li>
+                                </ul>
+                            </li>
                         </ul>
 
                     </ul>
@@ -627,14 +635,45 @@
             </div>
 
         </aside>
+        <style>
+            .fab-container-refresh {
+                bottom: 20px;
+                right: 25px;
+                top: auto; 
+
+            }
+
+            .fab-refresh{
+                font-size: 20px;
+                animation: animaterefresh 3s linear infinite;
+            }
+
+            @keyframes  animaterefresh{
+                0%{
+                    box-shadow: 0 0 0 0 rgba(160, 191, 76, .5), 0 0 0 0 rgba(160, 191, 76, .5);
+                }
+                40%{
+                    box-shadow: 0 0 0 10px rgba(160, 191, 76, 0), 0 0 0 0 rgba(160, 191, 76, .5);
+                }
+                80%{
+                    box-shadow: 0 0 0 10px rgba(160, 191, 76, 0), 0 0 0 10px rgba(160, 191, 76, 0);
+                }
+                100%{
+                    box-shadow: 0 0 0 0 rgba(160, 191, 76, 0), 0 0 0 10px rgba(160, 191, 76, 0);
+                }
+            }
+        </style>
+        <div class="fab-container fab-container-refresh">
+            <div class="fab fab-icon-holder fab-refresh" onclick="RefreshAcademusoft()">
+                <i class="fa fa-refresh"></i>
+            </div>
+        </div>
 
         <?php echo $__env->yieldContent('menu',''); ?>
         <div class="page-wrapper">
             <div class="container-fluid">
-                
                  <?php echo $__env->yieldContent('header_content',''); ?>
                  <?php echo $__env->yieldContent('content',''); ?>
-
             </div>
             <footer class="footer text-center">
                 © 2018 Luis Aponte y Ever Lazo
@@ -645,6 +684,10 @@
    <script>
       feather.replace()
       $('.clockpicker').clockpicker();
+
+      function RefreshAcademusoft() {
+         
+      }
     </script>
     <script src=" <?php echo e(asset('assets/plugins/bootstrap/js/tether.min.js')); ?> "></script>
     <script src="<?php echo e(asset('assets/plugins/bootstrap/js/bootstrap.min.js')); ?>"></script>

@@ -348,64 +348,11 @@ class PlanDesarrolloAsignaturaController extends Controller
 
         if ($post) {
             $post = (object) $post;
-            $condiciones1 = "";
-            $condiciones2 = "";
-            $condiciones3 = "";
-            if ($post->periodo_academico and $post->periodo_academico != "") $condiciones1 .= " where id_periodo_academico = ".$post->periodo_academico;
-            if ($post->id_tercero and $post->id_tercero != "") $condiciones2 .= " and id_tercero = ".$post->id_tercero;
-            if ($post->id_asignatura and $post->id_asignatura != "") $condiciones3 .= " and id_asignatura = ".$post->id_asignatura;
-            
-            $planes = [];
-            $sql = "select * from periodo_academico $condiciones1"; 
-            $periodos_academicos = DB::select($sql);
-            $sql2 = "select * from terceros where id_dominio_tipo_ter = 3 and id_licencia = ".session('id_licencia')." $condiciones2"; 
-            $docentes = DB::select($sql2);
-            $sql3 = "select * from asignatura where id_licencia = ".session('id_licencia')." $condiciones3"; 
-            $asignaturas = DB::select($sql3);
-            foreach ($periodos_academicos as $periodo_academico) {
-                foreach ($docentes as $docente) {
-                    foreach ($asignaturas as $asignatura) {
-                        $tiene_carga_academica = Grupo::where('id_tercero', $docente->id_tercero)
-                                                      ->where('id_periodo_academico',  $periodo_academico->id_periodo_academico)
-                                                      ->where('id_asignatura',  $asignatura->id_asignatura)
-                                                      ->first();
-
-
-                        $plan['id_tercero'] = $docente->id_tercero;
-                        $plan['docente'] = $docente->nombre." ".$docente->apellido;
-                        $plan['periodo'] = $periodo_academico->periodo;
-                        $plan['asignatura'] = $asignatura->nombre." (".$asignatura->codigo.")";
-
-                        if($tiene_carga_academica){
-                            $plan['tiene_carga_academica'] = 1;
-                            $plan_desarrollo_asignatura = PlanDesarrolloAsignatura::where('id_tercero', $docente->id_tercero)
-                                                      ->where('id_periodo_academico',  $periodo_academico->id_periodo_academico)
-                                                      ->where('id_asignatura',  $asignatura->id_asignatura)
-                                                      ->first();
-
-                            if($plan_desarrollo_asignatura){
-                                $plan['id_plan_desarrollo_asignatura'] = $plan_desarrollo_asignatura->id_plan_desarrollo_asignatura;
-                                $plan['estado'] = $plan_desarrollo_asignatura->estado;
-                                $plan['fecha'] = date('d/m/Y H:i', strtotime($plan_desarrollo_asignatura->created_at));
-                            }else{
-                                //como no existe hay q sacarle el retraso
-                                $fecha_actual = date('Y-m-d H:i:s'); 
-                                $plan['id_plan_desarrollo_asignatura'] = null;
-                                $plan['estado'] = 'Pendiente';
-                                $plan['retraso'] = PlanDesarrolloAsignatura::retraso($docente->id_tercero, $periodo_academico->id_periodo_academico, $asignatura->id_asignatura);
-                            }
-
-                            if ($post->estado and $post->estado != ""){
-                                if($post->estado == $plan['estado']) array_push($planes, $plan);
-                            }else{
-                                array_push($planes, $plan);
-                            }
-
-                        }
-                    }
-                }
-            }
-            
+            $id_periodo = $post->periodo_academico;
+            $id_tercero = $post->id_tercero;
+            $id_asignatura = $post->id_asignatura;
+            $estado = $post->estado;
+            $planes = PlanDesarrolloAsignatura::reporte($id_periodo, $id_tercero, $id_asignatura, $estado);
             return response()->json($planes);
         }
         return response()->json("Error de data enviada");

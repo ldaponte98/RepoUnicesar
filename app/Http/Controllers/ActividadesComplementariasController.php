@@ -14,7 +14,7 @@ use Mail;
 
 class ActividadesComplementariasController extends Controller
 {
-     public function listar()
+    public function listar()
     {
         
         $periodos_academicos = DB::table('periodo_academico')
@@ -26,62 +26,22 @@ class ActividadesComplementariasController extends Controller
         }
         return view('actividades_complementarias.consultar',compact('periodos_academicos'));
    }
+
    public function getReporte(Request $request)
    {
    		$post = $request->all();
         if ($post) {
             $post = (object) $post;
-            $condiciones = "";
-            
-            if ($post->estado and $post->estado != "") $condiciones .= " and a.estado = '".$post->estado."'";
-            if ($post->periodo_academico and $post->periodo_academico != "") $condiciones .= " and p.id_periodo_academico = ".$post->periodo_academico;
-            if ($post->corte and $post->corte != "") $condiciones .= " and a.corte = ".$post->corte;
-
-            $condiciones .= " and t.id_licencia = ".session('id_licencia');
-            if(session('is_docente') == true) {
-              $condiciones .= " and a.id_tercero = '".session('id_tercero_usuario')."'";
-            }else{
-              if ($post->id_tercero and $post->id_tercero != "") $condiciones .= " and a.id_tercero = '".$post->id_tercero."'";
-            }
-            $sql = "select a.id_actividad_complementaria,
-                    t.id_tercero,
-                    concat(t.nombre,' ',t.apellido) as docente,
-                    a.fecha,
-                    a.estado,
-                    a.corte,
-                    a.id_plan_trabajo,
-                    a.fecha,
-                    p.periodo as periodo_academico
-                    from actividades_complementarias a
-                    left join plan_trabajo pl using(id_plan_trabajo)
-                    left join periodo_academico p on pl.id_periodo_academico = p.id_periodo_academico
-                    left join terceros t  on t.id_tercero = a.id_tercero
-                    where a.id_actividad_complementaria is not null 
-                    $condiciones";
-            $data = DB::select($sql);
-
-            $actividades = [];
-            foreach ($data as $value) {
-               $actividad = $value;
-               if($value->estado == 'Pendiente') {
-                 $actividad->retraso = ActividadesComplementarias::find($value->id_actividad_complementaria)->retraso();
-               }
-               //calculo el progreso que lleva de terminada las actividades complementarias segun el plan de trabajo
-            	$total_actividades_a_entregar = count(PlanTrabajo::find($value->id_plan_trabajo)->get_tipos_de_actividades_para_actividades_complementarias());
-            	$total_actividades_realizadas = count(ActividadesComplementarias::find($value->id_actividad_complementaria)->get_tipos_de_actividades_realizadas());
-              
-              if($total_actividades_a_entregar != 0){
-                $actividad->progreso = ($total_actividades_realizadas / $total_actividades_a_entregar) * 100;
-              }else{
-                $actividad->progreso  = 100;
-              }
-            	
-               array_push($actividades, $actividad);
-            }
+            $periodo_academico = $post->periodo_academico;
+            $estado = $post->estado;
+            $corte = $post->corte;
+            $id_tercero = $post->id_tercero;
+            $actividades = ActividadesComplementarias::reporte($periodo_academico, $estado, $corte, $id_tercero);
             return response()->json($actividades);
         }
         return response()->json("nada llego");
    }
+
    public function editar($id_actividad_complementaria)
    {
     $actividad_complementaria = ActividadesComplementarias::find($id_actividad_complementaria);

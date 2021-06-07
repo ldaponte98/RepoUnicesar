@@ -154,6 +154,9 @@ Route::get('plan_desarrollo_asignatura/view/{id_tercero}/{id_asignatura}/{id_per
 Route::post('plan_desarrollo_asignatura/obtener_fecha_sugerida','PlanDesarrolloAsignaturaController@obtener_fecha_sugerida')->name('plan_desarrollo_asignatura/obtener_fecha_sugerida');
 Route::post('plan_desarrollo_asignatura/editar','PlanDesarrolloAsignaturaController@editar')->name('plan_desarrollo_asignatura/editar');
 Route::get('plan_desarrollo_asignatura/imprimir/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@imprimir')->name('plan_desarrollo_asignatura/imprimir');
+
+Route::get('plan_desarrollo_asignatura/verimprimir/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@verimprimir')->name('plan_desarrollo_asignatura/verimprimir');
+
 Route::post('plan_desarrollo_asignatura/cargar_plan_existente','PlanDesarrolloAsignaturaController@cargar_plan_existente')->name('plan_desarrollo_asignatura/cargar_plan_existente');
 Route::get('plan_desarrollo_asignatura/obtener_vista/{id_plan_desarrollo_asignatura}','PlanDesarrolloAsignaturaController@obtener_vista')->name('plan_desarrollo_asignatura/obtener_vista');
 Route::get('plan_desarrollo_asignatura/consultar_general','PlanDesarrolloAsignaturaController@consultar_general')->name('plan_desarrollo_asignatura/consultar_general');
@@ -170,6 +173,10 @@ Route::post('comunication/updatePeriodosAcademicos','ComunicationController@upda
 Route::post('comunication/updateAsignaturas','ComunicationController@updateAsignaturas')->name('comunication/updateAsignaturas');
 Route::post('comunication/auth','ComunicationController@auth')->name('comunication/auth');
 Route::get('comunication/redirect/{token}','ComunicationController@login')->name('comunication/redirect');
+
+
+Route::any('reportes/puntualidad_formatos','ReporteController@puntualidad_formatos')->name('reportes/puntualidad_formatos');
+Route::any('reportes/actividades_docente','ReporteController@actividades_docente')->name('reportes/actividades_docente');
 
 
 

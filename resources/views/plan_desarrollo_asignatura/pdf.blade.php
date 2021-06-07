@@ -346,7 +346,7 @@
            <td> @php echo $detalle->estrategias_metodologicas; @endphp </td>
            <td> @php echo $detalle->competencias; @endphp </td>
            <td> @php echo $detalle->evaluacion_academica; @endphp </td>
-           <td> @php echo $detalle->bibliografia; @endphp </td>
+           <td> @php echo $detalle->bibliografia; @endphp</td>
           
     </tr>
     @endforeach

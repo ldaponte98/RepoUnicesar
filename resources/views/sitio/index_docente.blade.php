@@ -154,26 +154,16 @@
                                     <span class="mt-5 display-3">{{ $calificacion }}</span><br>
                                     <b>Puntos</b>
                                     <p class="clasificacion">
-                                        <input id="radio1" type="radio" name="estrellas" value="10">
-                                        <label class="start {{$calificacion >= 95 ? "start-active" : ""}}" for="radio1">★</label>
-                                        <input id="radio2" type="radio" name="estrellas" value="9">
-                                        <label class="start {{$calificacion >= 85 ? "start-active" : ""}}" for="radio2">★</label>
-                                        <input id="radio3" type="radio" name="estrellas" value="8">
-                                        <label class="start {{$calificacion >= 75 ? "start-active" : ""}}" for="radio3">★</label>
-                                        <input id="radio4" type="radio" name="estrellas" value="7">
-                                        <label class="start {{$calificacion >= 65 ? "start-active" : ""}}" for="radio4">★</label>
-                                        <input id="radio5" type="radio" name="estrellas" value="6">
-                                        <label class="start {{$calificacion >= 55 ? "start-active" : ""}}" for="radio5">★</label>
                                         <input id="radio6" type="radio" name="estrellas" value="5">
-                                        <label class="start {{$calificacion >= 45 ? "start-active" : ""}}" for="radio6">★</label>
+                                        <label class="start {{$calificacion >= 5 ? "start-active" : ""}}" for="radio6">★</label>
                                         <input id="radio7" type="radio" name="estrellas" value="4">
-                                        <label class="start {{$calificacion >= 35 ? "start-active" : ""}}" for="radio7">★</label>
+                                        <label class="start {{$calificacion >= 4 ? "start-active" : ""}}" for="radio7">★</label>
                                         <input class="start" id="radio8" type="radio" name="estrellas" value="3">
-                                        <label class="start {{$calificacion >= 25 ? "start-active" : ""}}" for="radio8">★</label>
+                                        <label class="start {{$calificacion >= 3 ? "start-active" : ""}}" for="radio8">★</label>
                                         <input id="radio9" type="radio" name="estrellas" value="2">
-                                        <label class="start {{$calificacion >= 15 ? "start-active" : ""}}" for="radio9">★</label>
+                                        <label class="start {{$calificacion >= 2 ? "start-active" : ""}}" for="radio9">★</label>
                                         <input id="radio10" type="radio" name="estrellas" value="1">
-                                        <label class="start {{$calificacion >= 5 ? "start-active" : ""}}" for="radio10">★</label>
+                                        <label class="start {{$calificacion >= 1 ? "start-active" : ""}}" for="radio10">★</label>
                                     </p>
                                 </center>  
                             </div>

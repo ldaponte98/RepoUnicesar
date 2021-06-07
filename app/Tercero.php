@@ -573,9 +573,9 @@ class Tercero extends Model
         $clases = $this->clases_docente();
         $calificacion_final = 0;
         foreach ($clases as $clase) {
-             $calificacion_final += $clase->get_calificacion_final() / count($clases);
+            $calificacion_final += $clase->get_calificacion_final() / count($clases);
         }
-        return round($calificacion_final);
+        return round($calificacion_final, 1);
     }
 
     public function total_calificaciones($tipo = null) //positiva, neutral, negativa
@@ -585,9 +585,9 @@ class Tercero extends Model
         foreach ($clases as $clase) {
             foreach ($clase->calificaciones as $calificacion) {
                 foreach ($calificacion->detalles as $detalle) {
-                    if (($tipo == "positiva" and  $detalle->valor >= 80)) $total++;
-                    if (($tipo == "neutral" and  $detalle->valor >= 60 and $detalle->valor < 80)) $total++;
-                    if (($tipo == "negativa" and  $detalle->valor < 60)) $total++;
+                    if (($tipo == "positiva" and  $detalle->valor >= 4)) $total++;
+                    if (($tipo == "neutral" and  $detalle->valor >= 3 and $detalle->valor < 4)) $total++;
+                    if (($tipo == "negativa" and  $detalle->valor < 3)) $total++;
                     if ($tipo == null) $total;
                 }
             }
@@ -603,9 +603,9 @@ class Tercero extends Model
         foreach ($clases as $clase) {
             foreach ($clase->calificaciones as $calificacion) {
                 foreach ($calificacion->detalles as $detalle) {
-                    if (($tipo == "positiva" and  $detalle->valor >= 80)) $total++;
-                    if (($tipo == "neutral" and  $detalle->valor >= 60 and $detalle->valor < 80)) $total++;
-                    if (($tipo == "negativa" and  $detalle->valor < 60)) $total++;
+                    if (($tipo == "positiva" and  $detalle->valor >= 4)) $total++;
+                    if (($tipo == "neutral" and  $detalle->valor >= 3 and $detalle->valor < 4)) $total++;
+                    if (($tipo == "negativa" and  $detalle->valor < 3)) $total++;
                     if ($tipo == null) $total;
                     $total_todas++;
                 }

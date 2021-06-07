@@ -203,5 +203,54 @@ class ActividadesComplementarias extends Model
           return $cont;
         }
 
-    
+    public static function reporte($periodo_academico = "", $estado = "", $corte = "", $id_tercero = "")
+    {
+        $condiciones = "";
+        if ($estado and $estado != "") $condiciones .= " and a.estado = '".$estado."'";
+        if ($periodo_academico and $periodo_academico != "") $condiciones .= " and p.id_periodo_academico = ".$periodo_academico;
+        if ($corte and $corte != "") $condiciones .= " and a.corte = ".$corte;
+
+        $condiciones .= " and t.id_licencia = ".session('id_licencia');
+        if(session('is_docente') == true) {
+          $condiciones .= " and a.id_tercero = '".session('id_tercero_usuario')."'";
+        }else{
+          if ($id_tercero and $id_tercero != "") $condiciones .= " and a.id_tercero = '".$id_tercero."'";
+        }
+        $sql = "select a.id_actividad_complementaria,
+                t.id_tercero,
+                concat(t.nombre,' ',t.apellido) as docente,
+                a.fecha,
+                a.estado,
+                a.corte,
+                a.id_plan_trabajo,
+                a.fecha,
+                p.periodo as periodo_academico
+                from actividades_complementarias a
+                left join plan_trabajo pl using(id_plan_trabajo)
+                left join periodo_academico p on pl.id_periodo_academico = p.id_periodo_academico
+                left join terceros t  on t.id_tercero = a.id_tercero
+                where a.id_actividad_complementaria is not null 
+                $condiciones";
+        $data = DB::select($sql);
+
+        $actividades = [];
+        foreach ($data as $value) {
+           $actividad = $value;
+           if($value->estado == 'Pendiente') {
+             $actividad->retraso = ActividadesComplementarias::find($value->id_actividad_complementaria)->retraso();
+           }
+           //calculo el progreso que lleva de terminada las actividades complementarias segun el plan de trabajo
+            $total_actividades_a_entregar = count(PlanTrabajo::find($value->id_plan_trabajo)->get_tipos_de_actividades_para_actividades_complementarias());
+            $total_actividades_realizadas = count(ActividadesComplementarias::find($value->id_actividad_complementaria)->get_tipos_de_actividades_realizadas());
+          
+          if($total_actividades_a_entregar != 0){
+            $actividad->progreso = ($total_actividades_realizadas / $total_actividades_a_entregar) * 100;
+          }else{
+            $actividad->progreso  = 100;
+          }
+            
+           array_push($actividades, $actividad);
+        }
+        return $actividades;
+    }
 }

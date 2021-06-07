@@ -158,7 +158,7 @@
                 </div>
                 <div class="col-sm-6 text-right">
                    <select class="form-control s-select" name="respuesta_{{ $criterio->id_dominio }}">
-                       @for ($i = 0; $i <= 100 ; $i++)
+                       @for ($i = 0; $i <= 5 ; $i++)
                            <option value="{{ $i }}">{{ $i }}</option>
                        @endfor
                    </select>

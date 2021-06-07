@@ -146,57 +146,14 @@ class SeguimientoAsignaturaController extends Controller
 
         if ($post) {
             $post = (object) $post;
-            $condiciones = "";
-            if ($post->estado and $post->estado != "") $condiciones .= " and s.estado = '".$post->estado."'";
-            if ($post->asignatura and $post->asignatura != "") $condiciones .= " and s.id_asignatura = ".$post->asignatura;
-            if ($post->grupo and $post->grupo != "") $condiciones .= " and s.id_grupo = ".$post->grupo;
-            if ($post->periodo_academico and $post->periodo_academico != "") $condiciones .= " and g.id_periodo_academico = ".$post->periodo_academico;
-            if ($post->corte and $post->corte != "") $condiciones .= " and s.corte = ".$post->corte;
-            if ($post->fecha and $post->fecha != ""){
-                $desde = explode(' - ', $post->fecha)[0];
-                $hasta = explode(' - ', $post->fecha)[1];
-                 $condiciones .= " and DATE_FORMAT(s.fecha, '%Y/%m/%d') BETWEEN '$desde' AND '$hasta'";
-            }
-            if ($post->docente and $post->docente != ""){
-                $condiciones .= " and (LOWER(t.id_tercero) like LOWER('%".$post->docente."%')
-                                       or LOWER(t.cedula) like LOWER('%".$post->docente."%')
-                                       or LOWER(t.nombre) like LOWER('%".$post->docente."%')
-                                       or LOWER(t.apellido) like LOWER('%".$post->docente."%')
-                                       or LOWER(t.email) like LOWER('%".$post->docente."%')
-                                       or LOWER(t.servicio) like LOWER('%".$post->docente."%')
-                                       )";
-            }
-
-            $condiciones .= " and a.id_licencia = ".session('id_licencia');
-
-            $sql = "select s.id_seguimiento,
-                    t.id_tercero,
-                    concat(t.nombre,' ',t.apellido) as docente,
-                    a.id_asignatura,
-                    concat(a.nombre,' (',a.codigo,') ') as asignatura,
-                    g.id_grupo,
-                    g.codigo as grupo,
-                    s.fecha,
-                    s.estado,
-                    s.corte,
-                    p.periodo as periodo_academico
-                    from seguimiento_asignatura s
-                    left join asignatura a using(id_asignatura)
-                    left join grupo g using(id_grupo)
-                    left join periodo_academico p on g.id_periodo_academico = p.id_periodo_academico
-                    left join terceros t  on t.id_tercero = s.id_tercero
-                    where s.id_seguimiento is not null 
-                    $condiciones";
-            $data = DB::select($sql);
-
-            $seguimientos = [];
-            foreach ($data as $key => $value) {
-               $seguimiento = $value;
-               if($value->estado == 'Pendiente') {
-                 $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
-               }
-               array_push($seguimientos, $seguimiento);
-            }
+            $periodo_academico = $post->periodo_academico;
+            $estado = $post->estado;
+            $docente = $post->docente;
+            $asignatura = $post->asignatura;
+            $grupo = $post->grupo;
+            $corte = $post->corte;
+            $fecha = $post->fecha;
+            $seguimientos = SeguimientoAsignatura::reporte($periodo_academico, $estado, $docente, $asignatura, $grupo, $corte, $fecha);
             return response()->json($seguimientos);
         }
         return response()->json("nada llego");

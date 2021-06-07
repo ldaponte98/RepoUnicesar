@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class SeguimientoAsignatura extends Model
 {
@@ -257,5 +258,61 @@ class SeguimientoAsignatura extends Model
        return round($porcentaje, 2);
     }
 
-	
+
+    public static function reporte($periodo_academico = "", $estado = "", $docente = "", $asignatura = "", $grupo = "", $corte = "", $fecha = "")
+    {
+        $condiciones = "";
+        if ($estado and $estado != "") $condiciones .= " and s.estado = '".$estado."'";
+        if ($asignatura and $asignatura != "") $condiciones .= " and s.id_asignatura = ".$asignatura;
+        if ($grupo and $grupo != "") $condiciones .= " and s.id_grupo = ".$grupo;
+        if ($periodo_academico and $periodo_academico != "") $condiciones .= " and g.id_periodo_academico = ".$periodo_academico;
+        if ($corte and $corte != "") $condiciones .= " and s.corte = ".$corte;
+        if ($fecha and $fecha != ""){
+            $desde = explode(' - ', $fecha)[0];
+            $hasta = explode(' - ', $fecha)[1];
+             $condiciones .= " and DATE_FORMAT(s.fecha, '%Y/%m/%d') BETWEEN '$desde' AND '$hasta'";
+        }
+        if ($docente and $docente != ""){
+            $condiciones .= " and (LOWER(t.id_tercero) like LOWER('%".$docente."%')
+                                   or LOWER(t.cedula) like LOWER('%".$docente."%')
+                                   or LOWER(t.nombre) like LOWER('%".$docente."%')
+                                   or LOWER(t.apellido) like LOWER('%".$docente."%')
+                                   or LOWER(t.email) like LOWER('%".$docente."%')
+                                   or LOWER(t.servicio) like LOWER('%".$docente."%')
+                                   )";
+        }
+
+        $condiciones .= " and a.id_licencia = ".session('id_licencia');
+
+        $sql = "select s.id_seguimiento,
+                t.id_tercero,
+                concat(t.nombre,' ',t.apellido) as docente,
+                a.id_asignatura,
+                concat(a.nombre,' (',a.codigo,') ') as asignatura,
+                g.id_grupo,
+                g.codigo as grupo,
+                s.fecha,
+                s.estado,
+                s.corte,
+                p.periodo as periodo_academico
+                from seguimiento_asignatura s
+                left join asignatura a using(id_asignatura)
+                left join grupo g using(id_grupo)
+                left join periodo_academico p on g.id_periodo_academico = p.id_periodo_academico
+                left join terceros t  on t.id_tercero = s.id_tercero
+                where s.id_seguimiento is not null 
+                $condiciones";
+        $data = DB::select($sql);
+
+        $seguimientos = [];
+        foreach ($data as $key => $value) {
+           $seguimiento = $value;
+           if($value->estado == 'Pendiente') {
+             $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
+           }
+           array_push($seguimientos, $seguimiento);
+        }
+
+        return $seguimientos;
+    }
 }
