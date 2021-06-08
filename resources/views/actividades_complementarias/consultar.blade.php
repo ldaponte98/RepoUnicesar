@@ -34,8 +34,6 @@
 </style>
 @section('header_content')
 
-<script src="http://malsup.github.io/jquery.blockUI.js"></script>
-
 <div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
                         <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
