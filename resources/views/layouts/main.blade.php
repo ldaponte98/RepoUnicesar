@@ -59,7 +59,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.full.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css">
-    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script src="https://malsup.github.io/jquery.blockUI.js"></script>
 
     <script src="{{ asset('ckeditor.js') }}"></script>
     <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
