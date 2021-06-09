@@ -83,7 +83,7 @@
 				{{ Form::open(array('method' => 'post', 'route' => 'usuario/login')) }}
 					<input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
 					<span class="login100-form-title p-b-26">
-						Bienvenido Develop
+						Bienvenido
 					</span>
 					<span class="login100-form-title p-b-28">
 						<i><img width="auto" height="150" src="Imagenes/iconoupc.png"></i>

@@ -84,7 +84,7 @@
 
 					<input type="hidden" name="_token" value="<?php echo e(csrf_token()); ?>"></input>
 					<span class="login100-form-title p-b-26">
-						Bienvenido Dev
+						Bienvenido Develop
 					</span>
 					<span class="login100-form-title p-b-28">
 						<i><img width="auto" height="150" src="Imagenes/iconoupc.png"></i>
