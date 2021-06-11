@@ -24,7 +24,7 @@ class SeguimientoAsignaturaController extends Controller
     {
     	$seguimiento = SeguimientoAsignatura::find($id_seguimiento);
     	if ($seguimiento) {
-    		if ($seguimiento->estado == 'Enviado' and session('id_usuario')==true and session('is_admin')==true) {
+    		if ($seguimiento->estado == 'Enviado' and session('is_admin') == true) {
     			$seguimiento->estado = 'Recibido';
         		$seguimiento->save();
 

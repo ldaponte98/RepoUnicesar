@@ -623,17 +623,21 @@
                             <li class="">
                                 <a class="has-arrow waves-effect" style="display: flex !important;" href="#" aria-expanded="false"><i data-feather="bar-chart-2" class="m-r-10" aria-hidden="true"></i> Reportes </a>
                                 <ul aria-expanded="false" class="collapse">
-                                    <li><a href="<?php echo e(route('reportes/puntualidad_formatos')); ?>">Puntualidad en formatos</a></li>
-                                    <li><a href="<?php echo e(route('reportes/actividades_docente')); ?>">Actividades docente</a></li>
+                                    <li>
+                                        <a href="<?php echo e(route('reportes/puntualidad_formatos')); ?>">Puntualidad en formatos</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo e(route('reportes/actividades_docente')); ?>">Actividades docente</a>
+                                    </li>
+                                    <li>
+                                        <a href="<?php echo e(route('reportes/aprobados_reprobados')); ?>">Rendimiento por asignatura</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
-
                     </ul>
-                    
                 </nav>
             </div>
-
         </aside>
         <style>
             .fab-container-refresh {

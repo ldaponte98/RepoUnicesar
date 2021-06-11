@@ -54,7 +54,7 @@
 <div class="row">
     
 
-    <div class="col-sm-4">
+    <div class="col-sm-12">
         <div class="card h-card">
             <div class="card-block">
                 <div class="row">
@@ -129,54 +129,6 @@
             </div>
         </div>
     </div>
-    <div class="col-sm-4">
-        <div class="card h-card">
-            <div class="card-block">
-                <div class="row">
-                    @php
-                        $clases_pendientes = $usuario->tercero->clases_pendientes(5);
-                    @endphp
-                    <div class="col-sm-12"><h4><b>Fechas de entrega sin establecer</b></h4></div>
-                    <div class="table-responsive mt-2">
-                        <table class="table stylish-table v-middle no-wrap">
-                            <tbody>
-                                @if (count($clases_pendientes) == 0)
-                                    <tr><td><center><b><i>No tienes clases pendientes</i></b></center></td></tr>
-                                @endif
-                                @foreach ($clases_pendientes as $clase)
-                                    <tr onclick="location.href = '{{ route('clases/view', $clase->id_clase) }}'">
-                                        <td>
-                                            <div class="d-flex align-items-center">
-                                                <div class="icon-rounded btn_tintilante">
-                                                    <center><i data-feather="airplay" aria-hidden="true"></i></center>
-                                                </div>
-                                                <div class="ml-1">
-                                                    <a href="javascript:void(0)" class="link fs-3 fw-normal d-block mb-1">{{ $clase->grupo->asignatura->nombre }}</a>
-                                                    <small>Grupo {{ $clase->grupo->codigo }}</small><br>
-                                                    <span class="badge mt-1 bg-light-warning text-warning fw-normal">
-                                                        <b>
-                                                        {{ date('d/m/Y', strtotime($clase->fecha_inicio)) }} de {{ date('H:i', strtotime($clase->fecha_inicio)) }} hasta {{ date('H:i', strtotime($clase->fecha_fin)) }}
-                                                        </b>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div class="d-flex pull-right">
-                                                <a href="{{ route('clases/view', $clase->id_clase) }}"><i data-feather="eye" aria-hidden="true"></i></a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                        <div class="text-center">
-                            <a class="btn btn-primary text-white" href="{{ route('clases/mis_clases_pendientes') }}"><b>Ver todas</b></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </div>
 @endsection

@@ -32,7 +32,7 @@
 </style>
 <?php $__env->startSection('header_content'); ?>
 
-<script src="http://malsup.github.io/jquery.blockUI.js"></script>
+<script src="https://malsup.github.io/jquery.blockUI.js"></script>
 
 <div class="row page-titles">
                     <div class="col-md-6 col-8 align-self-center">
