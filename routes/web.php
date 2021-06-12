@@ -178,6 +178,7 @@ Route::get('comunication/redirect/{token}','ComunicationController@login')->name
 Route::any('reportes/puntualidad_formatos','ReporteController@puntualidad_formatos')->name('reportes/puntualidad_formatos');
 Route::any('reportes/actividades_docente','ReporteController@actividades_docente')->name('reportes/actividades_docente');
 Route::any('reportes/aprobados_reprobados','ReporteController@aprobados_reprobados')->name('reportes/aprobados_reprobados');
+Route::any('reportes/informe_general_asignaturas','ReporteController@informe_general_asignaturas')->name('reportes/informe_general_asignaturas');
 
 
 

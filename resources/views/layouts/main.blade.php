@@ -626,7 +626,10 @@
                                         <a href="{{ route('reportes/actividades_docente') }}">Actividades docente</a>
                                     </li>
                                     <li>
-                                        <a href="{{ route('reportes/aprobados_reprobados') }}">Rendimiento por asignatura</a>
+                                        <a href="{{ route('reportes/aprobados_reprobados') }}">Rendimiento por grupos</a>
+                                    </li>
+                                    <li>
+                                        <a href="{{ route('reportes/informe_general_asignaturas') }}">Rendimiento general</a>
                                     </li>
                                 </ul>
                             </li>

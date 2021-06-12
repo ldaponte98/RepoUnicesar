@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Reporte;
 use App\Asignatura;
 use App\Grupo;
@@ -133,6 +134,38 @@ class ReporteController extends Controller
 
         return view('reportes.aprobados_reprobados', compact([
             'reporte',  'id_asignatura', 'id_periodo'
+        ]));
+    }
+
+
+    public function informe_general_asignaturas(Request $request)
+    {
+        $post = $request->all();
+        $reporte = true;
+        $id_periodo = null;
+        if ($post) {
+            $asignaturas = [];
+            $id_periodo = $post->id_periodo_academico;
+            $id_licencia = session('id_licencia');
+            $sql = "SELECT DISTINCT(g.id_asignatura) as id_asignatura, a.codigo, a.nombre
+                       FROM grupo g
+                       INNER JOIN asignatura a USING(id_asignatura)
+                       WHERE a.id_licencia = $id_licencia
+                       AND g.id_periodo_academico = $id_periodo
+                       GROUP BY 1
+                       ORDER BY 3 ASC";
+            $results = DB::select($sql);
+            foreach ($results as $result) {
+                $result = (object) $result;
+                $asignatura['id_asignatura'] = $result->id_asignatura;
+                $asignatura['codigo'] = $result->codigo;
+                $asignatura['nombre'] = $result->nombre;
+                
+            }
+        }
+
+        return view('reportes.informe_general_asignaturas', compact([
+            'reporte','id_periodo'
         ]));
     }
 }
