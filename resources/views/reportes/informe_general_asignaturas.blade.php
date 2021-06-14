@@ -50,20 +50,25 @@
         }
 
         .point i{
-            margin-right: 8px;
+            margin-right: 5px;
         }
 
         .point h5{
             font-size: 14px;
         }
 
-        .yellow{ color:#F5E331; }
-        .blue{ color:#009EFB; }
-        .green{ color:#99BC4A; }
-        .violet{ color:#AC80FF; }
+        .yellow{ color:#F5E331 !important; }
+        .blue{ color:#009EFB !important; }
+        .green{ color:#99BC4A !important; }
+        .violet{ color:#AC80FF !important; }
 
         .td-asig{
             padding-top: 18px !important;
+        }
+
+        .estados{
+            align-items: center;
+            display: inline-flex;
         }
         
     </style>
@@ -111,27 +116,32 @@
                     <div class="col-sm-12">
                         <center>
                             <h3><b>Informe de rendimiento general de asignaturas</b></h3>
+                            <i>Informe realizado con seguimientos de asignatura realizados hasta la fecha pertenecientes al periodo academico.</i><br><br>
                             <div class="states-order">
                                 <div class="point yellow">
-                                    <i class="fa fa-circle"></i>
+                                    <a href="#span_1" class="yellow"><i class="fa fa-circle"></i></a>
                                     <h5>Mayor porcentaje de aprobación</h5>
                                 </div>
                                 <div class="point blue">
-                                    <i class="fa fa-circle"></i>
+                                    <a href="#span_2" class="blue"><i class="fa fa-circle"></i></a>
                                     <h5>Menor porcentaje de aprobación</h5>
                                 </div>
                                 <div class="point green">
-                                    <i class="fa fa-circle"></i>
+                                    <a href="#span_3" class="green"><i class="fa fa-circle"></i></a>
                                     <h5>Mayor promedio de notas</h5>
                                 </div>
                                 <div class="point violet">
-                                    <i class="fa fa-circle"></i>
+                                    <a href="#span_4" class="violet"><i class="fa fa-circle"></i></a>
                                     <h5>Menor promedio de notas</h5>
                                 </div>
                             </div>
                         </center>
+                        <div style="text-align: right;">
+                            <a target="_blank" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-primary">Exportar</a>
+                        </div>
+                        
                         <div class="table-responsive">
-                            <table class="table table-striped table-bordered">
+                            <table id="table-report" class="table table-striped table-bordered">
                                 <tdead>
                                     <tr>
                                         <td class="td-asig" colspan="1" rowspan="2">
@@ -157,17 +167,65 @@
                                     </tr>
                               </tdead>
                               <tbody>
+                                @foreach ($reporte as $item)
                                 <tr>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-not-fill"><center></center></td>
-                                    <td scope="col" class="td-fill"><center><b>0</b></center></td>
-                                    <td scope="col" class="td-fill"><center><b>0</b></center></td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->nombre }} - {{ $item->codigo }}</center>
+                                        <center>
+                                            <div class="estados">
+                                                @if ($item->id_asignatura == $estadisticas->id_asignatura_max_aprobacion)
+                                                    <div id="span_1" class="point yellow">
+                                                        <i class="fa fa-circle animation-point"></i>
+                                                    </div>
+                                                @endif
+
+                                                @if ($item->id_asignatura == $estadisticas->id_asignatura_min_aprobacion)
+                                                    <div id="span_2" class="point blue">
+                                                        <i class="fa fa-circle animation-point"></i>
+                                                    </div>
+                                                @endif
+
+                                                @if ($item->id_asignatura == $estadisticas->id_asignatura_max_aprobacion)
+                                                    <div id="span_3" class="point green">
+                                                        <i class="fa fa-circle animation-point"></i>
+                                                    </div>
+                                                @endif
+
+                                                @if ($item->id_asignatura == $estadisticas->id_asignatura_min_notas)
+                                                    <div id="span_4" class="point violet">
+                                                        <i class="fa fa-circle animation-point"></i>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </center>
+                                        
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_1['porc_aprobacion'] }}%</center>
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_1['promedio_notas'] }}</center>
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_2['porc_aprobacion'] }}%</center>
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_2['promedio_notas'] }}</center>
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_3['porc_aprobacion'] }}%</center>
+                                    </td>
+                                    <td scope="col" class="td-not-fill">
+                                        <center>{{ $item->corte_3['promedio_notas'] }}</center>
+                                    </td>
+                                    <td scope="col" class="td-fill">
+                                        <center><b>{{ $item->porc_aprobacion_final }}%</b></center>
+                                    </td>
+                                    <td scope="col" class="td-fill">
+                                        <center><b>{{ $item->promedio_notas_final }}</b></center>
+                                    </td>
                                 </tr>
+                                @endforeach
                               </tbody>
                             </table>
                         </div>
@@ -187,14 +245,12 @@
         })
         $("#id_asignatura").select2({
             width : '100%',
-        })
-        @if ($reporte)
-            //let data = JSON.parse('@php echo json_encode($reporte) @endphp')
-            //console.log(data)
-            //PintarGrafica(data)
-        @endif
-        
+        })        
     });
+
+    function exportar_excel() {
+        tableToExcel('table-report', 'Reporte general de rendimiento ({{ date('Y-m-d') }})')
+    }
 </script>
 @endsection
 

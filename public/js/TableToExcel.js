@@ -5,12 +5,16 @@ var tableToExcel2 = (function() {
     , format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; }) }
   return function(table, name) {
     if (!table.nodeType) table = document.getElementById(table)
-    var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
+    let table_html = quitarTildes(table.innerHTML)
+    var ctx = {worksheet: name || 'Worksheet', table: table_html}
     window.location.href = uri + base64(format(template, ctx))
   }
 })()
 
-
+function quitarTildes(cadena){
+  const acentos = {'á':'a','é':'e','í':'i','ó':'o','ú':'u','Á':'A','É':'E','Í':'I','Ó':'O','Ú':'U'};
+  return cadena.split('').map( letra => acentos[letra] || letra).join('').toString(); 
+}
 
 
 function borrarColumna(idTabla,numeroColumna)
@@ -30,7 +34,7 @@ function tableToExcel(id_tabla, filename = '', color_header = '#9bbf4c'){
     var tableSelect = document.getElementById(id_tabla);
     var tableHTML= "<table border = 1 >"+ tableSelect.innerHTML + "</table>";
     tableHTML = tableHTML.replace(/ /g, '%20');
-    
+    tableHTML = quitarTildes(tableHTML)
     // Specify file name
     filename = filename?filename+'.xls':'excel_data.xls';
     

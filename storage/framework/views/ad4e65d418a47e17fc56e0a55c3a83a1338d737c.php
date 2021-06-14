@@ -197,6 +197,11 @@
                 box-shadow: 0 0 0 0 rgba(255, 79, 112, 0), 0 0 0 10px rgba(255, 79, 112, 0);
             }
         }
+
+        .animation-point{
+            border-radius: 20px;
+            animation: animate 3s linear infinite;
+        }
     </style>
     <script type="text/javascript">
     $(document).ready(function () {

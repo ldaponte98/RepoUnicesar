@@ -315,4 +315,47 @@ class SeguimientoAsignatura extends Model
 
         return $seguimientos;
     }
+
+
+    public static function rendimiento($id_asignatura, $id_periodo, $corte)
+    {
+        $sql = "SELECT
+                SUM(s.num_estudiantes) as num_estudiantes,
+                SUM(s.aprobados) as aprobados,
+                SUM(s.reprobados) as reprobados,
+                SUM(s.prom_notas) as prom_notas
+                FROM seguimiento_asignatura s
+                INNER JOIN grupo g USING(id_grupo)
+                WHERE g.id_periodo_academico = $id_periodo
+                AND s.id_asignatura = $id_asignatura
+                AND s.estado <> 'Pendiente'
+                AND s.corte = $corte";
+        $results_seg = DB::select($sql);
+
+        $sql = "SELECT s.id_seguimiento
+                FROM seguimiento_asignatura s
+                INNER JOIN grupo g USING(id_grupo)
+                WHERE g.id_periodo_academico = $id_periodo
+                AND s.id_asignatura = $id_asignatura
+                AND s.estado <> 'Pendiente'
+                AND s.corte = $corte";
+        $total = count(DB::select($sql));
+        $promedio_notas = 0;
+        $porc_aprobacion = 0;
+
+        foreach ($results_seg as $result_seg) {
+            $result_seg = (object) $result_seg;
+            if ($result_seg->num_estudiantes > 0) {
+                $porc_aprobacion = round(($result_seg->aprobados / $result_seg->num_estudiantes) * 100, 1);
+            }
+            if ($total > 0) {
+                $promedio_notas = round(($result_seg->prom_notas / $total), 1);
+            }
+        } 
+
+        return (object) [
+           'promedio_notas' => $promedio_notas,
+           'porc_aprobacion' => $porc_aprobacion
+        ];
+    }
 }

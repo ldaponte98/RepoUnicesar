@@ -141,9 +141,11 @@ class ReporteController extends Controller
     public function informe_general_asignaturas(Request $request)
     {
         $post = $request->all();
-        $reporte = true;
+        $reporte = null;
         $id_periodo = null;
+        $estadisticas = [];
         if ($post) {
+            $post = (object) $post;
             $asignaturas = [];
             $id_periodo = $post->id_periodo_academico;
             $id_licencia = session('id_licencia');
@@ -152,20 +154,83 @@ class ReporteController extends Controller
                        INNER JOIN asignatura a USING(id_asignatura)
                        WHERE a.id_licencia = $id_licencia
                        AND g.id_periodo_academico = $id_periodo
-                       GROUP BY 1
+                       GROUP BY 1,2,3
                        ORDER BY 3 ASC";
             $results = DB::select($sql);
-            foreach ($results as $result) {
-                $result = (object) $result;
-                $asignatura['id_asignatura'] = $result->id_asignatura;
-                $asignatura['codigo'] = $result->codigo;
-                $asignatura['nombre'] = $result->nombre;
+            $reporte = [];
+            if (count($results) > 0) {
+                foreach ($results as $result) {
+                    $result = (object) $result;
+                    $id_asignatura = $result->id_asignatura;
+                    $asignatura['id_asignatura'] = $id_asignatura;
+                    $asignatura['codigo'] = $result->codigo;
+                    $asignatura['nombre'] = $result->nombre;
+                    for ($i=1; $i <= 3; $i++) { 
+                        $asignatura["corte_".$i]['promedio_notas'] = 0;
+                        $asignatura["corte_".$i]['porc_aprobacion'] = 0;
+                    }
+
+                    $rendimiento_1 = SeguimientoAsignatura::rendimiento($id_asignatura, $id_periodo, 1);
+                    $rendimiento_2 = SeguimientoAsignatura::rendimiento($id_asignatura, $id_periodo, 2);
+                    $rendimiento_3 = SeguimientoAsignatura::rendimiento($id_asignatura, $id_periodo, 3);
+                    $asignatura['corte_1']['promedio_notas'] = $rendimiento_1->promedio_notas;
+                    $asignatura['corte_1']['porc_aprobacion'] = $rendimiento_1->porc_aprobacion;
+            
+                    $asignatura['corte_2']['promedio_notas'] = $rendimiento_2->promedio_notas;
+                    $asignatura['corte_2']['porc_aprobacion'] = $rendimiento_2->porc_aprobacion;
                 
+                    $asignatura['corte_3']['promedio_notas'] = $rendimiento_3->promedio_notas;
+                    $asignatura['corte_3']['porc_aprobacion'] = $rendimiento_3->porc_aprobacion;
+                    
+
+                    $asignatura['promedio_notas_final'] = round((($rendimiento_1->promedio_notas + $rendimiento_2->promedio_notas + $rendimiento_3->promedio_notas) / 3), 1);
+                    $asignatura['porc_aprobacion_final'] = round((($rendimiento_1->porc_aprobacion + $rendimiento_2->porc_aprobacion + $rendimiento_3->porc_aprobacion) / 3), 1);
+                    $reporte[] = (object) $asignatura;
+                }
+
+                $max_notas = 0;
+                $min_notas = 5;
+                $max_aprobacion = 0;
+                $min_aprobacion = 100;
+
+                $id_asignatura_max_nota = $reporte[0]->promedio_notas_final;
+                $id_asignatura_min_notas = $reporte[0]->promedio_notas_final;
+                $id_asignatura_max_aprobacion = $reporte[0]->porc_aprobacion_final;
+                $id_asignatura_min_aprobacion = $reporte[0]->porc_aprobacion_final;
+
+                foreach ($reporte as $asignatura) {
+                    if ($asignatura->promedio_notas_final > $max_notas) {
+                        $max_notas = $asignatura->promedio_notas_final;
+                        $id_asignatura_max_nota = $asignatura->id_asignatura;
+                    }
+
+                    if ($asignatura->promedio_notas_final < $min_notas) {
+                        $min_notas = $asignatura->promedio_notas_final;
+                        $id_asignatura_min_notas = $asignatura->id_asignatura;
+                    }
+
+                    if ($asignatura->porc_aprobacion_final > $max_aprobacion) {
+                        $max_aprobacion = $asignatura->porc_aprobacion_final;
+                        $id_asignatura_max_aprobacion = $asignatura->id_asignatura;
+                    }
+
+                    if ($asignatura->porc_aprobacion_final < $min_aprobacion) {
+                        $min_aprobacion = $asignatura->porc_aprobacion_final;
+                        $id_asignatura_min_aprobacion = $asignatura->id_asignatura;
+                    }
+                }
+
+                $estadisticas = (object) [
+                    'id_asignatura_max_nota' => $id_asignatura_max_nota,
+                    'id_asignatura_min_notas' => $id_asignatura_min_notas,
+                    'id_asignatura_max_aprobacion' => $id_asignatura_max_aprobacion,
+                    'id_asignatura_min_aprobacion' => $id_asignatura_min_aprobacion
+                ];
             }
         }
 
         return view('reportes.informe_general_asignaturas', compact([
-            'reporte','id_periodo'
+            'reporte','id_periodo', 'estadisticas'
         ]));
     }
 }
