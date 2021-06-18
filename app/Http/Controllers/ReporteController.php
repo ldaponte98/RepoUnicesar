@@ -138,6 +138,63 @@ class ReporteController extends Controller
     }
 
 
+    public function desercion(Request $request)
+    {
+        $post = $request->all();
+        $reporte = null;
+        $id_asignatura = null;
+        $id_periodo = null;
+        if ($post) {
+            $post = (object) $post;
+            $id_asignatura = $post->id_asignatura;
+            $id_periodo = $post->id_periodo_academico;
+
+            $reporte = [];
+            $asignatura = Asignatura::find($id_asignatura);
+            if ($asignatura) {
+                //BUSCAMOS LOS GRUPOS DE LA ASIGNATURA EN EL PERIODO ACADEMICO
+                $carga_academica =  Grupo::where('id_periodo_academico', $id_periodo)
+                                    ->where('id_asignatura', $id_asignatura)
+                                    ->get();
+
+                foreach ($carga_academica as $carga) {
+                    //AHORA SUMAMOS POR GRUPO LOS APROBADOS Y REPROBADOS POR CORTE
+                    $grupo['grupo'] = 'Grupo '.$carga->codigo;
+                    $grupo['docente'] = $carga->tercero;
+                    $grupo['cortes'] = [];
+                    for ($corte = 1; $corte <= 3 ; $corte++) { 
+                        
+                        $info['corte'] = $corte;
+                        
+                        $seguimiento = SeguimientoAsignatura::where('id_grupo', $carga->id_grupo)
+                                                         ->where('estado', '<>', 'Pendiente')
+                                                         ->where('corte', $corte)
+                                                         ->first();
+                        $info["total_inicial"] = $carga->num_est_ini;
+                        $info["asistentes"] = 0;
+                        $info["desertados"] = 0;
+                        $info['id_seguimiento'] = null;
+                        if ($seguimiento) {
+                            $info["asistentes"] = $seguimiento->num_estudiantes;
+                            $info["desertados"] = $carga->num_est_ini - $seguimiento->num_estudiantes;
+                            $info['id_seguimiento'] = $seguimiento->id_seguimiento;
+                        }
+                        $grupo['cortes'][] = (object) $info;
+                    }
+                    $reporte[] = (object) $grupo;
+                }
+            }else{
+                $titulo = "Error"; $mensaje = "Asignatura invalida";
+                return view('sitio.error',compact(['titulo', 'mensaje']));
+            }
+        }
+
+        return view('reportes.desercion', compact([
+            'reporte',  'id_asignatura', 'id_periodo'
+        ]));
+    }
+
+
     public function informe_general_asignaturas(Request $request)
     {
         $post = $request->all();

@@ -20,6 +20,13 @@ return [
     'email_general' => 'repounicesar@gmail.com',
 
     'url_base' => ENV('APP_URL'),
-    'ips' => ['127.0.0.1', '179.14.170.8', '168.197.71.161']
+    'ips' => ['127.0.0.1', '179.14.170.8', '168.197.71.161'],
+    'services' => (object) [
+        'academusoft' => (object) [
+            'sync_programas_facultades' => 'http://wwwpruebas.unicesar.edu.co:9000/unicesar/academusoft/academico/integracion/programas.jsp',
+            'sync_asignaturas' => 'http://wwwpruebas.unicesar.edu.co:9000/unicesar/academusoft/academico/integracion/asignaturas.jsp',
+            'sync_periodo_actual' => 'http://wwwpruebas.unicesar.edu.co:9000/unicesar/academusoft/academico/integracion/periodo.jsp'
+        ] 
+    ],
 ]
 ?>

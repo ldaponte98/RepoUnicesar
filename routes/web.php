@@ -179,8 +179,9 @@ Route::any('reportes/puntualidad_formatos','ReporteController@puntualidad_format
 Route::any('reportes/actividades_docente','ReporteController@actividades_docente')->name('reportes/actividades_docente');
 Route::any('reportes/aprobados_reprobados','ReporteController@aprobados_reprobados')->name('reportes/aprobados_reprobados');
 Route::any('reportes/informe_general_asignaturas','ReporteController@informe_general_asignaturas')->name('reportes/informe_general_asignaturas');
+Route::any('reportes/desercion','ReporteController@desercion')->name('reportes/desercion');
+
+Route::any('academusoft_service/sincronizar', 'AcademusoftServiceController@sincronizar')->name('academusoft_service/sincronizar');
 
 
-
-
-
+Route::any('tercero/notificar_retraso_formatos', 'TerceroController@notificar_retraso_formatos')->name('tercero/notificar_retraso_formatos');

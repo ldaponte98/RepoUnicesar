@@ -344,6 +344,21 @@ class TerceroController extends Controller
         )); 
     }
 
+    public function notificar_retraso_formatos()
+    {
+        $for = "ldaponte98@gmail.com";
+        $subject = "Cron repo";
+        $vista_email = 'email.test';
+        $data_email = [
+            'html' => "<h1>Hola soy el cron desde el server</h1>"
+        ];
+        Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
+            $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
+            $msj->subject($subject);
+            $msj->to($for);
+        });
+    }
+
    
 
 }

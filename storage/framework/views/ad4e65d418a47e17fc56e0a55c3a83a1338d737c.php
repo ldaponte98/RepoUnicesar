@@ -640,6 +640,9 @@
                                     <li>
                                         <a href="<?php echo e(route('reportes/informe_general_asignaturas')); ?>">Rendimiento general</a>
                                     </li>
+                                    <li>
+                                        <a href="<?php echo e(route('reportes/desercion')); ?>">Deserción por asignatura</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>

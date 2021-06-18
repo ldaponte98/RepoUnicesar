@@ -636,6 +636,9 @@
                                     <li>
                                         <a href="{{ route('reportes/informe_general_asignaturas') }}">Rendimiento general</a>
                                     </li>
+                                    <li>
+                                        <a href="{{ route('reportes/desercion') }}">Deserción por asignatura</a>
+                                    </li>
                                 </ul>
                             </li>
                         </ul>
