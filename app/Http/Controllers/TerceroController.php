@@ -352,11 +352,16 @@ class TerceroController extends Controller
         $data_email = [
             'html' => "<h1>Hola soy el cron desde el server</h1>"
         ];
-        Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
+        $response = Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
             $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
             $msj->subject($subject);
             $msj->to($for);
         });
+
+        return response()->json(array(
+            'estado_envio' => $response,
+            'message' => "Se ejecuto"
+        )); 
     }
 
    
