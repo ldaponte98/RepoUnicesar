@@ -20,7 +20,7 @@
 
         @media (max-width: 600px) {
             .echart-graph{
-                width: 350px; 
+                width: 260px; 
                 height: 400px;
             }
         }

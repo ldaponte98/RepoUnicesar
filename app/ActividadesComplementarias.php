@@ -100,7 +100,7 @@ class ActividadesComplementarias extends Model
         	$periodo = $this->plan_trabajo->periodo_academico;
         	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
         						->where('id_dominio_tipo_formato',config('global.actividades_complementarias'))
-                                ->where('id_licencia',session('id_licencia'))
+                                ->where('id_licencia',$this->plan_trabajo->tercero->id_licencia)
         						->first();
         	$fecha_actual = date('Y-m-d H:i:s'); 
             $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
@@ -203,14 +203,91 @@ class ActividadesComplementarias extends Model
           return $cont;
         }
 
-    public static function reporte($periodo_academico = "", $estado = "", $corte = "", $id_tercero = "")
+    public function dias_restantes_entrega()
+    {   
+        $fecha_actual = date('Y-m-d H:i:s');
+        $periodo = $this->plan_trabajo->periodo_academico;
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
+                            ->where('id_dominio_tipo_formato',config('global.actividades_complementarias'))
+                            ->where('id_licencia',$this->plan_trabajo->tercero->id_licencia)
+                            ->first();
+         
+        
+        
+        if(!$fechas_de_entrega) return "Sin fechas de entrega registradas";
+        $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
+                                   ->where('id_formato', $this->id_actividad_complementaria)
+                                   ->where('id_dominio_tipo_formato', config('global.actividades_complementarias'))
+                                   ->where('estado', 1)
+                                   ->first();
+        if ($plazo_extra) {
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin. "+1 days"));
+            $fecha_actual = date('Y-m-d'). "00:00:00";
+            $fecha_actual = date_create($fecha_actual);
+            $fecha_fin = date_create($fecha_fin_plazo);
+            $diferencia = date_diff($fecha_actual,$fecha_fin);
+            $dias = $diferencia->days; 
+            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+            return $dias;
+        }
+        $fecha_actual = date('Y-m-d'). "00:00:00";
+        switch ($this->corte) {
+            case 1:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal1){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal1. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            case 2:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal2){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal2. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            case 3:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal3){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal3. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            
+            default:
+                return "Verifique el corte";
+                break;
+        }
+    }
+
+    public static function reporte($periodo_academico = "", $estado = "", $corte = "", $id_tercero = "", $id_licencia = null)
     {
+        $id_licencia = $id_licencia == null ? session('id_licencia') : $id_licencia; 
         $condiciones = "";
         if ($estado and $estado != "") $condiciones .= " and a.estado = '".$estado."'";
         if ($periodo_academico and $periodo_academico != "") $condiciones .= " and p.id_periodo_academico = ".$periodo_academico;
         if ($corte and $corte != "") $condiciones .= " and a.corte = ".$corte;
 
-        $condiciones .= " and t.id_licencia = ".session('id_licencia');
+        $condiciones .= " and t.id_licencia = $id_licencia";
         if(session('is_docente') == true) {
           $condiciones .= " and a.id_tercero = '".session('id_tercero_usuario')."'";
         }else{
@@ -238,6 +315,7 @@ class ActividadesComplementarias extends Model
            $actividad = $value;
            if($value->estado == 'Pendiente') {
              $actividad->retraso = ActividadesComplementarias::find($value->id_actividad_complementaria)->retraso();
+             $actividad->dias_restantes_entrega = ActividadesComplementarias::find($value->id_actividad_complementaria)->dias_restantes_entrega();
            }
            //calculo el progreso que lleva de terminada las actividades complementarias segun el plan de trabajo
             $total_actividades_a_entregar = count(PlanTrabajo::find($value->id_plan_trabajo)->get_tipos_de_actividades_para_actividades_complementarias());

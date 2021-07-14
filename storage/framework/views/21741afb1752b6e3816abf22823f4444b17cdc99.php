@@ -26,7 +26,7 @@
     }
 </style>
 <?php $__env->startSection('header_content'); ?>
-    <script src="http://malsup.github.io/jquery.blockUI.js"></script>
+    <script src="https://malsup.github.io/jquery.blockUI.js"></script>
 
     <div class="row page-titles">
         <div class="col-md-6 col-8 align-self-center">
@@ -143,6 +143,7 @@
                                                 <td><b>Retraso</b></td>
                                                 <td><b>Progreso</b></td>
                                                 <td><b>Periodo academico</b></td>
+                                                <td><b>Dias faltantes para envio</b></td>
                                                 <td><center><b>Acciones</b></center></td>
                                                 
                                             </tr>
@@ -210,6 +211,11 @@
                                             "</div></td>"
 
                             tabla +="<td><center>"+plan_trabajo.periodo+"</center></td>"
+                            if(plan_trabajo.dias_restantes_entrega){
+                                tabla += "<td><center>"+plan_trabajo.dias_restantes_entrega+"</center></td>"
+                            }else{
+                                tabla += "<td>Ninguno, ya diligenciado</td>"
+                            }
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(plan_trabajo.estado=='Pendiente'){
                                 if(plan_trabajo.retraso != "En espera" && plan_trabajo.retraso != "Fechas sin definir"){

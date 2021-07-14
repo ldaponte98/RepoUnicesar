@@ -213,7 +213,8 @@ class SeguimientoAsignaturaController extends Controller
             foreach ($data as $key => $value) {
                $seguimiento = $value;
                if($value->estado == 'Pendiente') {
-                 $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
+                $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
+                $seguimiento->dias_restantes_entrega = SeguimientoAsignatura::find($value->id_seguimiento)->dias_restantes_entrega();
                }
                array_push($seguimientos, $seguimiento);
             }

@@ -182,67 +182,140 @@ class SeguimientoAsignatura extends Model
 	}
 
 	public function retraso()
-        {
-        	$periodo = $this->grupo->periodo_academico;
-        	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
-        						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
-                                ->where('id_licencia',session('id_licencia'))
-        						->first();
-            if(!$fechas_de_entrega) return "En espera";
-        	$fecha_actual = date('Y-m-d H:i:s'); 
-            $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
-                                       ->where('id_formato', $this->id_seguimiento)
-                                       ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
-                                       ->where('estado', 1)
-                                       ->first();
-            if ($plazo_extra) {
-                return "Tiene plazo-extra";
-                $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
-                $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
-                if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {
-                   return "Tiene plazo-extra";
-                }
-                
+    {
+    	$periodo = $this->grupo->periodo_academico;
+    	$fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
+    						->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
+                            ->where('id_licencia',session('id_licencia'))
+    						->first();
+        if(!$fechas_de_entrega) return "En espera";
+    	$fecha_actual = date('Y-m-d H:i:s'); 
+        $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
+                                   ->where('id_formato', $this->id_seguimiento)
+                                   ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
+                                   ->where('estado', 1)
+                                   ->first();
+        if ($plazo_extra) {
+            return "Tiene plazo-extra";
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
+            if ($fecha_actual >= $fecha_inicio_plazo and $fecha_actual <= $fecha_fin_plazo) {
+               return "Tiene plazo-extra";
             }
-        	switch ($this->corte) {
-        		case 1:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal1) return "En espera";
-		            $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
-		            $fecha_actual = date_create($fecha_actual);
-		            $fechacierre = date_create($fechacierre);
-		            $diferencia = date_diff($fecha_actual,$fechacierre);
-		            $dias = $diferencia->days;
-		            $horas = $diferencia->h;
-                    $retraso = "";
-		            return "Retrasado $dias dias y $horas horas";
-        			break;
-        		case 2:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal2) return "En espera";
-		            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal2));
-		            $fecha_actual = date_create($fecha_actual);
-		            $fechacierre = date_create($fechacierre);
-		            $diferencia = date_diff($fecha_actual,$fechacierre);
-		            $dias = $diferencia->days;
-		            $horas = $diferencia->h;
-		            return "Retrasado $dias dias y $horas horas";
-        			break;
-        		case 3:
-        			if ($fecha_actual <= $fechas_de_entrega->fechafinal3) return "En espera";
-		            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal3));
-		            $fecha_actual = date_create($fecha_actual);
-		            $fechacierre = date_create($fechacierre);
-		            $diferencia = date_diff($fecha_actual,$fechacierre);
-		            $dias = $diferencia->days;
-		            $horas = $diferencia->h;
-		            return "Retrasado $dias dias y $horas horas";
-        			break;
-        		
-        		default:
-        			return "Verifique el corte";
-        			break;
-        	}
-        
+            
         }
+    	switch ($this->corte) {
+    		case 1:
+    			if ($fecha_actual <= $fechas_de_entrega->fechafinal1) return "En espera";
+	            $fechacierre = date("Y-m-d H:i:s", strtotime($fechas_de_entrega->fechafinal1));
+	            $fecha_actual = date_create($fecha_actual);
+	            $fechacierre = date_create($fechacierre);
+	            $diferencia = date_diff($fecha_actual,$fechacierre);
+	            $dias = $diferencia->days;
+	            $horas = $diferencia->h;
+                $retraso = "";
+	            return "Retrasado $dias dias y $horas horas";
+    			break;
+    		case 2:
+    			if ($fecha_actual <= $fechas_de_entrega->fechafinal2) return "En espera";
+	            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal2));
+	            $fecha_actual = date_create($fecha_actual);
+	            $fechacierre = date_create($fechacierre);
+	            $diferencia = date_diff($fecha_actual,$fechacierre);
+	            $dias = $diferencia->days;
+	            $horas = $diferencia->h;
+	            return "Retrasado $dias dias y $horas horas";
+    			break;
+    		case 3:
+    			if ($fecha_actual <= $fechas_de_entrega->fechafinal3) return "En espera";
+	            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal3));
+	            $fecha_actual = date_create($fecha_actual);
+	            $fechacierre = date_create($fechacierre);
+	            $diferencia = date_diff($fecha_actual,$fechacierre);
+	            $dias = $diferencia->days;
+	            $horas = $diferencia->h;
+	            return "Retrasado $dias dias y $horas horas";
+    			break;
+    		
+    		default:
+    			return "Verifique el corte";
+    			break;
+    	}
+    
+    }
+
+    public function dias_restantes_entrega()
+    {
+        $periodo = $this->grupo->periodo_academico;
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$periodo->id_periodo_academico)
+                            ->where('id_dominio_tipo_formato',config('global.seguimiento_asignatura'))
+                            ->where('id_licencia',$this->asignatura->id_licencia)
+                            ->first();
+        if(!$fechas_de_entrega) return "Sin fechas de entrega registradas";
+        $fecha_actual = date('Y-m-d H:i:s'); 
+        $plazo_extra = PlazoDocente::where('id_tercero', $this->id_tercero)
+                                   ->where('id_formato', $this->id_seguimiento)
+                                   ->where('id_dominio_tipo_formato', config('global.seguimiento_asignatura'))
+                                   ->where('estado', 1)
+                                   ->first();
+        if ($plazo_extra) {
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin. "+1 days"));
+            $fecha_actual = date('Y-m-d'). "00:00:00";
+            $fecha_actual = date_create($fecha_actual);
+            $fecha_fin = date_create($fecha_fin_plazo);
+            $diferencia = date_diff($fecha_actual,$fecha_fin);
+            $dias = $diferencia->days; 
+            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+            return $dias;
+        }
+        $fecha_actual = date('Y-m-d'). "00:00:00";
+        switch ($this->corte) {
+            case 1:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal1){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal1. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            case 2:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal2){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal2. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            case 3:
+                if ($fecha_actual > $fechas_de_entrega->fechafinal3){
+                    return "Sin dias disponibles";
+                }else{
+                    $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal3. "+1 days"))." 00:00:00";
+                    $fecha_actual = date_create($fecha_actual);
+                    $fechacierre = date_create($fechacierre);
+                    $diferencia = date_diff($fecha_actual,$fechacierre);
+                    $dias = $diferencia->days;
+                    if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+                    return $dias;
+                }
+                break;
+            
+            default:
+                return "Verifique el corte";
+                break;
+        }
+    }
 
 
     public function porcentaje_desarrollo_por_corte()
@@ -259,8 +332,9 @@ class SeguimientoAsignatura extends Model
     }
 
 
-    public static function reporte($periodo_academico = "", $estado = "", $docente = "", $asignatura = "", $grupo = "", $corte = "", $fecha = "")
+    public static function reporte($periodo_academico = "", $estado = "", $docente = "", $asignatura = "", $grupo = "", $corte = "", $fecha = "", $id_tercero = null, $id_licencia = null)
     {
+        $id_licencia = $id_licencia == null ? session('id_licencia') : $id_licencia; 
         $condiciones = "";
         if ($estado and $estado != "") $condiciones .= " and s.estado = '".$estado."'";
         if ($asignatura and $asignatura != "") $condiciones .= " and s.id_asignatura = ".$asignatura;
@@ -282,8 +356,8 @@ class SeguimientoAsignatura extends Model
                                    )";
         }
 
-        $condiciones .= " and a.id_licencia = ".session('id_licencia');
-
+        $condiciones .= " and a.id_licencia = $id_licencia";
+        if ($id_tercero != null) $condiciones .= " and t.id_tercero = $id_tercero";
         $sql = "select s.id_seguimiento,
                 t.id_tercero,
                 concat(t.nombre,' ',t.apellido) as docente,
@@ -309,6 +383,7 @@ class SeguimientoAsignatura extends Model
            $seguimiento = $value;
            if($value->estado == 'Pendiente') {
              $seguimiento->retraso = SeguimientoAsignatura::find($value->id_seguimiento)->retraso();
+             $seguimiento->dias_restantes_entrega = SeguimientoAsignatura::find($value->id_seguimiento)->dias_restantes_entrega();
            }
            array_push($seguimientos, $seguimiento);
         }

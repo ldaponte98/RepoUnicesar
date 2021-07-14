@@ -3,13 +3,13 @@
 ?>    
 <style type="text/css">
     .search{
-    line-height: inherit;
-    height: 31px;
-    background-color: #f2f7f8;
-    border-left-color: transparent;
-    border-right-color: transparent;
-    border-top-color: transparent;
-    border-bottom-color: #ddd;
+        line-height: inherit;
+        height: 31px;
+        background-color: #f2f7f8;
+        border-left-color: transparent;
+        border-right-color: transparent;
+        border-top-color: transparent;
+        border-bottom-color: #ddd;
     }
     .search:focus{
        border-bottom-color: black; 
@@ -22,7 +22,9 @@
     #bodytablemiseguimiento tr:hover{
         background-color: #DAF7A6;
         color: black;
-       
+    }
+    .table{
+        font-size: 14px;
     }
 </style>
 <?php $__env->startSection('header_content'); ?>
@@ -183,6 +185,7 @@
                                                 <td><b>Retraso</b></td>
                                                 <td><b>Estado</b></td>
                                                 <td><b>Periodo</b></td>
+                                                <td><b>Dias faltantes para envio</b></td>
                                                 <td><center><b>Acciones</b></center></td>
                                                 
                                             </tr>
@@ -291,6 +294,13 @@
                             }
                             tabla += "<td>"+seguimiento.estado+"</td>"+
                                      "<td>"+seguimiento.periodo_academico+"</td>"
+
+                            if(seguimiento.dias_restantes_entrega){
+                                tabla += "<td><center>"+seguimiento.dias_restantes_entrega+"</center></td>"
+                            }else{
+                                tabla += "<td>Ninguno, ya diligenciado</td>"
+                            }         
+
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(seguimiento.estado=='Pendiente'){
                                 acciones = "<td><center><a style='color: blue; cursor: pointer;  font-size: 14px;'"+

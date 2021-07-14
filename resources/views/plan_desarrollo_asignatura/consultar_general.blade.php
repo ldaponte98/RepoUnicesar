@@ -160,6 +160,7 @@
                                                 <td><b>Estado</b></td>
                                                 <td><b>Fecha de registro</b></td>
                                                 <td><b>Retraso</b></td>
+                                                <td><b>Dias faltantes para envio</b></td>
                                                 <td><center><b>Acciones</b></center></td>
                                                 
                                             </tr>
@@ -217,6 +218,11 @@
                                 }else{
                                     tabla += "<td>"+plan_desarrollo.fecha+"</td>"+
                                              "<td>No tiene</td>"
+                                }
+                                if(plan_desarrollo.dias_restantes_entrega){
+                                    tabla += "<td><center>"+plan_desarrollo.dias_restantes_entrega+"</center></td>"
+                                }else{
+                                    tabla += "<td>Ninguno, ya diligenciado</td>"
                                 }
                                 //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                                 if(plan_desarrollo.estado=='Pendiente'){

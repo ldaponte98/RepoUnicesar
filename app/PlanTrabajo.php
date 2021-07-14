@@ -179,19 +179,63 @@ class PlanTrabajo extends Model
         }
 	}
 
+	public static function dias_restantes_entrega($id_tercero, $id_periodo_academico)
+    {
+        $fecha_actual = date('Y-m-d');
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$id_periodo_academico)
+                ->where('id_dominio_tipo_formato',config('global.plan_trabajo'))
+                ->first();
 
-	public static function reporte($periodo_academico = "", $id_tercero = "", $estado = ""){
+        $plazo_extra = PlazoDocente::where('id_tercero', $id_tercero)
+                   ->where('id_periodo_academico', $id_periodo_academico)
+                   ->where('id_dominio_tipo_formato', config('global.plan_trabajo'))
+                   ->where('estado', 1)
+                   ->first();
+        if ($plazo_extra) {
+            
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin. "+1 days"));
+            $fecha_actual = date('Y-m-d'). "00:00:00";
+            $fecha_actual = date_create($fecha_actual);
+            $fecha_fin = date_create($fecha_fin_plazo);
+            $diferencia = date_diff($fecha_actual,$fecha_fin);
+            $dias = $diferencia->days; 
+            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+            return $dias;
+                        
+        }
+
+        if($fechas_de_entrega){
+        	
+        	if ($fecha_actual > $fechas_de_entrega->fechafinal1){
+                return "Sin dias disponibles";
+            }else{
+            	$fecha_actual = date('Y-m-d'). "00:00:00";
+	            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal1. "+1 days"))." 00:00:00";
+	            $fecha_actual = date_create($fecha_actual);
+	            $fechacierre = date_create($fechacierre);
+	            $diferencia = date_diff($fecha_actual,$fechacierre);
+	            $dias = $diferencia->days;
+	            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+	            return $dias;
+        	}
+        }else{
+            return "Sin fechas de entrega registradas";
+        }
+    }
+
+
+	public static function reporte($periodo_academico = "", $id_tercero = "", $estado = "", $id_licencia = null){
 		$condiciones1 = "";
         $condiciones2 = "";
+        $id_licencia = $id_licencia == null ? session('id_licencia') : $id_licencia; 
         if ($periodo_academico and $periodo_academico != "") $condiciones1 .= " where id_periodo_academico = ".$periodo_academico;
         if ($id_tercero and $id_tercero != "") $condiciones2 .= " and id_tercero = ".$id_tercero;
         
-        $docentes = Tercero::all()
-                    ->where('id_licencia', session('id_licencia'));
         $planes = [];
         $sql = "select * from periodo_academico $condiciones1"; 
         $periodos_academicos = DB::select($sql);
-        $sql2 = "select * from terceros where id_dominio_tipo_ter = 3 and id_licencia = ".session('id_licencia')." $condiciones2"; 
+        $sql2 = "select * from terceros where id_dominio_tipo_ter = 3 and id_licencia = $id_licencia $condiciones2"; 
         $docentes = DB::select($sql2);
 
         foreach ($periodos_academicos as $periodo_academico) {
@@ -208,7 +252,7 @@ class PlanTrabajo extends Model
                     $progreso = 0;
 
                     //aca verifico si el docente tiene un plan en este periodo
-                    $plan_trabajo = PlanTrabajo::where('id_tercero', $docente->id_tercero)->where('id_periodo_academico',  $periodo_academico->id_periodo_academico)->first();
+                    $plan_trabajo = PlanTrabajo::where('id_tercero', $docente->id_tercero)->where('id_periodo_academico',  $periodo_academico->id_periodo_academico)->where('estado', '<>', 'Pendiente')->first();
                     if($plan_trabajo){
                         $plan['id_plan_trabajo'] = $plan_trabajo->id_plan_trabajo;
                         $plan['estado'] = $plan_trabajo->estado;
@@ -219,6 +263,7 @@ class PlanTrabajo extends Model
                         $plan['id_plan_trabajo'] = null;
                         $plan['estado'] = 'Pendiente';
                         $plan['retraso'] = PlanTrabajo::retraso($docente->id_tercero, $periodo_academico->id_periodo_academico);
+                        $plan['dias_restantes_entrega'] = PlanTrabajo::dias_restantes_entrega($docente->id_tercero, $periodo_academico->id_periodo_academico);
 
                     }
                     $plan_trabajo_progreso = PlanTrabajo::find($plan['id_plan_trabajo']);

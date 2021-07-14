@@ -205,8 +205,48 @@ class PlanDesarrolloAsignatura extends Model
         }
     }
 
-    public static function reporte($periodo_academico = "", $id_tercero = "", $id_asignatura = "", $estado = "")
+    public static function dias_restantes_entrega($id_tercero, $id_periodo_academico,$id_asignatura)
     {
+        $fecha_actual = date('Y-m-d'). "00:00:00";
+        $fechas_de_entrega = FechasEntrega::where('id_periodo_academico',$id_periodo_academico)
+                ->where('id_dominio_tipo_formato',config('global.desarrollo_asignatura'))
+                ->first();
+
+        $plazo_extra = PlazoDocente::where('id_tercero', $id_tercero)
+                   ->where('id_periodo_academico', $id_periodo_academico)
+                   ->where('id_asignatura', $id_asignatura)
+                   ->where('id_dominio_tipo_formato', config('global.desarrollo_asignatura'))
+                   ->where('estado', 1)
+                   ->first();
+        if ($plazo_extra) {
+            
+            $fecha_inicio_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_inicio));
+            $fecha_fin_plazo = date('Y-m-d H:i:s', strtotime($plazo_extra->fecha_fin));
+            $fecha_actual = date_create($fecha_actual);
+            $fecha_fin = date_create($fecha_fin_plazo);
+            $diferencia = date_diff($fecha_actual,$fecha_fin);
+            $dias = $diferencia->days; 
+            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+            return $dias;
+                        
+        }
+
+        if($fechas_de_entrega){
+            $fechacierre = date("Y-m-d", strtotime($fechas_de_entrega->fechafinal1. "+1 days"))." 00:00:00";
+            $fecha_actual = date_create($fecha_actual);
+            $fechacierre = date_create($fechacierre);
+            $diferencia = date_diff($fecha_actual,$fechacierre);
+            $dias = $diferencia->days;
+            if ($dias == 0 and ($diferencia->h > 0 or $diferencia->m > 0)) $dias = 1;
+            return $dias;
+        }else{
+            return "Sin fechas de entrega registradas";
+        }
+    }
+
+    public static function reporte($periodo_academico = "", $id_tercero = "", $id_asignatura = "", $estado = "", $id_licencia = null)
+    {
+        $id_licencia = $id_licencia == null ? session('id_licencia') : $id_licencia;
         $condiciones1 = "";
         $condiciones2 = "";
         $condiciones3 = "";
@@ -217,9 +257,9 @@ class PlanDesarrolloAsignatura extends Model
         $planes = [];
         $sql = "select * from periodo_academico $condiciones1"; 
         $periodos_academicos = DB::select($sql);
-        $sql2 = "select * from terceros where id_dominio_tipo_ter = 3 and id_licencia = ".session('id_licencia')." $condiciones2"; 
+        $sql2 = "select * from terceros where id_dominio_tipo_ter = 3 and id_licencia = $id_licencia $condiciones2"; 
         $docentes = DB::select($sql2);
-        $sql3 = "select * from asignatura where id_licencia = ".session('id_licencia')." $condiciones3"; 
+        $sql3 = "select * from asignatura where id_licencia = $id_licencia $condiciones3"; 
         $asignaturas = DB::select($sql3);
         foreach ($periodos_academicos as $periodo_academico) {
             foreach ($docentes as $docente) {
@@ -252,6 +292,7 @@ class PlanDesarrolloAsignatura extends Model
                             $plan['id_plan_desarrollo_asignatura'] = null;
                             $plan['estado'] = 'Pendiente';
                             $plan['retraso'] = PlanDesarrolloAsignatura::retraso($docente->id_tercero, $periodo_academico->id_periodo_academico, $asignatura->id_asignatura);
+                            $plan['dias_restantes_entrega'] = PlanDesarrolloAsignatura::dias_restantes_entrega($docente->id_tercero, $periodo_academico->id_periodo_academico, $asignatura->id_asignatura);
                         }
 
                         if ($estado and $estado != ""){

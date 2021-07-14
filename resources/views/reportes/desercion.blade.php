@@ -18,14 +18,17 @@
             height: 500px;
         }
         @media (max-width: 600px) {
-            .echart-graph{
-                width: 350px; 
-                height: 400px;
+            .mobile-chart{
+                max-width: 240px;
+                overflow: scroll;
+                display: inline-flex;
+                align-items: center;
             }
         }
         .table-bordered th{
             color: #000000;
         }
+        
     </style>
 @endsection
 @section('content')
@@ -87,7 +90,9 @@
                     <div class="col-sm-12">
                         <center>
                             <h3><b>Indice de deserción por asignatura</b></h3>
-                            <div id="chart" class="echart-graph"></div>
+                            <div class="mobile-chart">
+                                <div id="chart" class="echart-graph"></div>
+                            </div>
                         </center>
                     </div>
                 </div>
@@ -95,39 +100,41 @@
                 <h3><b>Primer corte</b></h3>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="table table-bordered">
-                            <thead>                               
-                                <tr>
-                                    <th><b><center>Grupo</center></b></th>
-                                    <th><b><center>Docente encargado</center></b></th>
-                                    <th><b><center>Estudiantes iniciales</center></b></th>
-                                    <th><b><center>Asistentes</center></b></th>
-                                    <th><b><center>Desertados</center></b></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reporte as $grupo)
-                                <tr>
-                                    <td>{{ $grupo->grupo }}</td>
-                                    <td>
-                                        <a target="_blank" 
-                                            href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
-                                            {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
-                                        </a>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[0]->total_inicial, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[0]->asistentes, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[0]->desertados, 0, ".", ".") }}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>                               
+                                    <tr>
+                                        <th><b><center>Grupo</center></b></th>
+                                        <th><b><center>Docente encargado</center></b></th>
+                                        <th><b><center>Estudiantes iniciales</center></b></th>
+                                        <th><b><center>Asistentes</center></b></th>
+                                        <th><b><center>Desertados</center></b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($reporte as $grupo)
+                                    <tr>
+                                        <td>{{ $grupo->grupo }}</td>
+                                        <td>
+                                            <a target="_blank" 
+                                                href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
+                                                {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
+                                            </a>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[0]->total_inicial, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[0]->asistentes, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[0]->desertados, 0, ".", ".") }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -135,39 +142,41 @@
                 <h3><b>Segundo corte</b></h3>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="table table-bordered">
-                            <thead>                               
-                                <tr>
-                                    <th><b><center>Grupo</center></b></th>
-                                    <th><b><center>Docente encargado</center></b></th>
-                                    <th><b><center>Estudiantes iniciales</center></b></th>
-                                    <th><b><center>Asistentes</center></b></th>
-                                    <th><b><center>Desertados</center></b></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reporte as $grupo)
-                                <tr>
-                                    <td>{{ $grupo->grupo }}</td>
-                                    <td>
-                                        <a target="_blank" 
-                                            href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
-                                            {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
-                                        </a>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[1]->total_inicial, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[1]->asistentes, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[1]->desertados, 0, ".", ".") }}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>                               
+                                    <tr>
+                                        <th><b><center>Grupo</center></b></th>
+                                        <th><b><center>Docente encargado</center></b></th>
+                                        <th><b><center>Estudiantes iniciales</center></b></th>
+                                        <th><b><center>Asistentes</center></b></th>
+                                        <th><b><center>Desertados</center></b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($reporte as $grupo)
+                                    <tr>
+                                        <td>{{ $grupo->grupo }}</td>
+                                        <td>
+                                            <a target="_blank" 
+                                                href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
+                                                {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
+                                            </a>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[1]->total_inicial, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[1]->asistentes, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[1]->desertados, 0, ".", ".") }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
@@ -175,40 +184,42 @@
                 <h3><b>Tercer corte</b></h3>
                 <div class="row">
                     <div class="col-sm-12">
-                        <table class="table table-bordered">
-                            <thead>                               
-                                <tr>
-                                    <th><b><center>Grupo</center></b></th>
-                                    <th><b><center>Docente encargado</center></b></th>
-                                    <th><b><center>Estudiantes iniciales</center></b></th>
-                                    <th><b><center>Asistentes</center></b></th>
-                                    <th><b><center>Desertados</center></b></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($reporte as $grupo)
-                                <tr>
-                                    <td>{{ $grupo->grupo }}</td>
-                                    <td>
-                                        <a target="_blank" 
-                                            href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
-                                            {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
-                                        </a>
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[2]->total_inicial, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[2]->asistentes, 0, ".", ".") }}
-                                    </td>
-                                    <td style="text-align: right;">
-                                        {{ number_format($grupo->cortes[2]->desertados, 0, ".", ".") }}
-                                    </td>
-                                </tr>
-                                @endforeach
-                                
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>                               
+                                    <tr>
+                                        <th><b><center>Grupo</center></b></th>
+                                        <th><b><center>Docente encargado</center></b></th>
+                                        <th><b><center>Estudiantes iniciales</center></b></th>
+                                        <th><b><center>Asistentes</center></b></th>
+                                        <th><b><center>Desertados</center></b></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($reporte as $grupo)
+                                    <tr>
+                                        <td>{{ $grupo->grupo }}</td>
+                                        <td>
+                                            <a target="_blank" 
+                                                href="{{ route('docente/view', $grupo->docente->id_tercero) }}">
+                                                {{ $grupo->docente->getNameFull() }} ({{ $grupo->docente->cedula }})
+                                            </a>
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[2]->total_inicial, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[2]->asistentes, 0, ".", ".") }}
+                                        </td>
+                                        <td style="text-align: right;">
+                                            {{ number_format($grupo->cortes[2]->desertados, 0, ".", ".") }}
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                    
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

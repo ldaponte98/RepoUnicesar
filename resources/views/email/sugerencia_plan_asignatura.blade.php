@@ -10,7 +10,7 @@
     color: #ffffff !important;
     background-color: #6ab363 !important;
     border-radius: 6px !important;
-    border: 2px solid #3e7541 !important;
+    border: 2px solid #6ab363 !important;
     cursor: pointer !important;
   }
   .boton_personalizado:hover{
@@ -45,7 +45,7 @@
     color: #ffffff !important;
     background-color: #6ab363 !important;
     border-radius: 6px !important;
-    border: 2px solid #3e7541 !important;
+    border: 2px solid #6ab363 !important;
     cursor: pointer !important;
     ">Vortal</a>
     <br><br>

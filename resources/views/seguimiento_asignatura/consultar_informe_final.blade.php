@@ -33,83 +33,81 @@
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
     <script src="https://malsup.github.io/jquery.blockUI.js"></script>
-
 <div class="row page-titles">
-                    <div class="col-md-6 col-8 align-self-center">
-                        <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
-                            <li class="breadcrumb-item active">Informe final seguimiento de asignatura</li>
-                        </ol>
-                        <a id="btnfil" style="color: white;" onclick="masfiltros()"  class="btn pull-left  btn-info">Mas filtros</a>
-                    </div>
-                    <div class="col-md-2 col-8 align-self-center">
-                    </div><div class="col-md-2 col-8 align-self-center">
-                    </div>
-                    <div class="col-md-2 col-8 align-self-center">
-                      <br> <br>   
-                    <a target="_blank" id="btnlistar" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-success">Excel tabla actual</a>
-                    </div>
-                </div>
+    <div class="col-md-6 col-8 align-self-center">
+        <h3 class="text-themecolor m-b-0 m-t-0">Tabla</h3>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="javascript:void(0)">Tablero</a></li>
+            <li class="breadcrumb-item active">Informe final seguimiento de asignatura</li>
+        </ol>
+        <a id="btnfil" style="color: white;" onclick="masfiltros()"  class="btn pull-left  btn-info">Mas filtros</a>
+    </div>
+    <div class="col-md-2 col-8 align-self-center">
+    </div><div class="col-md-2 col-8 align-self-center">
+    </div>
+    <div class="col-md-2 col-8 align-self-center">
+      <br> <br>   
+    <a target="_blank" id="btnlistar" style="color: white;" onclick="exportar_excel()"  class="btn pull-rigth hidden-sm-down btn-success">Excel tabla actual</a>
+    </div>
+</div>
 @endsection
 @section('content')
 {{ Form::open(array('id' => 'form_fltros')) }}
 <div class="row">    
+    <div class="col-sm-3">
+        <div class="form-group">
+              <label style="color: black;"><b>Estado</b></label>
+                       <select id="estado" name="estado" class="form-control form-control-line"  >
+                            <option value="">Todos</option>
+                            <option value="Recibido">Recibidos (Leidos)</option>
+                            <option value="Enviado">Enviados (No leidos)</option>
+                            <option value="Pendiente">Pendientes</option>
+                        </select>
+        </div>
+    </div>  
+          <div class="col-sm-3">
+        <div class="form-group">
+              <label style="color: black;"><b>Asignatura</b></label>
+                    <select id="asignatura" name="asignatura" class="form-control form-control-line"  >
+                            <option value="">Seleccione...</option>
+                            @foreach ($asignaturas as $asignatura)
+                            <option value="{{ $asignatura->id_asignatura }}">{{ $asignatura->nombre }}</option>
+                            @endforeach
+                    </select>
+        </div>
+    </div> 
 
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Estado</b></label>
-                                           <select id="estado" name="estado" class="form-control form-control-line"  >
-                                                <option value="">Todos</option>
-                                                <option value="Recibido">Recibidos (Leidos)</option>
-                                                <option value="Enviado">Enviados (No leidos)</option>
-                                                <option value="Pendiente">Pendientes</option>
-                                            </select>
-                            </div>
-                        </div>  
-                              <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Asignatura</b></label>
-                                        <select id="asignatura" name="asignatura" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                @foreach ($asignaturas as $asignatura)
-                                                <option value="{{ $asignatura->id_asignatura }}">{{ $asignatura->nombre }}</option>
-                                                @endforeach
-                                        </select>
-                            </div>
-                        </div> 
-
-                         <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Grupo</b></label>
-                                   <select id="grupo" name="grupo" class="form-control form-control-line"  >
-                                        <option value="">Seleccione...</option>
-                                        
-                                    </select>
-                            </div>
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group">
-                                  <label style="color: black;"><b>Periodo academico</b></label>
-                                           <select id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
-                                                <option value="">Seleccione...</option>
-                                                @php
-                                                    $cont = 0;
-                                                @endphp
-                                                @foreach ($periodos_academicos as $periodo)
-                                                @if ($cont == 0)
-                                                    <option selected value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
-                                                    @php
-                                                        $cont++;
-                                                    @endphp
-                                                @else
-                                                    <option value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
-                                                @endif
-                                                
-                                                @endforeach
-                                            </select>
-                            </div>
-                        </div>
+     <div class="col-sm-3">
+        <div class="form-group">
+              <label style="color: black;"><b>Grupo</b></label>
+               <select id="grupo" name="grupo" class="form-control form-control-line"  >
+                    <option value="">Seleccione...</option>
+                    
+                </select>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <div class="form-group">
+              <label style="color: black;"><b>Periodo academico</b></label>
+                       <select id="periodo_academico" name="periodo_academico" class="form-control form-control-line"  >
+                            <option value="">Seleccione...</option>
+                            @php
+                                $cont = 0;
+                            @endphp
+                            @foreach ($periodos_academicos as $periodo)
+                            @if ($cont == 0)
+                                <option selected value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
+                                @php
+                                    $cont++;
+                                @endphp
+                            @else
+                                <option value="{{ $periodo->id_periodo_academico }}">{{ $periodo->periodo }}</option>
+                            @endif
+                            
+                            @endforeach
+                        </select>
+        </div>
+    </div>
                         
                       
                     
@@ -171,6 +169,7 @@
                                                 <td><b>Retraso</b></td>
                                                 <td><b>Estado</b></td>
                                                 <td><b>Periodo</b></td>
+                                                <td><b>Dias faltantes para envio</b></td>
                                                 <td><center><b>Acciones</b></center></td>
                                                 
                                             </tr>
@@ -279,6 +278,11 @@
                             }
                             tabla += "<td>"+seguimiento.estado+"</td>"+
                                      "<td>"+seguimiento.periodo_academico+"</td>"
+                            if(seguimiento.dias_restantes_entrega){
+                                tabla += "<td><center>"+seguimiento.dias_restantes_entrega+"</center></td>"
+                            }else{
+                                tabla += "<td>Ninguno, ya diligenciado</td>"
+                            } 
                             //AHORA EVALUO LOS ESTADOS PARA LAS ACCIONES QUE SE PODRAN HACER
                             if(seguimiento.estado=='Pendiente'){
 

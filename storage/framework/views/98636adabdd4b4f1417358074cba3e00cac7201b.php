@@ -155,6 +155,7 @@
                                                 <td><b>Envio</b></td>
                                                 <td><b>Retraso</b></td>
                                                 <td><b>Progreso</b></td>
+                                                <td><b>Dias faltantes para envio</b></td>
                                                 <td><center><b>Acciones</b></center></td> 
                                             </tr>
                                         </thead>
@@ -282,7 +283,11 @@
                                                 "<div class='progress-bar bg-"+$color_progreso+"' role='progressbar' style='width: "+actividad.progreso+"%; height: 6px;' aria-valuenow='25' aria-valuemin='0' aria-valuemax='100'></div>"+
                                             "</div></td>"
                             
-
+                            if(actividad.dias_restantes_entrega){
+                                tabla += "<td><center>"+actividad.dias_restantes_entrega+"</center></td>"
+                            }else{
+                                tabla += "<td>Ninguno, ya diligenciado</td>"
+                            }                
                             tabla += acciones
                             $.unblockUI(); //
                         })

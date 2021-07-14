@@ -16,6 +16,8 @@ use App\Grupo;
 use App\Notificaciones;
 use App\PlanAsignatura;
 use App\CodigoAcceso;
+use App\PeriodoAcademico;
+use App\FechasEntrega;
 use Mail;
 
 
@@ -346,24 +348,129 @@ class TerceroController extends Controller
 
     public function notificar_retraso_formatos()
     {
-        $for = "ldaponte98@gmail.com";
-        $subject = "Cron repo";
-        $vista_email = 'email.test';
-        $data_email = [
-            'html' => "<h1>Hola soy el cron desde el server</h1>"
-        ];
+
+        set_time_limit(999999);
+        $ultimo_periodo = PeriodoAcademico::orderBy('id_periodo_academico','desc')
+                    ->where('id_periodo_academico', 15)
+                   ->first();
+
+        $docentes = Tercero::all()->where('id_dominio_tipo_ter', 3)
+                                  ->where('estado', 1);
+        $logs_plan_trabajo = [];
+        $logs_plan_desarrollo = [];
+        $logs_plan_seguimiento_asignatura = [];
+        $logs_actividades_complementarias = [];
+
+        foreach ($docentes as $docente) {
+            $id_tercero = $docente->id_tercero;
+            $nombre_tercero = $docente->getNameFull();
+            $id_licencia = $docente->id_licencia;
+            $estado = "Pendiente";
+            $id_periodo = $ultimo_periodo->id_periodo_academico;
+            
+            //PLANES DE TRABAJO
+            $planes_trabajo = PlanTrabajo::reporte($id_periodo, $id_tercero, $estado,$id_licencia);
+            foreach ($planes_trabajo as $formato) {
+               $formato = (object) $formato;
+               if (is_numeric($formato->dias_restantes_entrega) and 
+                   $formato->dias_restantes_entrega > 0 and 
+                   $formato->dias_restantes_entrega <= 3){
+
+                    $logs_plan_trabajo[] = "Enviando plan trabajo $formato->periodo - Docente $docente->cedula";
+                    $data_email = [
+                        'nombre_tercero' => $nombre_tercero,
+                        'formato' => 'Plan de trabajo',
+                        'periodo_academico' => $ultimo_periodo->periodo,
+                        'dias_restantes' => $formato->dias_restantes_entrega,
+                    ];
+                    $this->enviar_email_aviso($docente, $data_email);
+               }
+            }
+
+            //PLANES DE DESARROLLO
+            $planes_desarrollo = PlanDesarrolloAsignatura::reporte($id_periodo, $id_tercero, "", $estado, $id_licencia);
+            foreach ($planes_desarrollo as $formato) {
+               $formato = (object) $formato;
+               if (is_numeric($formato->dias_restantes_entrega) and 
+                   $formato->dias_restantes_entrega > 0 and 
+                   $formato->dias_restantes_entrega <= 3){
+                    $logs_plan_desarrollo[] = "Enviando plan desarrollo asignatura $formato->periodo - Asignatura $formato->asignatura - Docente $docente->cedula";
+                    $data_email = [
+                        'nombre_tercero' => $nombre_tercero,
+                        'formato' => 'Plan de desarrollo asignatura',
+                        'asignatura' => $formato->asignatura,
+                        'periodo_academico' => $ultimo_periodo->periodo,
+                        'dias_restantes' => $formato->dias_restantes_entrega,
+                    ];
+                    $this->enviar_email_aviso($docente, $data_email);
+               }
+            }
+
+            //PLAN SEGUIMIENTO ASIGNATURA POR CORTE
+            $seguimientos = SeguimientoAsignatura::reporte($id_periodo, $estado, "", "", "", "", "", $id_tercero, $id_licencia);
+            
+            foreach ($seguimientos as $formato) {
+               $formato = (object) $formato;
+               if (is_numeric($formato->dias_restantes_entrega) and 
+                   $formato->dias_restantes_entrega > 0 and 
+                   $formato->dias_restantes_entrega <= 3)
+               {
+                    $logs_plan_seguimiento_asignatura[] = "Enviando plan seguimiento asignatura $formato->periodo_academico - Asignatura $formato->asignatura - Grupo $formato->grupo - Corte $formato->corte - Docente $docente->cedula";
+                    $data_email = [
+                        'nombre_tercero' => $nombre_tercero,
+                        'formato' => 'Plan de seguimiento asignatura por corte',
+                        'asignatura' => $formato->asignatura,
+                        'grupo' => $formato->grupo,
+                        'corte' => $formato->corte,
+                        'periodo_academico' => $ultimo_periodo->periodo,
+                        'dias_restantes' => $formato->dias_restantes_entrega,
+                    ];
+                    $this->enviar_email_aviso($docente, $data_email);
+               }
+            }
+
+            //ACTIVIDADES COMPLEMENTARIAS
+            $actividades = ActividadesComplementarias::reporte($id_periodo, $estado, "",$id_tercero, $id_licencia);
+            
+            foreach ($actividades as $formato) {
+               $formato = (object) $formato;
+               if (is_numeric($formato->dias_restantes_entrega) and 
+                   $formato->dias_restantes_entrega > 0 and 
+                   $formato->dias_restantes_entrega <= 3)
+               {
+                    $logs_actividades_complementarias[] = "Enviando actividades complementarias $formato->periodo_academico - Corte $formato->corte - Docente $docente->cedula";
+                    $data_email = [
+                        'nombre_tercero' => $nombre_tercero,
+                        'formato' => 'Actividades complementarias',
+                        'corte' => $formato->corte,
+                        'periodo_academico' => $ultimo_periodo->periodo,
+                        'dias_restantes' => $formato->dias_restantes_entrega,
+                    ];
+                    $this->enviar_email_aviso($docente, $data_email);
+               }
+            }
+        }      
+
+        return response()->json(array(
+            'message' => "CRON Ejecutado Exitosamente",
+            'logs' => [
+                'logs_plan_trabajo' => $logs_plan_trabajo,
+                'logs_plan_desarrollo' => $logs_plan_desarrollo,
+                'logs_plan_seguimiento_asignatura' => $logs_plan_seguimiento_asignatura,
+                'logs_actividades_complementarias' => $logs_actividades_complementarias
+            ]
+        )); 
+    }
+
+    public function enviar_email_aviso($tercero, $data_email)
+    {
+        $for = $tercero->email;
+        $subject = "Finalización de fechas para gestion docencia - $data_email[formato]";
+        $vista_email = 'email.aviso_fecha_entrega_formato';
         $response = Mail::send($vista_email, $data_email, function($msj) use($subject ,$for){
             $msj->from(config('global.email_general'),"Universidad Popular Del Cesar");
             $msj->subject($subject);
             $msj->to($for);
         });
-
-        return response()->json(array(
-            'estado_envio' => $response,
-            'message' => "Se ejecuto"
-        )); 
     }
-
-   
-
 }

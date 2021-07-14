@@ -110,35 +110,39 @@ class AcademusoftServiceController extends Controller
     	$url = config('global.services')->academusoft->sync_periodo_actual;
         $http = Http::get($url);
         if (!$http->error) {
-        	if ($http->response->status == "200") {
-        		$data = $http->response->data;
-        		$codigo_periodo = $data->anio."-".$data->periodo;
-        		$periodo = PeriodoAcademico::where('periodo', $codigo_periodo)->first();
-        		if(!$periodo){
-        			$periodo = new PeriodoAcademico;
-        			$periodo->periodo = $codigo_periodo;
-        		}
-        		
-        		$periodo->fechaInicio = date('Y-m-d', strtotime($data->fecha_inicio));
-        		$periodo->fechaFin = date('Y-m-d', strtotime($data->fecha_fin));
-                $periodo->estado = isset($periodo->estado) ? $periodo->estado : 1;
+            if (isset($http->response->status)) {
+                if ($http->response->status == "200") {
+                    $data = $http->response->data;
+                    $codigo_periodo = $data->anio."-".$data->periodo;
+                    $periodo = PeriodoAcademico::where('periodo', $codigo_periodo)->first();
+                    if(!$periodo){
+                        $periodo = new PeriodoAcademico;
+                        $periodo->periodo = $codigo_periodo;
+                    }
+                    
+                    $periodo->fechaInicio = date('Y-m-d', strtotime($data->fecha_inicio));
+                    $periodo->fechaFin = date('Y-m-d', strtotime($data->fecha_fin));
+                    $periodo->estado = isset($periodo->estado) ? $periodo->estado : 1;
 
-                //CALCULAMOS LA CANTIDAD DE SEMANAS DEL PERIODO
-                $fecha_inicio = new \DateTime($periodo->fechaInicio);
-				$fecha_fin = new \DateTime($periodo->fechaFin);
-				$interval = $fecha_inicio->diff($fecha_fin);
-				$semanas = floor(($interval->format('%a') / 7));
-				$periodo->total_semanas =  $semanas;
+                    //CALCULAMOS LA CANTIDAD DE SEMANAS DEL PERIODO
+                    $fecha_inicio = new \DateTime($periodo->fechaInicio);
+                    $fecha_fin = new \DateTime($periodo->fechaFin);
+                    $interval = $fecha_inicio->diff($fecha_fin);
+                    $semanas = floor(($interval->format('%a') / 7));
+                    $periodo->total_semanas =  $semanas;
 
-        		if($periodo->save()){
-                    $creacion_planes_asignatura = $this->crear_planes_asignatura($periodo);
-                    $error = false; $mensaje = "OK";
+                    if($periodo->save()){
+                        $creacion_planes_asignatura = $this->crear_planes_asignatura($periodo);
+                        $error = false; $mensaje = "OK";
+                    }else{
+                        $mensaje = "No se pudo guardar el periodo academico $codigo_periodo";
+                    }
                 }else{
-                    $mensaje = "No se pudo guardar el periodo academico $codigo_periodo";
+                    $mensaje = $http->response->message;
                 }
-        	}else{
-        		$mensaje = $http->response->message;
-        	}
+            }else{
+                $mensaje = "Servicio de academusoft caido";
+            }
         }else{
         	$mensaje = $http->message;
         }
